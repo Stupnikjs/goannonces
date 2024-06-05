@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -25,6 +26,9 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+	status := app.TestBucket("testzik")
+
+	fmt.Println(status)
 	http.ListenAndServe(":"+port, app.routes())
 
 }
