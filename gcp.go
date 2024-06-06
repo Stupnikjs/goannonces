@@ -31,3 +31,13 @@ func (app *application) TestBucket(bucketName string, client storage.Client) boo
 	}
 	return false
 }
+
+
+func GetAllFileInBucket() ([]string,error) {
+
+}
+
+func PushTrackToBucket(*os.File, bucketName) error {
+
+
+}
