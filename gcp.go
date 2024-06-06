@@ -24,7 +24,7 @@ func (app *application) ConnectToGcp() *storage.Client {
 
 }
 
-func (app *application) TestBucket(bucketName string, client storage.Client) bool {
+func TestBucket(bucketName string, client storage.Client) bool {
 	bucket := client.Bucket(bucketName)
 	if bucket != nil {
 		return true
@@ -38,6 +38,14 @@ func GetAllFileInBucket() ([]string,error) {
 }
 
 func PushTrackToBucket(*os.File, bucketName) error {
+
+
+}
+
+
+func CreateBucket(filename string, client storage.Client, ctx context.Context) error {
+
+
 
 
 }
