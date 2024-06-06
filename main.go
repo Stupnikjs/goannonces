@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 
 	"cloud.google.com/go/storage"
 	_ "cloud.google.com/go/storage"
@@ -20,27 +19,21 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
-
-	// app.InitTables()
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
 		fmt.Println(err)
 	}
-	b := client.Bucket("michel")
-	attr, err := b.Attrs(ctx)
-
-	err = b.Create(ctx, "celestial-tract-421819", attr)
-	fmt.Println(os.Getenv("GOOGLE_APPPLICATION_CREDENTIALS"))
+	buck := client.Bucket("lastbucketnamethatsit")
+	// err = CreateBucket(client, buck, ctx)
+	defer client.Close()
 	if err != nil {
-		print("here error")
 		fmt.Println(err)
 	}
 
+	err = PushFileToBucket(buck)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

@@ -7,34 +7,10 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
-
-	"google.golang.org/api/option"
 )
 
-func (app *application) ConnectToGcp() *storage.Client {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
-	defer cancel()
-	options := option.WithCredentialsFile("credentials.json")
-	client, err := storage.NewClient(ctx, options)
+func CreateBucket(client *storage.Client, bucket *storage.BucketHandle, ctx context.Context) error {
 
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	return client
-
-}
-
-func TestBucket(bucketName string, client storage.Client) bool {
-	bucket := client.Bucket(bucketName)
-	if bucket != nil {
-		return true
-	}
-	return false
-}
-
-func CreateBucket(bucketName string, client storage.Client, ctx context.Context) error {
-	bucket := client.Bucket(bucketName)
 	projectID := "celestial-tract-421819"
 	// Creates the new bucket.
 	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
@@ -44,7 +20,21 @@ func CreateBucket(bucketName string, client storage.Client, ctx context.Context)
 		return err
 	}
 
-	fmt.Printf("Bucket %v created.\n", bucketName)
+	fmt.Print("Bucket created.\n")
 	return nil
 
+}
+
+func PushToBucket(bucket *storage.BucketHandle, filename string, data []byte) error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+	defer cancel()
+	obj := bucket.Object(filename)
+	w := obj.NewWriter(ctx)
+	_, err := w.Write(data)
+	defer w.Close()
+
+	if err != nil {
+		return err
+	}
+	return nil
 }
