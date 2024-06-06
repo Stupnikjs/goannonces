@@ -1,13 +1,9 @@
 package main
 
-
-
-func ConnectToDb () {
-
+func ConnectToDb() {
 
 }
 
-
-func GetAllTracks () []Track {
-
+func GetAllTracks() []Track {
+	return []Track{}
 }

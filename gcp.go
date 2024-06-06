@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"cloud.google.com/go/storage"
@@ -32,29 +33,18 @@ func TestBucket(bucketName string, client storage.Client) bool {
 	return false
 }
 
+func CreateBucket(bucketName string, client storage.Client, ctx context.Context) error {
+	bucket := client.Bucket(bucketName)
+	projectID := "celestial-tract-421819"
+	// Creates the new bucket.
+	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+	defer cancel()
+	if err := bucket.Create(ctx, projectID, nil); err != nil {
+		log.Fatalf("Failed to create bucket: %v", err)
+		return err
+	}
 
-func GetAllFileInBucket() ([]string,error) {
-
-}
-
-func PushTrackToBucket(*os.File, bucketName) error {
-
-
-}
-
-
-func CreateBucket(bucketname string, client storage.Client, ctx context.Context) error {
-bucket := client.Bucket(bucketName)
-
-        // Creates the new bucket.
-        ctx, cancel := context.WithTimeout(ctx, time.Second*10)
-        defer cancel()
-        if err := bucket.Create(ctx, projectID, nil); err != nil {
-                log.Fatalf("Failed to create bucket: %v", err)
-        }
-
-        fmt.Printf("Bucket %v created.\n", bucketName)
-
-
+	fmt.Printf("Bucket %v created.\n", bucketName)
+	return nil
 
 }

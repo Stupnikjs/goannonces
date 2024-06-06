@@ -1,14 +1,10 @@
 package main
 
-
-
-
 // audio
-type struct Track {
-  ID int32
-  SelectionCount int
-  PlayCount int 
-  GcpstroreURL string 
-  Tags []string 
- 
+type Track struct {
+	ID             int32
+	SelectionCount int
+	PlayCount      int
+	GcpstroreURL   string
+	Tags           []string
 }
