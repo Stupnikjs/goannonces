@@ -43,8 +43,17 @@ func PushTrackToBucket(*os.File, bucketName) error {
 }
 
 
-func CreateBucket(filename string, client storage.Client, ctx context.Context) error {
+func CreateBucket(bucketname string, client storage.Client, ctx context.Context) error {
+bucket := client.Bucket(bucketName)
 
+        // Creates the new bucket.
+        ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+        defer cancel()
+        if err := bucket.Create(ctx, projectID, nil); err != nil {
+                log.Fatalf("Failed to create bucket: %v", err)
+        }
+
+        fmt.Printf("Bucket %v created.\n", bucketName)
 
 
 
