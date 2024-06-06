@@ -37,7 +37,9 @@ func (app *application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 func (app *application) RenderSoloTrack(w http.ResponseWriter, r *http.Request) {
   TrackId := request.GetParams()
   
-  DownloadFromGcp(TrackId)
+  trackStream = :DownloadFromGcp(TrackId)
+  td := TemplateData{}
+  td.Data["track"] = trackStream
   _ = render(w, "/trackplayer.gohtml", &TemplateData{}
 
 }
