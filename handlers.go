@@ -32,3 +32,12 @@ func (app *application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 
 	_ = render(w, r, "/acceuil.gohtml", &TemplateData{})
 }
+
+
+func (app *application) RenderSoloTrack(w http.ResponseWriter, r *http.Request) {
+  TrackId := request.GetParams()
+  
+  DownloadFromGcp(TrackId)
+  _ = render(w, "/trackplayer.gohtml", &TemplateData{}
+
+}
