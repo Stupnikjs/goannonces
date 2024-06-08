@@ -25,16 +25,11 @@ func CreateBucket(client *storage.Client, bucket *storage.BucketHandle, ctx cont
 
 }
 
-func PushToBucket(bucket *storage.BucketHandle, filename string, data []byte) error {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
-	defer cancel()
-	obj := bucket.Object(filename)
-	w := obj.NewWriter(ctx)
-	_, err := w.Write(data)
-	defer w.Close()
+func (app *application) LoadToBucket([]byte data, ) error {
 
-	if err != nil {
-		return err
-	}
-	return nil
-}
+
+
+
+return nil 
+} 
+
