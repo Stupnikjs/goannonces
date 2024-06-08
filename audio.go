@@ -6,6 +6,6 @@ type Track struct {
     Name string 
 	SelectionCount int
 	PlayCount      int
-	GcpstroreURL   string
+StoreURL   string
 	Tags           []string
 }
