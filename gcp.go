@@ -34,18 +34,17 @@ func (app *application) LoadToBucket(fileName string, []byte data) error {
 		client, err := storage.NewClient(ctx)
 
 
-
 		buck := client.Bucket(app.BucketName)
 
 		// Check if bucket already created
 		err = CreateBucket(client, buck, ctx)
 
 		if err != nil {
-			http.Error(w, fmt.Sprintf("err occurs %s", err), http.StatusBadRequest)
+			return err 
 		}
 		defer client.Close()
 		if err != nil {
-			fmt.Println(err)
+			return err 
 		}
 
 
