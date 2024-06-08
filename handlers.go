@@ -79,37 +79,10 @@ func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	// Return a success message
 	fmt.Fprintf(w, "File uploaded successfully: %v", header.Filename)
 */
-	
-		ctx, cancel := context.WithCancel(context.Background())
-		defer cancel()
-		client, err := storage.NewClient(ctx)
+	 err = app.LoadToBucket(header.FileName, buf)
 
-
-
-		buck := client.Bucket(app.BucketName)
-
-		// Check if bucket already created
-		err = CreateBucket(client, buck, ctx)
-
-		if err != nil {
-			http.Error(w, fmt.Sprintf("err occurs %s", err), http.StatusBadRequest)
+  
 		}
-		defer client.Close()
-		if err != nil {
-			fmt.Println(err)
-		}
-
-
-			obj := buck.Object()
-
-			writer := obj.NewWriter(ctx)
-   writer.Write(buf)
-			defer writer.Close()
-			if err != nil {
-				fmt.Println(err)
-			}
-	
-}
 
 /*
 func (app *application) RenderSoloTrack(w http.ResponseWriter, r *http.Request) {
