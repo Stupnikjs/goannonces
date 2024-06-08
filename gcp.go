@@ -57,6 +57,8 @@ func (app *application) LoadToBucket(fileName string, []byte data) error {
 				fmt.Println(err)
 			}
 
+   // get object url to store in sql 
+
 
 return nil 
 } 
