@@ -12,7 +12,9 @@ func (app *application) routes() http.Handler {
 
 	// register routes
 	mux.Get("/", app.RenderAccueil)
+	mux.Get("/loader", app.RenderLoader)
 	mux.Post("/upload", app.UploadFile)
+
 	// static assets
 
 	fileServer := http.FileServer(http.Dir("./static/"))

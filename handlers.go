@@ -1,16 +1,15 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"html/template"
+	"io"
 	"net/http"
+	"os"
 	"path"
-
-	"cloud.google.com/go/storage"
 )
 
-var pathToTemplates = "/static/templates/"
+var pathToTemplates = "./static/templates/"
 
 type TemplateData struct {
 	Data map[string]any
@@ -44,23 +43,70 @@ func (app *application) RenderLoader(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	// load file to gcp bucket
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	client, err := storage.NewClient(ctx)
+
+	// Parse the multipart form
+	err := r.ParseMultipartForm(10 << 20) // 10 MB
 	if err != nil {
-		fmt.Println(err)
-	}
-	buck := client.Bucket("lastbucketnamethatsit")
-	// err = CreateBucket(client, buck, ctx)
-	defer client.Close()
-	if err != nil {
-		fmt.Println(err)
+		http.Error(w, "Unable to parse form", http.StatusBadRequest)
+		return
 	}
 
-	// err = PushFileToBucket(buck)
+	// Retrieve the file from the form data
+	file, header, err := r.FormFile("uploadfile")
 	if err != nil {
-		fmt.Println(err)
+		http.Error(w, "Error retrieving the file", http.StatusInternalServerError)
+		return
 	}
+	defer file.Close()
+
+	// Create a file in the server to save the uploaded file
+	dst, err := os.Create(header.Filename)
+	if err != nil {
+		http.Error(w, "Unable to create the file", http.StatusInternalServerError)
+		return
+	}
+	defer dst.Close()
+
+	// Copy the uploaded file to the created file on the server
+	_, err = io.Copy(dst, file)
+	if err != nil {
+		http.Error(w, "Error saving the file", http.StatusInternalServerError)
+		return
+	}
+
+	// Return a success message
+	fmt.Fprintf(w, "File uploaded successfully: %v", header.Filename)
+
+	/*
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		client, err := storage.NewClient(ctx)
+
+
+
+		buck := client.Bucket(app.BucketName)
+
+		// Check if bucket already created
+		err = CreateBucket(client, buck, ctx)
+
+		if err != nil {
+			http.Error(w, fmt.Sprintf("err occurs %s", err), http.StatusBadRequest)
+		}
+		defer client.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
+
+
+			obj := buck.Object()
+
+			writer := obj.NewWriter(ctx)
+
+			defer writer.Close()
+			if err != nil {
+				fmt.Println(err)
+			}
+	*/
 }
 
 /*

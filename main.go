@@ -1,6 +1,8 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"log"
 
 	"net/http"
@@ -12,8 +14,8 @@ import (
 
 type application struct {
 	BucketName string
-	DB
-	Port int
+	DB         *sql.DB
+	Port       int
 }
 
 func main() {
@@ -27,6 +29,6 @@ func main() {
 		Port:       3322,
 	}
 
-	http.ListenAndServe()
+	http.ListenAndServe(fmt.Sprintf(":%d", app.Port), app.routes())
 
 }
