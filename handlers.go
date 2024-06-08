@@ -33,6 +33,16 @@ func (app *application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 	_ = render(w, r, "/acceuil.gohtml", &TemplateData{})
 }
 
+func (app *application) RenderLoader(w http.ResponseWriter, r *http.Request) {
+
+	_ = render(w, r, "/loader.gohtml", &TemplateData{})
+}
+
+func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
+	// load file to gcp bucket
+
+}
+
 /*
 func (app *application) RenderSoloTrack(w http.ResponseWriter, r *http.Request) {
   TrackId := request.GetParams()
