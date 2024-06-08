@@ -58,6 +58,8 @@ func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
+
+ buf, err := io.ReadAll(file)
 /*
 	// Create a file in the server to save the uploaded file
 	dst, err := os.Create(header.Filename)
@@ -101,7 +103,7 @@ func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 			obj := buck.Object()
 
 			writer := obj.NewWriter(ctx)
-   writer.Write(file)
+   writer.Write(buf)
 			defer writer.Close()
 			if err != nil {
 				fmt.Println(err)
