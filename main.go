@@ -25,7 +25,7 @@ func main() {
 	}
 
 	app := application{
-		BucketName: "firstappbuckname",
+		BucketName: "firstappbucknamezikapp",
 		Port:       3322,
 	}
 

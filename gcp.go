@@ -11,7 +11,7 @@ import (
 
 func CreateBucket(client *storage.Client, bucket *storage.BucketHandle, ctx context.Context) error {
 
-	projectID := "celestial-tract-421819"
+	projectID := "zikstudio"
 	// Creates the new bucket.
 	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
@@ -25,41 +25,35 @@ func CreateBucket(client *storage.Client, bucket *storage.BucketHandle, ctx cont
 
 }
 
-func (app *application) LoadToBucket(fileName string, []byte data) error {
+func (app *application) LoadToBucket(fileName string, data []byte) error {
 
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	client, err := storage.NewClient(ctx)
 
-	
-		ctx, cancel := context.WithCancel(context.Background())
-		defer cancel()
-		client, err := storage.NewClient(ctx)
+	buck := client.Bucket(app.BucketName)
 
+	// Check if bucket already created
+	err = CreateBucket(client, buck, ctx)
 
-		buck := client.Bucket(app.BucketName)
+	if err != nil {
+		return err
+	}
+	defer client.Close()
+	if err != nil {
+		return err
+	}
 
-		// Check if bucket already created
-		err = CreateBucket(client, buck, ctx)
+	obj := buck.Object(fileName)
 
-		if err != nil {
-			return err 
-		}
-		defer client.Close()
-		if err != nil {
-			return err 
-		}
+	writer := obj.NewWriter(ctx)
+	writer.Write(data)
+	defer writer.Close()
+	if err != nil {
+		fmt.Println(err)
+	}
 
+	// get object url to store in sql
 
-			obj := buck.Object(fileName)
-
-			writer := obj.NewWriter(ctx)
-   writer.Write(buf)
-			defer writer.Close()
-			if err != nil {
-				fmt.Println(err)
-			}
-
-   // get object url to store in sql 
-
-
-return nil 
-} 
-
+	return nil
+}
