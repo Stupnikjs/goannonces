@@ -5,7 +5,6 @@ import (
 	"html/template"
 	"io"
 	"net/http"
-	"os"
 	"path"
 )
 
@@ -33,18 +32,19 @@ func render(w http.ResponseWriter, r *http.Request, t string, td *TemplateData) 
 
 func (app *application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 
- mocksTracks = []Tracks{
+	mocksTracks := []Track{
 
-    {Name : "Jinjo - Always there for u.mp3",
-    StorageURL: "",
-    },
-   {
-},
-}
-
-
-
-	_ = render(w, r, "/acceuil.gohtml", &TemplateData{})
+		{Name: "Jinjo - Always there for u.mp3",
+			StoreURL: "erpgiregip",
+		},
+		{
+			Name:     "some track name",
+			StoreURL: "urlejfefzkn.com",
+		},
+	}
+	td := TemplateData{}
+	td.Data["tracks"] = mocksTracks
+	_ = render(w, r, "/acceuil.gohtml", &td)
 }
 
 func (app *application) RenderLoader(w http.ResponseWriter, r *http.Request) {
@@ -70,30 +70,16 @@ func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
- buf, err := io.ReadAll(file)
-/*
-	// Create a file in the server to save the uploaded file
-	dst, err := os.Create(header.Filename)
-	if err != nil {
-		http.Error(w, "Unable to create the file", http.StatusInternalServerError)
-		return
-	}
-	defer dst.Close()
+	buf, err := io.ReadAll(file)
 
-	// Copy the uploaded file to the created file on the server
-	_, err = io.Copy(dst, file)
-	if err != nil {
-		http.Error(w, "Error saving the file", http.StatusInternalServerError)
-		return
-	}
-
-	// Return a success message
 	fmt.Fprintf(w, "File uploaded successfully: %v", header.Filename)
-*/
-	 err = app.LoadToBucket(header.FileName, buf)
 
-  
-		}
+	err = app.LoadToBucket(header.Filename, buf)
+	if err != nil {
+		http.Error(w, "Error Loading file to BUCKET", http.StatusInternalServerError)
+		return
+	}
+}
 
 /*
 func (app *application) RenderSoloTrack(w http.ResponseWriter, r *http.Request) {

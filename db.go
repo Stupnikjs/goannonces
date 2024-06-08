@@ -1,6 +1,14 @@
 package main
 
+import (
+	"database/sql"
+	"fmt"
+	"log"
+	"os"
 
+	"cloud.google.com/go/cloudsqlconn"
+	"cloud.google.com/go/cloudsqlconn/postgres/pgxv4"
+)
 
 func openDB() (*sql.DB, error) {
 
@@ -16,7 +24,6 @@ func openDB() (*sql.DB, error) {
 
 	}
 
-	listDir()
 	// Call cleanup when you're done with the database connection
 
 	db, err := sql.Open(
