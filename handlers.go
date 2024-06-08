@@ -33,6 +33,17 @@ func render(w http.ResponseWriter, r *http.Request, t string, td *TemplateData) 
 
 func (app *application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 
+ mocksTracks = []Tracks{
+
+    {Name : "Jinjo - Always there for u.mp3",
+    StorageURL: "",
+    },
+   {
+},
+}
+
+
+
 	_ = render(w, r, "/acceuil.gohtml", &TemplateData{})
 }
 
