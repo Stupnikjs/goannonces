@@ -58,7 +58,7 @@ func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
-
+/*
 	// Create a file in the server to save the uploaded file
 	dst, err := os.Create(header.Filename)
 	if err != nil {
@@ -76,8 +76,8 @@ func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 
 	// Return a success message
 	fmt.Fprintf(w, "File uploaded successfully: %v", header.Filename)
-
-	/*
+*/
+	
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
 		client, err := storage.NewClient(ctx)
@@ -101,12 +101,12 @@ func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 			obj := buck.Object()
 
 			writer := obj.NewWriter(ctx)
-
+   writer.Write(file)
 			defer writer.Close()
 			if err != nil {
 				fmt.Println(err)
 			}
-	*/
+	
 }
 
 /*
