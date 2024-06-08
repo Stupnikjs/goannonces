@@ -31,6 +31,9 @@ func (app *application) LoadToBucket(fileName string, data []byte) error {
 	defer cancel()
 	client, err := storage.NewClient(ctx)
 
+	if err != nil {
+		return err
+	}
 	buck := client.Bucket(app.BucketName)
 
 	// Check if bucket already created
@@ -40,18 +43,12 @@ func (app *application) LoadToBucket(fileName string, data []byte) error {
 		return err
 	}
 	defer client.Close()
-	if err != nil {
-		return err
-	}
 
 	obj := buck.Object(fileName)
 
 	writer := obj.NewWriter(ctx)
 	writer.Write(data)
 	defer writer.Close()
-	if err != nil {
-		fmt.Println(err)
-	}
 
 	// get object url to store in sql
 
