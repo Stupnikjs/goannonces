@@ -15,12 +15,11 @@
 {{define "content"}}
     <label>How many song to upload?</label>
     <input type="number" id="selectFileNum">
-    <button type="submit"  id="submitFileNum">Submit</button>
+    <input type="submit" id="submitFileNum" value="submit">
 
      <form action="/upload" method="POST"
             enctype="multipart/form-data"> 
         <h4>Browse your file</h4> 
-        <input type="file" name="uploadfile" /> <br><br> 
         <input type="submit" value="Upload File"/> 
     </form> 
     <script defer src="/static/js/loader.js"></script>

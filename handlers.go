@@ -51,24 +51,27 @@ func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Unable to parse form", http.StatusBadRequest)
 		return
 	}
-
+	nFiles := 4
 	// Retrieve the file from the form data
-	file, header, err := r.FormFile("uploadfile")
-	if err != nil {
-		http.Error(w, "Error retrieving the file", http.StatusInternalServerError)
-		return
+	for i := range nFiles {
+		file, header, err := r.FormFile(fmt.Sprintf("file%d", i))
+		if err != nil {
+			http.Error(w, "Error retrieving the file", http.StatusInternalServerError)
+			return
+		}
+		defer file.Close()
+
+		buf, err := io.ReadAll(file)
+
+		fmt.Fprintf(w, "File uploaded successfully: %v", header.Filename)
+
+		err = app.LoadToBucket(header.Filename, buf)
+		if err != nil {
+			http.Error(w, "Error Loading file to BUCKET", http.StatusInternalServerError)
+			return
+		}
 	}
-	defer file.Close()
 
-	buf, err := io.ReadAll(file)
-
-	fmt.Fprintf(w, "File uploaded successfully: %v", header.Filename)
-
-	err = app.LoadToBucket(header.Filename, buf)
-	if err != nil {
-		http.Error(w, "Error Loading file to BUCKET", http.StatusInternalServerError)
-		return
-	}
 }
 
 /*
