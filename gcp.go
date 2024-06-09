@@ -51,6 +51,9 @@ func (app *application) LoadToBucket(fileName string, data []byte) error {
 	defer writer.Close()
 
 	// get object url to store in sql
+ // get object id 
+ 
+ 
 
 	return nil
 }
