@@ -27,6 +27,7 @@ func CreateBucket(client *storage.Client, bucket *storage.BucketHandle, ctx cont
 
 func (app *application) LoadToBucket(fileName string, data []byte) error {
 
+	fmt.Printf("loading to bucket %s", fileName)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	client, err := storage.NewClient(ctx)
@@ -37,11 +38,8 @@ func (app *application) LoadToBucket(fileName string, data []byte) error {
 	buck := client.Bucket(app.BucketName)
 
 	// Check if bucket already created
-	err = CreateBucket(client, buck, ctx)
+	// err = CreateBucket(client, buck, ctx)
 
-	if err != nil {
-		return err
-	}
 	defer client.Close()
 
 	obj := buck.Object(fileName)
@@ -51,9 +49,7 @@ func (app *application) LoadToBucket(fileName string, data []byte) error {
 	defer writer.Close()
 
 	// get object url to store in sql
- // get object id 
- 
- 
+	// get object id
 
 	return nil
 }

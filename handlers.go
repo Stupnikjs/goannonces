@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
-	"io"
 	"net/http"
 	"path"
 )
@@ -53,21 +51,9 @@ func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Retrieve the file from the form data
-
-	file, header, err := r.FormFile("uploadfile")
+	err = app.ProcessMultipartReq(r)
 	if err != nil {
-		http.Error(w, "Error retrieving the file", http.StatusInternalServerError)
-		return
-	}
-	defer file.Close()
-
-	buf, err := io.ReadAll(file)
-
-	fmt.Fprintf(w, "File uploaded successfully: %v", header.Filename)
-
-	err = app.LoadToBucket(header.Filename, buf)
-	if err != nil {
-		http.Error(w, "Error Loading file to BUCKET", http.StatusInternalServerError)
+		http.Error(w, "Error loading files", http.StatusBadRequest)
 		return
 	}
 }
