@@ -1,11 +1,14 @@
 const inputSubmit = document.querySelector("#submitFileNum")
 
 let fileNumber = 1
+let form = document.querySelector("form")
+form.style.display = "flex"
+form.style.flexDirection = "column"
 
-inputSubmit.addEventListener("change", (e) => {
-    fileNumber = document.querySelector("selectFileNum").value
+
+inputSubmit.addEventListener("click", (e) => {
+    fileNumber = document.querySelector("#selectFileNum").value
     
-    let form = document.querySelector("form")
 
     for (let i=0; i < fileNumber; i++){
         let fileInput = document.createElement("input")

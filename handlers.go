@@ -53,6 +53,7 @@ func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Retrieve the file from the form data
+
 	file, header, err := r.FormFile("uploadfile")
 	if err != nil {
 		http.Error(w, "Error retrieving the file", http.StatusInternalServerError)
