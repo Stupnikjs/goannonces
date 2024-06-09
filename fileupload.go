@@ -7,11 +7,12 @@ import (
 )
 
 func (app *application) ProcessMultipartReq(r *http.Request) error {
-	for i := range 2 {
-		headers := r.MultipartForm.File[fmt.Sprintf("file%d", i)]
+
+	for _, headers := range r.MultipartForm.File {
 
 		for _, h := range headers {
 			file, err := h.Open()
+			fmt.Println(h.Size, h.Header)
 			if err != nil {
 				return err
 			}
@@ -20,17 +21,16 @@ func (app *application) ProcessMultipartReq(r *http.Request) error {
 
 			buf, err := io.ReadAll(file)
 
-			fmt.Printf("File uploaded successfully: %v", h.Filename)
-
 			err = app.LoadToBucket(h.Filename, buf)
 			if err != nil {
 				return err
 			}
 
-		}
-		/*
+			fmt.Printf("File uploaded successfully: %v", h.Filename)
 
-		 */
+		}
+
 	}
 	return nil
+
 }
