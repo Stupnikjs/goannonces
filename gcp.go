@@ -27,22 +27,24 @@ func CreateBucket(client *storage.Client, bucket *storage.BucketHandle, ctx cont
 
 func (app *application) LoadToBucket(fileName string, data []byte) error {
 
-	fmt.Printf("loading to bucket %s", fileName)
+	fmt.Println(fileName)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	client, err := storage.NewClient(ctx)
 
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
-	buck := client.Bucket(app.BucketName)
+	bucket := client.Bucket(app.BucketName)
 
+	fmt.Println(bucket)
 	// Check if bucket already created
 	// err = CreateBucket(client, buck, ctx)
 
 	defer client.Close()
 
-	obj := buck.Object(fileName)
+	obj := bucket.Object(fileName)
 
 	writer := obj.NewWriter(ctx)
 	writer.Write(data)

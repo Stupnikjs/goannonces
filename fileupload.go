@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+	"os"
 )
 
 func (app *application) ProcessMultipartReq(r *http.Request) error {
@@ -12,25 +15,48 @@ func (app *application) ProcessMultipartReq(r *http.Request) error {
 
 		for _, h := range headers {
 			file, err := h.Open()
-			fmt.Println(h.Size, h.Header)
+			fmt.Println(h.Header["Content-Disposition"][0])
 			if err != nil {
 				return err
 			}
 
 			defer file.Close()
 
-			buf, err := io.ReadAll(file)
+			finalByteArr, err := ByteFromMegaFile(file)
 
-			err = app.LoadToBucket(h.Filename, buf)
+			fileSave, err := os.Create(h.Filename)
 			if err != nil {
 				return err
 			}
-
-			fmt.Printf("File uploaded successfully: %v", h.Filename)
+			_, err = fileSave.Write(finalByteArr)
+			if err != nil {
+				return err
+			}
+			defer fileSave.Close()
 
 		}
 
 	}
 	return nil
+
+}
+
+func ByteFromMegaFile(file io.Reader) ([]byte, error) {
+
+	reader := bufio.NewReader(file)
+
+	finalByteArr := make([]byte, 0, 2048*1000)
+
+	for {
+		soloByte, err := reader.ReadByte()
+		if err != nil {
+			log.Println(err)
+			break
+		}
+
+		finalByteArr = append(finalByteArr, soloByte)
+	}
+
+	return finalByteArr, nil
 
 }

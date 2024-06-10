@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"path"
@@ -53,8 +54,7 @@ func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	// Retrieve the file from the form data
 	err = app.ProcessMultipartReq(r)
 	if err != nil {
-		http.Error(w, "Error loading files", http.StatusBadRequest)
-		return
+		fmt.Println(err)
 	}
 }
 

@@ -10,6 +10,15 @@ import (
 	"cloud.google.com/go/cloudsqlconn/postgres/pgxv4"
 )
 
+type Track struct {
+	ID             int32
+	Name           string
+	SelectionCount int
+	PlayCount      int
+	StoreURL       string
+	Tags           []string
+}
+
 func openDB() (*sql.DB, error) {
 
 	cleanup, err := pgxv4.RegisterDriver("cloudsql-postgres", cloudsqlconn.WithCredentialsFile("credentials.json"))
