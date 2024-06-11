@@ -23,7 +23,9 @@ func TestCreateBucket(t *testing.T) {
 
 	if err != nil {
 		t.Errorf("Unexpected error creating bucket %s", err.Error())
+ 
 	}
+ defer DeleteBucket(randBuckName)
 }
 
 func TestGetBucketObject(t *testing.T) {
