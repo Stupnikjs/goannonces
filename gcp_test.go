@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand/v2"
 	"os"
 	"testing"
 )
@@ -14,7 +15,15 @@ func TestLoadToBucket(t *testing.T) {
 }
 
 func TestCreateBucket(t *testing.T) {
-	CreateBucket()
+	randint := rand.IntN(2000)
+
+	randBuckName := fmt.Sprintf("randombuck%dname", randint)
+
+	err := CreateBucket(randBuckName)
+
+	if err != nil {
+		t.Errorf("Unexpected error creating bucket %s", err.Error())
+	}
 }
 
 func TestGetBucketObject(t *testing.T) {

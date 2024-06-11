@@ -76,9 +76,6 @@ func GetObjectURL(bucketName string, objectName string) (string, error) {
 	}
 	bucket := client.Bucket(bucketName)
 	obj := bucket.Object(objectName)
-	if err != nil {
-		return "", nil
-	}
 
 	attr, err := obj.Attrs(ctx)
 
@@ -113,12 +110,17 @@ func ListObjectsBucket(bucketName string) ([]string, error) {
 }
 
 func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName string) error {
+	objNames, err := ListObjectsBucket(BucketName)
+
+	if err != nil {
+		return err
+	}
 
 	for _, headers := range r.MultipartForm.File {
 
 		for _, h := range headers {
 			file, err := h.Open()
-			fmt.Println(h.Header["Content-Disposition"][0])
+
 			if err != nil {
 				return err
 			}

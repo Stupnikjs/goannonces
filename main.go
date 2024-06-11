@@ -26,7 +26,12 @@ func main() {
 		Port: 3322,
 	}
 
- app.DB = app.ConnectDB()
+	conn, err := app.connectToDB()
+	if err != nil {
+		log.Fatalf("Error loading db conn: %v", err)
+	}
+
+	app.DB = conn
 
 	http.ListenAndServe(fmt.Sprintf(":%d", app.Port), app.routes())
 
