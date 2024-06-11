@@ -26,6 +26,8 @@ func main() {
 		Port: 3322,
 	}
 
+ app.DB = app.ConnectDB()
+
 	http.ListenAndServe(fmt.Sprintf(":%d", app.Port), app.routes())
 
 }
