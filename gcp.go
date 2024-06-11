@@ -28,6 +28,8 @@ func CreateBucket(bucketName string) error {
 	projectID := "zikstudio"
 	// Creates the new bucket.
 
+	// CHOSE EUROPE WEST
+
 	if err := bucket.Create(ctx, projectID, nil); err != nil {
 		log.Fatalf("Failed to create bucket: %v", err)
 		return err
@@ -49,10 +51,6 @@ func LoadToBucket(bucketName string, fileName string, data []byte) error {
 		return err
 	}
 	bucket := client.Bucket(bucketName)
-
-	fmt.Println(bucket)
-	// Check if bucket already created
-	// err = CreateBucket(client, buck, ctx)
 
 	defer client.Close()
 
