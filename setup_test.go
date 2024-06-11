@@ -8,6 +8,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var TestBucket string = "mysuperstronktestbuck"
+
 func TestMain(m *testing.M) {
 
 	if err := godotenv.Load(); err != nil {
