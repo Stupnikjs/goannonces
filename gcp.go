@@ -66,6 +66,12 @@ func LoadToBucket(bucketName string, fileName string, data []byte) error {
 	return nil
 }
 
+
+func DeleteBucket(bucketName string) error {
+
+ return nil 
+}
+
 func GetObjectURL(bucketName string, objectName string) (string, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
