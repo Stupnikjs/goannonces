@@ -52,7 +52,7 @@ func openDB() (*sql.DB, error) {
 	return db, nil
 }
 
-func (app *application) connectToDB() (*sql.DB, error) {
+func (app *Application) connectToDB() (*sql.DB, error) {
 
 	connection, err := openDB()
 

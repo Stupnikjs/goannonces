@@ -1,35 +1,42 @@
-package main 
-
+package main
 
 import (
-"testing" 
-"os"
+	"fmt"
+	"log"
+	"os"
+	"testing"
 )
 
-func TestLoadToBucket(t testing.T)  {
-    
-}
+var testBucket string = "mysuperstronktestbuck"
 
-func TestCreateBucket(t testing.T)  {
+func TestLoadToBucket(t *testing.T) {
 
 }
 
-
-func TestGetBucketObject(t testing.T){
-
-  
-   mockFile , err := os.Create("test.txt") 
-   mockFile.Write([]byte("this is test files content"))
-   defer mockFile.Close()
-   defer os.Remove(mockFile)
-   
-    // Push mock object to bucket 
-
-   
-   
-   // Call get bucket method 
-   if expectedObjectName != actualObjectName {
-  t.Errorf("expected %s as object name but got %s", expectedObjectName, actualObjectName)
+func TestCreateBucket(t *testing.T) {
+	CreateBucket()
 }
 
-} 
+func TestGetBucketObject(t *testing.T) {
+
+	curr, err := os.Getwd()
+	fmt.Println(curr)
+	mockFile, err := os.Create("test.txt")
+	data := []byte("this is test files content")
+	mockFile.Write(data)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	defer mockFile.Close()
+	defer os.Remove(mockFile.Name())
+
+	err = LoadToBucket(BucketName, mockFile.Name(), data)
+
+	// Call get bucket method
+	if err != nil {
+		t.Errorf(" expected no error but go %s", err)
+	}
+
+}

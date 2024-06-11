@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -29,19 +30,19 @@ func render(w http.ResponseWriter, r *http.Request, t string, td *TemplateData) 
 
 // template rendering
 
-func (app *application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
+func (app *Application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 
 	td := TemplateData{}
 
 	_ = render(w, r, "/acceuil.gohtml", &td)
 }
 
-func (app *application) RenderLoader(w http.ResponseWriter, r *http.Request) {
+func (app *Application) RenderLoader(w http.ResponseWriter, r *http.Request) {
 
 	_ = render(w, r, "/loader.gohtml", &TemplateData{})
 }
 
-func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
+func (app *Application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	// load file to gcp bucket
 
 	// Parse the multipart form
@@ -52,20 +53,25 @@ func (app *application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Retrieve the file from the form data
-	err = app.ProcessMultipartReq(r)
+	err = app.LoadMultipartReqToBucket(r, BucketName)
 	if err != nil {
 		fmt.Println(err)
 	}
 }
 
-/*
-func (app *application) RenderSoloTrack(w http.ResponseWriter, r *http.Request) {
-  TrackId := request.GetParams()
+func ListObjectHandler(w http.ResponseWriter, r *http.Request) {
+	names, err := ListObjectsBucket(BucketName)
 
-  trackStream := DownloadFromGcp(TrackId)
-  td := TemplateData{}
-  td.Data["track"] = trackStream
-  _ = render(w, "/trackplayer.gohtml", &TemplateData{})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+
+	byteNames, err := json.Marshal(names)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+
+	w.Write(byteNames)
 
 }
-*/

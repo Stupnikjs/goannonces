@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-
 	"net/http"
 
 	_ "cloud.google.com/go/storage"
@@ -12,10 +11,9 @@ import (
 	_ "google.golang.org/api/option"
 )
 
-type application struct {
-	BucketName string
-	DB         *sql.DB
-	Port       int
+type Application struct {
+	DB   *sql.DB
+	Port int
 }
 
 func main() {
@@ -24,9 +22,8 @@ func main() {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 
-	app := application{
-		BucketName: "firstappbuckname",
-		Port:       3322,
+	app := Application{
+		Port: 3322,
 	}
 
 	http.ListenAndServe(fmt.Sprintf(":%d", app.Port), app.routes())
