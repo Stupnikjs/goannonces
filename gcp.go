@@ -68,7 +68,18 @@ func LoadToBucket(bucketName string, fileName string, data []byte) error {
 
 
 func DeleteBucket(bucketName string) error {
+ ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	client, err := storage.NewClient(ctx)
 
+	if err != nil {
+		return err
+	}
+	bucket := client.Bucket(bucketName)
+ err = bucket.Delete(ctx)
+ if err != nil {
+		return err
+	}
  return nil 
 }
 
