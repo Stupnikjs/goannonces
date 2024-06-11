@@ -11,7 +11,7 @@ import (
 var testBucket string = "mysuperstronktestbuck"
 
 func TestLoadToBucket(t *testing.T) {
-
+  
 }
 
 func TestCreateBucket(t *testing.T) {
@@ -50,4 +50,15 @@ func TestGetBucketObject(t *testing.T) {
 		t.Errorf(" expected no error but go %s", err)
 	}
 
+}
+
+func TestDeleteBucket(t *testing.T) {
+  err = DeleteBucket(TestBucket)
+
+  if err != nil {
+    
+   t.Errorf("error deleting bucket %s", err)
+
+ }
+  defer CreateBucket(TestBucket)
 }
