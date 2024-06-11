@@ -15,7 +15,7 @@ func TestMain(m *testing.M) {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
-
+ err = CreateBucket(TestBucket)
 	// Run all the tests
 
 	code := m.Run()
