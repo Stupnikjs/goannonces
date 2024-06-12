@@ -11,7 +11,7 @@ import (
 var testBucket string = "mysuperstronktestbuck"
 
 func TestLoadToBucket(t *testing.T) {
-  
+
 }
 
 func TestCreateBucket(t *testing.T) {
@@ -23,9 +23,9 @@ func TestCreateBucket(t *testing.T) {
 
 	if err != nil {
 		t.Errorf("Unexpected error creating bucket %s", err.Error())
- 
+
 	}
- defer DeleteBucket(randBuckName)
+	defer DeleteBucket(randBuckName)
 }
 
 func TestGetBucketObject(t *testing.T) {
@@ -53,12 +53,12 @@ func TestGetBucketObject(t *testing.T) {
 }
 
 func TestDeleteBucket(t *testing.T) {
-  err = DeleteBucket(TestBucket)
+	err := DeleteBucket(TestBucket)
 
-  if err != nil {
-    
-   t.Errorf("error deleting bucket %s", err)
+	if err != nil {
 
- }
-  defer CreateBucket(TestBucket)
+		t.Errorf("error deleting bucket %s", err)
+
+	}
+	defer CreateBucket(TestBucket)
 }

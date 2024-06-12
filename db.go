@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"cloud.google.com/go/cloudsqlconn"
 	"cloud.google.com/go/cloudsqlconn/postgres/pgxv4"
@@ -13,11 +15,37 @@ import (
 type Track struct {
 	ID             int32
 	Name           string
+	StoreURL       string
 	SelectionCount int
 	PlayCount      int
-	StoreURL       string
-	Tags           []string
+	Size           int32
+	UploadDate     string
 }
+
+var InitTableQuery string = `
+CREATE TABLE IF NOT EXISTS tracks (
+	id serial PRIMARY KEY,
+	name VARCHAR,
+	storage_url VARCHAR,
+	selected_count INTEGER, 
+	listen_count INTEGER, 
+	upload_date DATE,
+	size INTEGER
+	)
+`
+
+var InsertTrackQuery string = `
+INSERT INTO tracks ( 
+	name,
+	storage_url, 
+	selected_count, 
+	listen_count, 
+	upload_date, 
+	size
+) VALUES (
+	$1, $2, $3, $4, $5, $6, $7
+)
+`
 
 func openDB() (*sql.DB, error) {
 
@@ -61,4 +89,33 @@ func (app *Application) connectToDB() (*sql.DB, error) {
 	}
 	log.Println("Connected to Postgres!")
 	return connection, nil
+}
+
+func (app *Application) PushTrackToSQL(track Track) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	_, err := app.DB.ExecContext(
+		ctx,
+		InsertTrackQuery,
+		track.Name,
+		track.StoreURL,
+		track.SelectionCount,
+		track.PlayCount,
+		time.Now().Format("11-11-2023"),
+		track.Size,
+	)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (app *Application) InitTable() {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	_, err := app.DB.ExecContext(ctx, InitTableQuery)
+	if err != nil {
+		log.Fatalf("error initing table %v", err)
+
+	}
 }

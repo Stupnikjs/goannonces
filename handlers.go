@@ -75,3 +75,55 @@ func ListObjectHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(byteNames)
 
 }
+
+func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName string) error {
+	objNames, err := ListObjectsBucket(BucketName)
+
+	if err != nil {
+		return err
+	}
+
+	for _, headers := range r.MultipartForm.File {
+
+		for _, h := range headers {
+
+			if IsInSlice(h.Filename, objNames) {
+				// format a messgage with already present files
+				break
+			}
+
+			file, err := h.Open()
+
+			if err != nil {
+				return err
+			}
+
+			defer file.Close()
+
+			finalByteArr, err := ByteFromMegaFile(file)
+
+			if err != nil {
+				return err
+			}
+
+			err = LoadToBucket(bucketName, h.Filename, finalByteArr)
+
+			if err != nil {
+				return err
+			}
+
+			track := Track{}
+			url, err := GetObjectURL(bucketName, h.Filename)
+			track.StoreURL = url
+			track.Name = h.Filename
+
+			err = app.PushTrackToSQL(track)
+			if err != nil {
+				return err
+			}
+		}
+
+	}
+	return nil
+
+}

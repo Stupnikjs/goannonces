@@ -1,12 +1,9 @@
 package main
 
 import (
-	"bufio"
 	"context"
 	"fmt"
-	"io"
 	"log"
-	"net/http"
 
 	"cloud.google.com/go/storage"
 	"google.golang.org/api/iterator"
@@ -66,9 +63,8 @@ func LoadToBucket(bucketName string, fileName string, data []byte) error {
 	return nil
 }
 
-
 func DeleteBucket(bucketName string) error {
- ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	client, err := storage.NewClient(ctx)
 
@@ -76,11 +72,11 @@ func DeleteBucket(bucketName string) error {
 		return err
 	}
 	bucket := client.Bucket(bucketName)
- err = bucket.Delete(ctx)
- if err != nil {
+	err = bucket.Delete(ctx)
+	if err != nil {
 		return err
 	}
- return nil 
+	return nil
 }
 
 func GetObjectURL(bucketName string, objectName string) (string, error) {
@@ -124,61 +120,4 @@ func ListObjectsBucket(bucketName string) ([]string, error) {
 		names = append(names, attrs.Name)
 	}
 	return names, nil
-}
-
-func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName string) error {
-	objNames, err := ListObjectsBucket(BucketName)
-
-	if err != nil {
-		return err
-	}
-
-	for _, headers := range r.MultipartForm.File {
-
-		for _, h := range headers {
-			file, err := h.Open()
-
-			if err != nil {
-				return err
-			}
-
-			defer file.Close()
-
-			finalByteArr, err := ByteFromMegaFile(file)
-
-			if err != nil {
-				return err
-			}
-
-			err = LoadToBucket(bucketName, h.Filename, finalByteArr)
-
-			if err != nil {
-				return err
-			}
-
-		}
-
-	}
-	return nil
-
-}
-
-func ByteFromMegaFile(file io.Reader) ([]byte, error) {
-
-	reader := bufio.NewReader(file)
-
-	finalByteArr := make([]byte, 0, 2048*1000)
-
-	for {
-		soloByte, err := reader.ReadByte()
-		if err != nil {
-			log.Println(err)
-			break
-		}
-
-		finalByteArr = append(finalByteArr, soloByte)
-	}
-
-	return finalByteArr, nil
-
 }

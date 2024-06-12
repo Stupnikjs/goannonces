@@ -33,6 +33,8 @@ func main() {
 
 	app.DB = conn
 
+	app.InitTable()
+
 	http.ListenAndServe(fmt.Sprintf(":%d", app.Port), app.routes())
 
 }
