@@ -45,6 +45,18 @@ func (app *Application) RenderLoader(w http.ResponseWriter, r *http.Request) {
 	_ = render(w, r, "/loader.gohtml", &TemplateData{})
 }
 
+func (app *Application) RenderSingleTrack(w http.ResponseWriter, r *http.Request) {
+        trackid := GetTrackId(r)
+        td := TemplateData{}
+        td.Data["Track"] =  app.GetTrack(trackid)
+
+        _ = render(w, r, "/singletrack.gohtml", &td)
+}
+
+
+
+
+
 func (app *Application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	// load file to gcp bucket
 
