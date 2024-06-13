@@ -25,16 +25,19 @@ func main() {
 	}
 
 	app := Application{
-		Port: 3322,
-		repo: &repo.PostgresRepo,
+		Port: 3322
 	}
 
-	conn, err := app.repo.connectToDB()
+	conn, err := app.connectToDB()
+
+ app.DB = &PostgresDBRepo{
+ DB:conn
+ }
 	if err != nil {
 		log.Fatalf("Error loading db conn: %v", err)
 	}
 
-	app.repo.InitTable()
+	app.DB.InitTable()
 
 	http.ListenAndServe(fmt.Sprintf(":%d", app.Port), app.routes())
 
