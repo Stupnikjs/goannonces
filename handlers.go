@@ -90,7 +90,7 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 
 		for _, h := range headers {
 
-			if IsInSlice(h.Filename, objNames) {
+			if IsInSlice[string](h.Filename, objNames) {
 				// format a messgage with already present files
 				break
 			}
