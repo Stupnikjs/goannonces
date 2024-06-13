@@ -1,4 +1,4 @@
-package main
+package gstore
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-var testBucket string = "mysuperstronktestbuck"
+var TestBucket string = "mysuperstronktestbuck"
 
 func TestLoadToBucket(t *testing.T) {
 
@@ -43,7 +43,7 @@ func TestGetBucketObject(t *testing.T) {
 	defer mockFile.Close()
 	defer os.Remove(mockFile.Name())
 
-	err = LoadToBucket(BucketName, mockFile.Name(), data)
+	err = LoadToBucket(TestBucket, mockFile.Name(), data)
 
 	// Call get bucket method
 	if err != nil {

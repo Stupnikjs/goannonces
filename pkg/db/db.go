@@ -1,4 +1,4 @@
-package main
+package repo
 
 import (
 	"context"
@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"cloud.google.com/go/cloudsqlconn"
 	"cloud.google.com/go/cloudsqlconn/postgres/pgxv4"
@@ -22,30 +21,9 @@ type Track struct {
 	UploadDate     string
 }
 
-var InitTableQuery string = `
-CREATE TABLE IF NOT EXISTS tracks (
-	id serial PRIMARY KEY,
-	name VARCHAR,
-	storage_url VARCHAR,
-	selected_count INTEGER, 
-	listen_count INTEGER, 
-	upload_date DATE,
-	size INTEGER
-	)
-`
-
-var InsertTrackQuery string = `
-INSERT INTO tracks ( 
-	name,
-	storage_url, 
-	selected_count, 
-	listen_count, 
-	upload_date, 
-	size
-) VALUES (
-	$1, $2, $3, $4, $5, $6, $7
-)
-`
+type PostgresRepo struct {
+	DB *sql.DB
+}
 
 func openDB() (*sql.DB, error) {
 
@@ -80,7 +58,7 @@ func openDB() (*sql.DB, error) {
 	return db, nil
 }
 
-func (app *Application) connectToDB() (*sql.DB, error) {
+func (rep *PostgresRepo) connectToDB() (*sql.DB, error) {
 
 	connection, err := openDB()
 
@@ -91,17 +69,16 @@ func (app *Application) connectToDB() (*sql.DB, error) {
 	return connection, nil
 }
 
-func (app *Application) PushTrackToSQL(track Track) error {
+func (rep *PostgresRepo) PushTrackToSQL(track Track) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	_, err := app.DB.ExecContext(
+	_, err := rep.DB.ExecContext(
 		ctx,
 		InsertTrackQuery,
 		track.Name,
 		track.StoreURL,
 		track.SelectionCount,
 		track.PlayCount,
-		time.Now().Format("11-11-2023"),
 		track.Size,
 	)
 	if err != nil {
@@ -110,12 +87,40 @@ func (app *Application) PushTrackToSQL(track Track) error {
 	return nil
 }
 
-func (app *Application) InitTable() {
+func (rep *PostgresRepo) InitTable() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	_, err := app.DB.ExecContext(ctx, InitTableQuery)
+	_, err := rep.DB.ExecContext(ctx, InitTableQuery)
 	if err != nil {
 		log.Fatalf("error initing table %v", err)
 
 	}
+}
+
+func (rep *PostgresRepo) GetAllTracks() []Track {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	rows, err := rep.DB.QueryContext(ctx, GetAllTrackQuery)
+	if err != nil {
+		fmt.Println(err)
+	}
+	tracks := []Track{}
+	track := Track{}
+	for rows.Next() {
+		err := rows.Scan(
+			&track.ID,
+			&track.Name,
+			&track.StoreURL,
+			&track.PlayCount,
+			&track.SelectionCount,
+			&track.Size,
+		)
+		if err != nil {
+			fmt.Println(err)
+			break
+		}
+		tracks = append(tracks, track)
+
+	}
+	return tracks
 }

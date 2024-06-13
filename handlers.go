@@ -6,6 +6,8 @@ import (
 	"html/template"
 	"net/http"
 	"path"
+
+	"github.com/Stupnikjs/zik/pkg/gstore"
 )
 
 var pathToTemplates = "./static/templates/"
@@ -33,6 +35,7 @@ func render(w http.ResponseWriter, r *http.Request, t string, td *TemplateData) 
 func (app *Application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 
 	td := TemplateData{}
+	td.Data["Tracks"] = app.GetAllTracks()
 
 	_ = render(w, r, "/acceuil.gohtml", &td)
 }
@@ -60,7 +63,7 @@ func (app *Application) UploadFile(w http.ResponseWriter, r *http.Request) {
 }
 
 func ListObjectHandler(w http.ResponseWriter, r *http.Request) {
-	names, err := ListObjectsBucket(BucketName)
+	names, err := gstore.ListObjectsBucket(BucketName)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -77,7 +80,7 @@ func ListObjectHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName string) error {
-	objNames, err := ListObjectsBucket(BucketName)
+	objNames, err := gstore.ListObjectsBucket(BucketName)
 
 	if err != nil {
 		return err
@@ -106,17 +109,16 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 				return err
 			}
 
-			err = LoadToBucket(bucketName, h.Filename, finalByteArr)
+			err = gstore.LoadToBucket(bucketName, h.Filename, finalByteArr)
 
 			if err != nil {
 				return err
 			}
 
 			track := Track{}
-			url, err := GetObjectURL(bucketName, h.Filename)
+			url, err := gstore.GetObjectURL(bucketName, h.Filename)
 			track.StoreURL = url
 			track.Name = h.Filename
-
 			err = app.PushTrackToSQL(track)
 			if err != nil {
 				return err

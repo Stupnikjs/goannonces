@@ -1,4 +1,4 @@
-package main
+package gstore
 
 import (
 	"context"
@@ -8,8 +8,6 @@ import (
 	"cloud.google.com/go/storage"
 	"google.golang.org/api/iterator"
 )
-
-var BucketName string = "firstappbucknamezikapp"
 
 func CreateBucket(bucketName string) error {
 	ctx, cancel := context.WithCancel(context.Background())
@@ -120,4 +118,17 @@ func ListObjectsBucket(bucketName string) ([]string, error) {
 		names = append(names, attrs.Name)
 	}
 	return names, nil
+}
+
+func DeleteObjectInBucket(bucketName string, objectName string) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	client, err := storage.NewClient(ctx)
+
+	_ = client.Bucket(bucketName)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

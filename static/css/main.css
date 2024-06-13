@@ -1,0 +1,17 @@
+
+
+
+/* loader   */
+
+#loaderform {
+display:"flex";
+flex-direction:"columns";
+background-color:"azure";
+
+}
+
+#loaderform input {
+    padding : "1rem"; 
+    background-color:"lightblue";
+
+}

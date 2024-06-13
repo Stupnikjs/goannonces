@@ -2,8 +2,12 @@
 
 {{define "content"}}
     <section class="accueil-section">
-        <h2>Bienvenue sur OpenPharmacie </h2>
-         <p> Site gratuit de ressources pour les pharmaciens d'officine et leurs équipes </p>
-         <p> Simple d'accès, et contenu ludique</p>
+         {{ range .Data.Tracks}} 
+            <a href={{ .StoreURL }}>
+              {{ .Name }}
+            
+            </a>
+
+         {{ end }}
     </section>
 {{end}}

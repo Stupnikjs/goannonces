@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/Stupnikjs/zik/pkg/gstore"
 	"github.com/joho/godotenv"
 )
 
@@ -15,9 +16,9 @@ func TestMain(m *testing.M) {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
-	CreateBucket(TestBucket)
+	gstore.CreateBucket(TestBucket)
 	// Run all the tests
-	defer DeleteBucket(TestBucket)
+	defer gstore.DeleteBucket(TestBucket)
 	code := m.Run()
 
 	// Exit with the received code
