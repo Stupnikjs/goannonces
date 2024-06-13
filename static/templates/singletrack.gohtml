@@ -1,1 +1,13 @@
-{{}}
+{{template "base" .}}
+
+{{define "content"}}
+    <section id="single-track-section">
+         {{ range .Data.Tracks}} 
+            <a href={{ .StoreURL }}>
+              {{ .Name }}
+
+            </a>
+
+         {{ end }}
+    </section>
+{{end}}
