@@ -30,7 +30,7 @@ func main() {
 
 	conn, err := app.connectToDB()
 
- app.DB = &PostgresDBRepo{
+ app.DB = &PostgresRepo{
  DB:conn
  }
 	if err != nil {
