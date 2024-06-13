@@ -3,6 +3,21 @@
 
 /* loader   */
 
+#selectFileNum {
+
+background-color: "azure";
+padding: "1rem";
+border: "1px solid black";
+
+}
+
+#submitFileNum {
+background-color: "azure";
+padding: "1rem";
+border: "1px solid black";
+
+}
+
 #loaderform {
 display:"flex";
 flex-direction:"columns";
@@ -15,3 +30,5 @@ background-color:"azure";
     background-color:"lightblue";
 
 }
+
+
