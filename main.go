@@ -12,7 +12,7 @@ import (
 )
 
 type Application struct {
-	repo *repo.Dbrepo
+	DB repo.Dbrepo
 	Port int
 }
 
