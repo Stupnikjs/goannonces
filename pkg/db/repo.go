@@ -1,6 +1,6 @@
 package repo
 
-type Dbrepo interface {
+type DBrepo interface {
 	InitTable()
 	GetAllTracks() []Track
 	PushTrackToSQL(Track)
