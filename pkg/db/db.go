@@ -5,10 +5,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
-
-	"cloud.google.com/go/cloudsqlconn"
-	"cloud.google.com/go/cloudsqlconn/postgres/pgxv4"
 )
 
 type Track struct {
@@ -24,7 +20,6 @@ type Track struct {
 type PostgresRepo struct {
 	DB *sql.DB
 }
-
 
 func (rep *PostgresRepo) PushTrackToSQL(track Track) error {
 	ctx, cancel := context.WithCancel(context.Background())
