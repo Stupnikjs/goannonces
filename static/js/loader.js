@@ -2,8 +2,7 @@ const inputSubmit = document.querySelector("#submitFileNum")
 
 let fileNumber = 1
 let form = document.querySelector("form")
-form.style.display = "flex"
-form.style.flexDirection = "column"
+
 
 
 inputSubmit.addEventListener("click", (e) => {
