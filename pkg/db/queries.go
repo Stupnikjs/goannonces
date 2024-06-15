@@ -33,3 +33,14 @@ SELECT
 	size
 FROM tracks 
 `
+
+var GetTrackFromIdQuery string = `
+SELECT  
+	name,
+	storage_url, 
+	selected_count, 
+	listen_count, 
+	size
+FROM tracks 
+WHERE id = $1; 
+`

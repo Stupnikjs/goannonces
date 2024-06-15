@@ -38,8 +38,10 @@ func render(w http.ResponseWriter, r *http.Request, t string, td *TemplateData) 
 func (app *Application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 
 	td := TemplateData{}
-	td.Data["Tracks"] = app.DB.GetAllTracks()
-
+	tracks := app.DB.GetAllTracks()
+	fmt.Println(tracks)
+	td.Data = make(map[string]any)
+	td.Data["Tracks"] = tracks
 	_ = render(w, r, "/acceuil.gohtml", &td)
 }
 
@@ -51,7 +53,7 @@ func (app *Application) RenderLoader(w http.ResponseWriter, r *http.Request) {
 func (app *Application) RenderSingleTrack(w http.ResponseWriter, r *http.Request) {
 	trackid := chi.URLParam(r, "id")
 	td := TemplateData{}
-	td.Data["Track"] = app.DB.GetTrack(trackid)
+	td.Data["Track"] = app.DB.GetTrackFromId(trackid)
 
 	_ = render(w, r, "/singletrack.gohtml", &td)
 }

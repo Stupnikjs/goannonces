@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 )
 
 type Track struct {
@@ -40,11 +41,28 @@ func (rep *PostgresRepo) PushTrackToSQL(track Track) error {
 }
 
 func (rep *PostgresRepo) GetTrackFromId(id string) Track {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	row := rep.DB.QueryRowContext(ctx, GetTrackFromIdQuery, id)
 	track := Track{}
-	return track 
+	intID, err := strconv.Atoi(id)
+
+	if err != nil {
+		fmt.Println(err)
+
+	}
+	track.ID = int32(intID)
+	row.Scan(
+		&track.Name,
+		&track.StoreURL,
+		&track.PlayCount,
+		&track.SelectionCount,
+		&track.Size,
+	)
+	return track
 }
 
-func I(rep *PostgresRepo) InitTable() {
+func (rep *PostgresRepo) InitTable() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	_, err := rep.DB.ExecContext(ctx, InitTableQuery)

@@ -12,7 +12,7 @@ import (
 )
 
 type Application struct {
-	DB repo.Dbrepo
+	DB   repo.DBrepo
 	Port int
 }
 
@@ -25,14 +25,14 @@ func main() {
 	}
 
 	app := Application{
-		Port: 3322
+		Port: 3322,
 	}
 
 	conn, err := app.connectToDB()
 
- app.DB = &PostgresRepo{
- DB:conn
- }
+	app.DB = &repo.PostgresRepo{
+		DB: conn,
+	}
 	if err != nil {
 		log.Fatalf("Error loading db conn: %v", err)
 	}
