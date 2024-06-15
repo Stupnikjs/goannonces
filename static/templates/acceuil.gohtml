@@ -3,11 +3,13 @@
 {{define "content"}}
     <section class="accueil-section">
          {{ range .Data.Tracks}} 
-            <a href={{ .StoreURL }}>
-              {{ .Name }}
-            
-            </a>
-
+           <div> 
+              <p>{{ .Name }}</p>
+              <audio href="/{{ .ID }}">
+                {{ .Name }}
+              
+              </audio>
+            </div>
          {{ end }}
     </section>
 {{end}}

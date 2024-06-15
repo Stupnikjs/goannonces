@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -8,6 +9,7 @@ import (
 	"net/http"
 	"path"
 
+	"cloud.google.com/go/storage"
 	repo "github.com/Stupnikjs/zik/pkg/db"
 	"github.com/Stupnikjs/zik/pkg/gstore"
 	"github.com/go-chi/chi/v5"
@@ -146,7 +148,15 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http.Request) {
 	trackid := chi.URLParam(r, "id")
 	track := app.DB.GetTrackFromId(trackid)
-	resp, err := http.Get(track.StoreURL)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+	bucket := client.Bucket(BucketName)
+	obj := bucket.Object(track.Name)
+	reader, err := obj.NewReader(ctx)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -154,6 +164,6 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 	w.Header().Set("Content-Type", "audio/mpeg")
 	w.WriteHeader(http.StatusOK)
 
-	_, _ = io.Copy(w, resp.Body)
+	_, _ = io.Copy(w, reader)
 
 }
