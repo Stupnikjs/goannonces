@@ -39,7 +39,12 @@ func (rep *PostgresRepo) PushTrackToSQL(track Track) error {
 	return nil
 }
 
-func (rep *PostgresRepo) InitTable() {
+func (rep *PostgresRepo) GetTrackFromId(id string) Track {
+	track := Track{}
+	return track 
+}
+
+func I(rep *PostgresRepo) InitTable() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	_, err := rep.DB.ExecContext(ctx, InitTableQuery)
