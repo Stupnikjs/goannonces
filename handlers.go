@@ -24,6 +24,7 @@ type TemplateData struct {
 
 func render(w http.ResponseWriter, r *http.Request, t string, td *TemplateData) error {
 	_ = r.Method
+
 	parsedTemplate, err := template.ParseFiles(path.Join(pathToTemplates, t), path.Join(pathToTemplates, "/base.layout.gohtml"))
 	if err != nil {
 		return err

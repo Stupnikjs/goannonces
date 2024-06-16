@@ -47,7 +47,7 @@ border: 1px solid black;
 
 #loaderform {
 display:flex;
-flex-direction:columns;
+flex-direction:column;
 background-color:azure;
 
 }
