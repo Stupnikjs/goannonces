@@ -3,13 +3,14 @@
 {{define "content"}}
     <section class="accueil-section">
          {{ range .Data.Tracks}} 
-           <div> 
+           <div class="audiocard"> 
               <p>{{ .Name }}</p>
-              <audio href="/{{ .ID }}">
+              <button  data-url="/stream/sound/{{ .ID }}">
                 {{ .Name }}
               
-              </audio>
+              </button>
             </div>
          {{ end }}
     </section>
+    <script defer src="/static/js/acceuil.js"></script>
 {{end}}

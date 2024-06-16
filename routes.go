@@ -15,6 +15,7 @@ func (app *Application) routes() http.Handler {
 	mux.Get("/loader", app.RenderLoader)
 	mux.Get("/urls", ListObjectHandler)
 	mux.Post("/upload", app.UploadFile)
+	mux.Get("/stream/sound/{id}", app.UploadTrackFromGCPHandler)
 
 	// static assets
 

@@ -1,34 +1,42 @@
+/* acceuil */
 
-
-
-/* loader   */
-
-#selectFileNum {
-
-background-color: "azure";
-padding: "1rem";
-border: "1px solid black";
+.audiocard{
+padding: 1rem; 
+background-color: blue; 
 
 }
 
-#submitFileNum {
-background-color: "azure";
-padding: "1rem";
-border: "1px solid black";
+/* loader   */
+
+#selectFileNum{
+
+background-color: azure";
+padding: 1rem;
+border: 1px solid black;
+
+}
+
+#submitFileNum{
+background-color: azure;
+padding: 1rem;
+border: 1px solid black;
 
 }
 
 #loaderform {
-display:"flex";
-flex-direction:"columns";
-background-color:"azure";
+display:flex;
+flex-direction:columns;
+background-color:azure;
 
 }
 
 #loaderform input {
-    padding : "1rem"; 
-    background-color:"lightblue";
+    padding : 1rem; 
+    background-color:lightblue;
 
 }
+
+
+
 
 

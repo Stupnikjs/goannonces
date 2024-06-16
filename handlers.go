@@ -153,13 +153,17 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 	client, err := storage.NewClient(ctx)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 	bucket := client.Bucket(BucketName)
 	obj := bucket.Object(track.Name)
+	defer client.Close()
 	reader, err := obj.NewReader(ctx)
 
+	defer reader.Close()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 	w.Header().Set("Content-Type", "audio/mpeg")
 	w.WriteHeader(http.StatusOK)

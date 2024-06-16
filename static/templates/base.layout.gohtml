@@ -4,9 +4,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/main.css">
+    <link href='/static/css/main.css' rel='stylesheet' >
     <title>Document</title>
 </head>
+
+<style>
+/* acceuil */
+
+.audiocard{
+padding: 1rem; 
+background-color: blue; 
+
+}
+
+/* loader   */
+
+#selectFileNum{
+
+background-color: azure";
+padding: 1rem;
+border: 1px solid black;
+
+}
+
+#submitFileNum{
+background-color: azure;
+padding: 1rem;
+border: 1px solid black;
+
+}
+
+#loaderform {
+display:flex;
+flex-direction:columns;
+background-color:azure;
+
+}
+
+#loaderform input {
+    padding : 1rem; 
+    background-color:lightblue;
+
+}
+
+
+
+
+
+
+
+</style>
 <body>
     <header>
         <nav>
@@ -17,7 +64,6 @@
         </nav>
     </header>
     <div class="grid-section">
-        <div>Hola</div>
         <div>
             {{ block "content" . }}
             {{ end }}
