@@ -2,7 +2,8 @@ package repo
 
 type DBrepo interface {
 	InitTable()
-	GetAllTracks() []Track
+	GetAllTracks() ([]Track, error)
 	PushTrackToSQL(Track) error
-	GetTrackFromId(string) Track
+	GetTrackFromId(string) (*Track, error)
+	DeleteTrack(int32) error
 }

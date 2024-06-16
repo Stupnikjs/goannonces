@@ -5,13 +5,16 @@ for ( let i = 0; i < cards.length; i++ ){
     // create toggle button (todo) 
     button.addEventListener("click", (e) => {
         e.preventDefault()
-        
-        let audio = document.createElement("audio")
-        audio.src = button.getAttribute("data-url") 
-        audio.controls = true
-        audio.preload = "auto"
-        console.log(cards[i])
-        console.log(button.getAttribute("data-url"))
-        cards[i].appendChild(audio)
+        let selected = button.getAttribute("selected")
+        if (!selected){
+            button.setAttribute("selected", "true")
+            let audio = document.createElement("audio")
+            audio.src = button.getAttribute("data-url") 
+            audio.controls = true
+            audio.preload = "auto"
+            console.log(button.getAttribute("data-url"))
+            cards[i].appendChild(audio)
+        }
+       
     })
 }

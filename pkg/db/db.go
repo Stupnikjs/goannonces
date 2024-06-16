@@ -3,7 +3,6 @@ package repo
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"log"
 	"strconv"
 )
@@ -40,15 +39,15 @@ func (rep *PostgresRepo) PushTrackToSQL(track Track) error {
 	return nil
 }
 
-func (rep *PostgresRepo) GetTrackFromId(id string) Track {
+func (rep *PostgresRepo) GetTrackFromId(id string) (*Track, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	row := rep.DB.QueryRowContext(ctx, GetTrackFromIdQuery, id)
-	track := Track{}
+	track := &Track{}
 	intID, err := strconv.Atoi(id)
 
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 
 	}
 	track.ID = int32(intID)
@@ -59,7 +58,7 @@ func (rep *PostgresRepo) GetTrackFromId(id string) Track {
 		&track.SelectionCount,
 		&track.Size,
 	)
-	return track
+	return track, nil
 }
 
 func (rep *PostgresRepo) InitTable() {
@@ -72,12 +71,12 @@ func (rep *PostgresRepo) InitTable() {
 	}
 }
 
-func (rep *PostgresRepo) GetAllTracks() []Track {
+func (rep *PostgresRepo) GetAllTracks() ([]Track, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	rows, err := rep.DB.QueryContext(ctx, GetAllTrackQuery)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 	tracks := []Track{}
 	track := Track{}
@@ -91,13 +90,22 @@ func (rep *PostgresRepo) GetAllTracks() []Track {
 			&track.Size,
 		)
 		if err != nil {
-			fmt.Println(err)
-			break
+			return nil, err
 		}
 		tracks = append(tracks, track)
 
 	}
-	return tracks
+	return tracks, nil
+}
+
+func (rep *PostgresRepo) DeleteTrack(trackId int32) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	_, err := rep.DB.ExecContext(ctx, DeleteTrackQuery)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // get most played Track with num arg

@@ -44,3 +44,7 @@ SELECT
 FROM tracks 
 WHERE id = $1; 
 `
+
+var DeleteTrackQuery string = `
+DELETE FROM tracks WHERE id = $1; 
+`

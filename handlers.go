@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"path"
+	"strconv"
 
 	"cloud.google.com/go/storage"
 	repo "github.com/Stupnikjs/zik/pkg/db"
@@ -40,7 +41,12 @@ func render(w http.ResponseWriter, r *http.Request, t string, td *TemplateData) 
 func (app *Application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 
 	td := TemplateData{}
-	tracks := app.DB.GetAllTracks()
+	tracks, err := app.DB.GetAllTracks()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	fmt.Println(tracks)
 	td.Data = make(map[string]any)
 	td.Data["Tracks"] = tracks
@@ -55,7 +61,13 @@ func (app *Application) RenderLoader(w http.ResponseWriter, r *http.Request) {
 func (app *Application) RenderSingleTrack(w http.ResponseWriter, r *http.Request) {
 	trackid := chi.URLParam(r, "id")
 	td := TemplateData{}
-	td.Data["Track"] = app.DB.GetTrackFromId(trackid)
+	track, err := app.DB.GetTrackFromId(trackid)
+	td.Data = map[string]any{}
+	td.Data["Track"] = track
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	_ = render(w, r, "/singletrack.gohtml", &td)
 }
@@ -147,7 +159,11 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 
 func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http.Request) {
 	trackid := chi.URLParam(r, "id")
-	track := app.DB.GetTrackFromId(trackid)
+	track, err := app.DB.GetTrackFromId(trackid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	client, err := storage.NewClient(ctx)
@@ -169,5 +185,43 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 	w.WriteHeader(http.StatusOK)
 
 	_, _ = io.Copy(w, reader)
+
+}
+
+func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Request) {
+	trackid := chi.URLParam(r, "id")
+	trackidInt, err := strconv.Atoi(trackid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	trackidInt32 := int32(trackidInt)
+	err = app.DB.DeleteTrack(trackidInt32)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.Write([]byte("track deleted succefully"))
+}
+
+func (app *Application) DeleteGCPObjectHandler(w http.ResponseWriter, r *http.Request) {
+	// call to app
+	trackid := chi.URLParam(r, "id")
+	track, err := app.DB.GetTrackFromId(trackid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	err = gstore.DeleteObjectInBucket(BucketName, track.Name)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.Write([]byte(fmt.Sprintf("file %s deleted succesfully in bucker", track.Name)))
+
+}
+
+func (app *Application) IncrementPlayCountHandler(w http.ResponseWriter, r *http.Request) {
+	// call to app
 
 }
