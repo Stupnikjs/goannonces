@@ -99,3 +99,5 @@ func (rep *PostgresRepo) GetAllTracks() []Track {
 	}
 	return tracks
 }
+
+// get most played Track with num arg
