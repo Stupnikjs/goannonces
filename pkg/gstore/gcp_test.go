@@ -1,11 +1,14 @@
 package gstore
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"math/rand/v2"
 	"os"
 	"testing"
+
+	"cloud.google.com/go/storage"
 )
 
 var TestBucket string = "mysuperstronktestbuck"
@@ -61,4 +64,20 @@ func TestDeleteBucket(t *testing.T) {
 
 	}
 	defer CreateBucket(TestBucket)
+}
+func TestDeleteBucketObject(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	client, _ := storage.NewClient(ctx)
+	bucket := client.Bucket(TestBucket)
+	obj := bucket.Object("test.txt")
+	writer := obj.NewWriter(ctx)
+	writer.Write([]byte("this is test content"))
+	writer.Close()
+
+	err := DeleteObjectInBucket(TestBucket, "test.txt")
+	if err != nil {
+		t.Errorf("error deleting object %v", err)
+	}
+
 }
