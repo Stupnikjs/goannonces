@@ -3,7 +3,9 @@ let cards = document.querySelectorAll(".audiocard")
 for ( let i = 0; i < cards.length; i++ ){
     let button = cards[i].querySelector("button")
     // create toggle button (todo) 
-    button.addEventListener("click", () => {
+    button.addEventListener("click", (e) => {
+        e.preventDefault()
+        
         let audio = document.createElement("audio")
         audio.src = button.getAttribute("data-url") 
         audio.controls = true
