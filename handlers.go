@@ -23,7 +23,7 @@ type TemplateData struct {
 }
 
 func render(w http.ResponseWriter, r *http.Request, t string, td *TemplateData) error {
-
+	_ = r.Method
 	parsedTemplate, err := template.ParseFiles(path.Join(pathToTemplates, t), path.Join(pathToTemplates, "/base.layout.gohtml"))
 	if err != nil {
 		return err
@@ -117,7 +117,7 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 
 		for _, h := range headers {
 
-			if IsInSlice[string](h.Filename, objNames) {
+			if IsInSlice(h.Filename, objNames) {
 				// format a messgage with already present files
 				break
 			}
