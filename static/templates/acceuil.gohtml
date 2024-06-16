@@ -4,7 +4,6 @@
     <section class="accueil-section">
          {{ range .Data.Tracks}} 
            <div class="audiocard"> 
-              <p>{{ .Name }}</p>
               <button  data-url="/stream/sound/{{ .ID }}">
                 {{ .Name }}
               </button>
