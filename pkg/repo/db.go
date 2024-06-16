@@ -11,10 +11,11 @@ type Track struct {
 	ID             int32
 	Name           string
 	StoreURL       string
+	Selected       bool
 	SelectionCount int
 	PlayCount      int
 	Size           int32
-	UploadDate     string
+	Tag            string
 }
 
 type PostgresRepo struct {
@@ -29,9 +30,11 @@ func (rep *PostgresRepo) PushTrackToSQL(track Track) error {
 		InsertTrackQuery,
 		track.Name,
 		track.StoreURL,
+		track.Selected,
 		track.SelectionCount,
 		track.PlayCount,
 		track.Size,
+		track.Tag,
 	)
 	if err != nil {
 		return err
@@ -54,9 +57,11 @@ func (rep *PostgresRepo) GetTrackFromId(id string) (*Track, error) {
 	row.Scan(
 		&track.Name,
 		&track.StoreURL,
+		&track.Selected,
 		&track.PlayCount,
 		&track.SelectionCount,
 		&track.Size,
+		&track.Tag,
 	)
 	return track, nil
 }
@@ -85,9 +90,11 @@ func (rep *PostgresRepo) GetAllTracks() ([]Track, error) {
 			&track.ID,
 			&track.Name,
 			&track.StoreURL,
+			&track.Selected,
 			&track.PlayCount,
 			&track.SelectionCount,
 			&track.Size,
+			&track.Tag,
 		)
 		if err != nil {
 			return nil, err

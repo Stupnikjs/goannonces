@@ -147,6 +147,7 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 			url, err := gstore.GetObjectURL(bucketName, h.Filename)
 			track.StoreURL = url
 			track.Name = h.Filename
+			track.Selected = false
 			err = app.DB.PushTrackToSQL(track)
 			if err != nil {
 				return err
