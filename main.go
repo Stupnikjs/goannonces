@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	_ "cloud.google.com/go/storage"
-	repo "github.com/Stupnikjs/zik/pkg/db"
+	"github.com/Stupnikjs/zik/pkg/repo"
 	"github.com/joho/godotenv"
 	_ "google.golang.org/api/option"
 )

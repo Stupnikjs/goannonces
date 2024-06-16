@@ -11,8 +11,8 @@ import (
 	"strconv"
 
 	"cloud.google.com/go/storage"
-	repo "github.com/Stupnikjs/zik/pkg/db"
 	"github.com/Stupnikjs/zik/pkg/gstore"
+	"github.com/Stupnikjs/zik/pkg/repo"
 	"github.com/go-chi/chi/v5"
 )
 
