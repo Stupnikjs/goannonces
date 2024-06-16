@@ -101,3 +101,5 @@ func (rep *PostgresRepo) GetAllTracks() []Track {
 }
 
 // get most played Track with num arg
+// create route to increment PlayCount
+// selectcnt
