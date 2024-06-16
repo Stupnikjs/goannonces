@@ -1,4 +1,4 @@
-package main
+package gstore
 
 import (
 	"log"
@@ -7,8 +7,6 @@ import (
 
 	"github.com/joho/godotenv"
 )
-
-var TestBucket string = "mysuperstronktestbuck"
 
 func TestMain(m *testing.M) {
 

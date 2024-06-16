@@ -3,19 +3,13 @@ package gstore
 import (
 	"context"
 	"fmt"
-	"log"
 	"math/rand/v2"
-	"os"
 	"testing"
 
 	"cloud.google.com/go/storage"
 )
 
 var TestBucket string = "mysuperstronktestbuck"
-
-func TestLoadToBucket(t *testing.T) {
-
-}
 
 func TestCreateBucket(t *testing.T) {
 	randint := rand.IntN(2000)
@@ -33,20 +27,9 @@ func TestCreateBucket(t *testing.T) {
 
 func TestGetBucketObject(t *testing.T) {
 
-	curr, err := os.Getwd()
-	fmt.Println(curr)
-	mockFile, err := os.Create("test.txt")
 	data := []byte("this is test files content")
-	mockFile.Write(data)
 
-	if err != nil {
-		log.Println(err)
-	}
-
-	defer mockFile.Close()
-	defer os.Remove(mockFile.Name())
-
-	err = LoadToBucket(TestBucket, mockFile.Name(), data)
+	err := LoadToBucket(TestBucket, "test.txt", data)
 
 	// Call get bucket method
 	if err != nil {
@@ -56,6 +39,7 @@ func TestGetBucketObject(t *testing.T) {
 }
 
 func TestDeleteBucket(t *testing.T) {
+	CreateBucket(TestBucket)
 	err := DeleteBucket(TestBucket)
 
 	if err != nil {
@@ -63,7 +47,6 @@ func TestDeleteBucket(t *testing.T) {
 		t.Errorf("error deleting bucket %s", err)
 
 	}
-	defer CreateBucket(TestBucket)
 }
 func TestDeleteBucketObject(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())

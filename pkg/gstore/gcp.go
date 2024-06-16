@@ -19,13 +19,14 @@ func CreateBucket(bucketName string) error {
 		return err
 	}
 	bucket := client.Bucket(bucketName)
-
+	attr, err := bucket.Attrs(ctx)
+	attr.Location = "EU"
 	projectID := "zikstudio"
 	// Creates the new bucket.
 
 	// CHOSE EUROPE WEST
 
-	if err := bucket.Create(ctx, projectID, nil); err != nil {
+	if err := bucket.Create(ctx, projectID, attr); err != nil {
 		log.Fatalf("Failed to create bucket: %v", err)
 		return err
 	}
