@@ -109,6 +109,13 @@ left: 10%;
   height: 100px;
 }
 
+#drag_zone {
+ border: 2px solid black; 
+ width: 200px;
+  height: 100px;
+
+}
+
 /* loader   */
 
 #selectFileNum{

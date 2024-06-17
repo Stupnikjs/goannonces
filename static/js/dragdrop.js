@@ -11,16 +11,17 @@ function dropHandler(ev) {
         if (item.kind === "file") {
           const file = item.getAsFile();
           console.log(`… file[${i}].name = ${file.name}`);
-          let p = document.createElement("p")
-          p.textContent = file.name
-          dragZone.appendChild(p)
-          console.log("michel")
+          
         }
       });
     } else {
       // Use DataTransfer interface to access the file(s)
       [...ev.dataTransfer.files].forEach((file, i) => {
         console.log(`… file[${i}].name = ${file.name}`);
+        let p = document.createElement("p")
+          p.textContent = file.name
+          dragZone.appendChild(p)
+          console.log("michel")
       });
     }
   }
