@@ -4,13 +4,23 @@
     <section class="accueil-section">
          {{ range .Data.Tracks}} 
            <div class="audiocard"> 
-              <button  data-url="/stream/sound/{{ .ID }}">
-                {{ .Name }}
-              </button>
-              <button class="selectBtn">Select</button>
+              <p> {{ .Name }} </p>
+              <div class="btnDiv">
+                <button class="nameBtn" data-url="/stream/sound/{{ .ID }}">
+                <i class="fa-solid fa-play"></i>
+                </button>
+                <button class="selectedBtn"> <i class="fa-solid fa-heart"></i> </button>
+                <button class="tagBtn"><i class="fa-solid fa-pen"></i></button>
+               </div>
+              <div class="hiddenTagDiv">
+                <input type="text" class="tagInput">
+                <button class="submitTagBtn"> Submit Tag </button>
+              </div>
+              
               <p> {{ .Tag }} </p>
             </div>
          {{ end }}
     </section>
     <script defer src="/static/js/acceuil.js"></script>
+    <script defer src="https://kit.fontawesome.com/8c6e47f935.js" crossorigin="anonymous"></script>
 {{end}}

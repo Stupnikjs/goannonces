@@ -1,19 +1,59 @@
+
+
+html, body , ul{
+margin: 0; 
+padding: 0; 
+
+}
+
+/* baselayout */
+
+
+.grid-section {
+display: grid; 
+grid-template-columns: 10% 1fr 10%; 
+
+}
+
+.padding-grid {
+width: 100%;
+ 
+
+}
+
+.content {
+
+margin: 2rem; 
+}
+
+nav > ul {
+
+display: flex; 
+list-style-type: none; 
+background-color: lightblue; 
+}
+
+nav > ul  > li {
+padding: 1rem; 
+margin : auto; 
+background-color: white;
+color: black;  
+
+}
+
 /* acceuil */
 
 .audiocard{
+position: relative; 
 margin:  1rem auto;
-
-padding: 1rem; 
+padding: 2rem; 
 background-color: lightblue; 
 border : 1px solid black; 
-display: flex; 
-flex-direction: column;
-align-items: center; 
 width: 50%; 
 }
 
 .audiocard p{
-max-width: 60%;
+max-width: 80%;
 margin:auto; 
 background-color: black;
 color: white; 
@@ -21,12 +61,27 @@ padding: .5rem;
 }
 
 .audiocard button{
-max-width: 60%;
-margin:auto;
+
 padding: .5rem;
 }
+.btnDiv{
+position: absolute; 
+display: flex; 
+flex-direction: column; 
+right: 2%;
+top: 2%;
 
+}
 
+.hiddenTagDiv {
+
+display: none; 
+}
+
+.selectedHeart {
+background-color: black; 
+color: gray; 
+}
 
 /* loader   */
 
@@ -45,6 +100,11 @@ border: 1px solid black;
 
 }
 
+#loader-section {
+display: flex; 
+flex-direction: column; 
+
+}
 #loaderform {
 display:flex;
 flex-direction:column;

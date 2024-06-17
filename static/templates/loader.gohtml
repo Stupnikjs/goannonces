@@ -2,14 +2,16 @@
 {{template "base" .}}
 
 {{define "content"}}
-    <label>How many song to upload?</label>
-    <input type="number" id="selectFileNum">
-    <button type="submit"  id="submitFileNum">Submit</button>
+    <section id="loader-section">
+        <label>How many song to upload?</label>
+        <input type="number" id="selectFileNum">
+        <button type="submit"  id="submitFileNum">Submit</button>
 
-     <form id="loaderform" action="/upload" method="POST"
-            enctype="multipart/form-data"> 
-        <h4>Browse your file</h4>  
-        <input type="submit" value="Upload File"/> 
-    </form> 
+        <form id="loaderform" action="/upload" method="POST"
+                enctype="multipart/form-data"> 
+            <h4>Browse your file</h4>  
+            <input type="submit" value="Upload File"/> 
+        </form> 
+    </section>
     <script defer src="/static/js/loader.js"></script>
 {{end}}
