@@ -72,6 +72,13 @@ func (app *Application) RenderSingleTrack(w http.ResponseWriter, r *http.Request
 	_ = render(w, r, "/singletrack.gohtml", &td)
 }
 
+func (app *Application) RenderDragDrop(w http.ResponseWriter, r *http.Request) {
+
+	td := TemplateData{}
+
+	_ = render(w, r, "/dragdrop.gohtml", &td)
+}
+
 func (app *Application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	// load file to gcp bucket
 
@@ -199,6 +206,10 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 }
 
 func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Request) {
+	reqStruct := reqStruct{}
+
+	bytes, err := io.ReadAll(r.Body)
+	err = json.Unmarshal(bytes, reqStruct)
 
 	trackidInt, err := strconv.Atoi(trackid)
 	if err != nil {
