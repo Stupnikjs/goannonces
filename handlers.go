@@ -84,10 +84,12 @@ func (app *Application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Retrieve the file from the form data
-	err = app.LoadMultipartReqToBucket(r, BucketName)
+	msg, err := app.LoadMultipartReqToBucket(r, BucketName)
 	if err != nil {
-		fmt.Println(err)
+		WriteErrorToResponse(w, err, 404)
 	}
+
+	w.Write([]byte(fmt.Sprintf("%s", msg)))
 }
 
 func ListObjectHandler(w http.ResponseWriter, r *http.Request) {
@@ -100,18 +102,19 @@ func ListObjectHandler(w http.ResponseWriter, r *http.Request) {
 	byteNames, err := json.Marshal(names)
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		WriteErrorToResponse(w, err, 404)
 	}
 
 	w.Write(byteNames)
 
 }
 
-func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName string) error {
+func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName string) (string, error) {
 	objNames, err := gstore.ListObjectsBucket(BucketName)
 
+	already := []string{}
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	for _, headers := range r.MultipartForm.File {
@@ -120,13 +123,15 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 
 			if IsInSlice(h.Filename, objNames) {
 				// format a messgage with already present files
+				already = append(already, h.Filename)
+
 				break
 			}
 
 			file, err := h.Open()
 
 			if err != nil {
-				return err
+				return "", err
 			}
 
 			defer file.Close()
@@ -134,13 +139,13 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 			finalByteArr, err := ByteFromMegaFile(file)
 
 			if err != nil {
-				return err
+				return "", err
 			}
 
 			err = gstore.LoadToBucket(bucketName, h.Filename, finalByteArr)
 
 			if err != nil {
-				return err
+				return "", err
 			}
 
 			track := repo.Track{}
@@ -150,12 +155,16 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 			track.Selected = false
 			err = app.DB.PushTrackToSQL(track)
 			if err != nil {
-				return err
+				return "", err
 			}
 		}
 
 	}
-	return nil
+	msg := ""
+	for _, s := range already {
+		msg += fmt.Sprintf(" %s were alreaddy in bucket ", s)
+	}
+	return msg, nil
 
 }
 
@@ -163,14 +172,14 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 	trackid := chi.URLParam(r, "id")
 	track, err := app.DB.GetTrackFromId(trackid)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	bucket := client.Bucket(BucketName)
@@ -180,7 +189,7 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 
 	defer reader.Close()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	w.Header().Set("Content-Type", "audio/mpeg")
@@ -194,13 +203,13 @@ func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Reques
 	trackid := chi.URLParam(r, "id")
 	trackidInt, err := strconv.Atoi(trackid)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	trackidInt32 := int32(trackidInt)
 	err = app.DB.DeleteTrack(trackidInt32)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	w.Write([]byte("track deleted succefully"))
@@ -211,12 +220,12 @@ func (app *Application) DeleteGCPObjectHandler(w http.ResponseWriter, r *http.Re
 	trackid := chi.URLParam(r, "id")
 	track, err := app.DB.GetTrackFromId(trackid)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	err = gstore.DeleteObjectInBucket(BucketName, track.Name)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	w.Write([]byte(fmt.Sprintf("file %s deleted succesfully in bucker", track.Name)))
@@ -239,10 +248,8 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 	body, err := io.ReadAll(r.Body)
 
 	if err != nil {
-		fmt.Println(err)
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		WriteErrorToResponse(w, err, 404)
 		return
-
 	}
 	tr := tagRequest{}
 	json.Unmarshal(body, &tr)
@@ -251,16 +258,14 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 		trackid := chi.URLParam(r, "id")
 		trackidInt, err := strconv.Atoi(trackid)
 		if err != nil {
-			fmt.Println(err)
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			WriteErrorToResponse(w, err, 404)
 			return
 		}
 		trackidInt32 := int32(trackidInt)
 		err = app.DB.UpdateTrackTag(trackidInt32, tr.Tag)
 
 		if err != nil {
-			fmt.Println(err)
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			WriteErrorToResponse(w, err, 404)
 			return
 
 		}
