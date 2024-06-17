@@ -16,6 +16,7 @@ func (app *Application) routes() http.Handler {
 	mux.Get("/urls", ListObjectHandler)
 	mux.Post("/upload", app.UploadFile)
 	mux.Get("/stream/sound/{id}", app.UploadTrackFromGCPHandler)
+	mux.Post("/tracks/tag/{id}", app.UpdateTrackTagHandler)
 
 	// static assets
 

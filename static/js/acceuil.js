@@ -4,6 +4,7 @@ for ( let i = 0; i < cards.length; i++ ){
     let button = cards[i].querySelector(".nameBtn")
     let tagBtn = cards[i].querySelector(".tagBtn")
     let selectedBtn = cards[i].querySelector(".selectedBtn")
+    let sumbitTagBtn = cards[i].querySelector(".submitTagBtn")
 
     // create toggle button (todo) 
     button.addEventListener("click", (e) => {
@@ -54,6 +55,23 @@ for ( let i = 0; i < cards.length; i++ ){
         }
        
     })
+    sumbitTagBtn.addEventListener("click", async (e) => {
+        e.preventDefault()
+        let input = cards[i].querySelector(".tagInput")
+        let resp = await fetch(`/tracks/tag/${trackid}`, {
+            method: "POST", 
+            headers: {
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify({
+                "tag": input.value 
+            })
 
+        })
+        if (resp.ok) {
+            window.location("/")
+        }
+       
+    })
 
 }

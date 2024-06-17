@@ -227,3 +227,14 @@ func (app *Application) IncrementPlayCountHandler(w http.ResponseWriter, r *http
 	// call to app
 
 }
+
+func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Request) {
+	// test request content type
+
+	// read request body json
+
+	// get id params
+
+	// update tag in db
+
+}
