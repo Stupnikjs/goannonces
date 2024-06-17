@@ -17,7 +17,7 @@ func (app *Application) routes() http.Handler {
 	mux.Post("/upload", app.UploadFile)
 	mux.Get("/stream/sound/{id}", app.UploadTrackFromGCPHandler)
 	mux.Post("/track/tag/{id}", app.UpdateTrackTagHandler)
-
+	mux.Post("/track/delete", app.DeleteTrackHandler)
 	// static assets
 
 	fileServer := http.FileServer(http.Dir("./static/"))

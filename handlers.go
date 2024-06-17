@@ -48,7 +48,6 @@ func (app *Application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	fmt.Println(tracks)
 	td.Data = make(map[string]any)
 	td.Data["Tracks"] = tracks
 	_ = render(w, r, "/acceuil.gohtml", &td)
@@ -200,7 +199,7 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 }
 
 func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Request) {
-	trackid := chi.URLParam(r, "id")
+
 	trackidInt, err := strconv.Atoi(trackid)
 	if err != nil {
 		WriteErrorToResponse(w, err, 404)

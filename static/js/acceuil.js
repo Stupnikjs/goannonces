@@ -5,6 +5,7 @@ for ( let i = 0; i < cards.length; i++ ){
     let tagBtn = cards[i].querySelector(".tagBtn")
     let selectedBtn = cards[i].querySelector(".selectedBtn")
     let sumbitTagBtn = cards[i].querySelector(".submitTagBtn")
+    let deleteBtn = cards[i].querySelector(".submitTagBtn")
 
     // create toggle button (todo) 
     button.addEventListener("click", (e) => {
@@ -36,6 +37,45 @@ for ( let i = 0; i < cards.length; i++ ){
             // trouver autre chose 
             let hiddenTagDiv = cards[i].querySelector(".hiddenTagDiv")
             hiddenTagDiv.classList.add("hiddenTagDiv")
+        }
+       
+    })
+
+    selectedBtn.addEventListener("click", (e) => {
+        e.preventDefault()
+        let selected = selectedBtn.getAttribute("selected")
+        if (selected == "false") {
+            selected = null
+        }
+        if (!selected){
+            selectedBtn.setAttribute("selected", "true")
+            selectedBtn.classList.add("selectedHeart")
+        } else {
+            selectedBtn.setAttribute("selected", "false")
+            selectedBtn.classList.remove("selectedHeart")
+        }
+       
+    })
+    deleteBtn.addEventListener("click", async (e) => {
+        e.preventDefault()
+        
+        let trackid = deleteBtn.id
+        let resp = await fetch(`/track/delete`, {
+            method: "POST", 
+            headers: {
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify({
+                "trackid": trackid,
+
+
+            })
+
+        })
+        if (resp.ok) {
+            window.location.assign("/")
+        } else {
+            console.log(resp.body)
         }
        
     })
