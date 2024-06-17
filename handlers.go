@@ -228,13 +228,40 @@ func (app *Application) IncrementPlayCountHandler(w http.ResponseWriter, r *http
 
 }
 
+type tagRequest struct {
+	Tag string `json:"tag"`
+}
+
 func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Request) {
 	// test request content type
-
+	contentTypes := r.Header["Content-type"]
+	if !IsInSlice("application/json", contentTypes) {
+		http.Error(w, "Wrong conent type request", http.StatusBadRequest)
+		return
+	}
 	// read request body json
+	body, err := io.ReadAll(r.Body)
 
-	// get id params
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 
-	// update tag in db
+	}
+	tr := tagRequest{}
+	json.Unmarshal(body, &tr)
+
+	if tr.Tag != "" {
+		trackid := chi.URLParam(r, "id")
+		err = app.DB.UpdateTrackTag(trackid, tr.Tag)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+
+		}
+
+	}
+
+	defer r.Body.Close()
 
 }
