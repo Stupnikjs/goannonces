@@ -56,3 +56,9 @@ WHERE id = $1;
 var DeleteTrackQuery string = `
 DELETE FROM tracks WHERE id = $1; 
 `
+
+var UpdateTrackTagQuery string = `
+UPDATE tracks
+	SET tag = $2
+ 	WHERE id = $1; 
+`

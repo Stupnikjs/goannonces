@@ -6,4 +6,5 @@ type DBrepo interface {
 	PushTrackToSQL(Track) error
 	GetTrackFromId(string) (*Track, error)
 	DeleteTrack(int32) error
+	UpdateTrackTag(int32, string) error
 }

@@ -115,6 +115,16 @@ func (rep *PostgresRepo) DeleteTrack(trackId int32) error {
 	return nil
 }
 
+func (rep *PostgresRepo) UpdateTrackTag(trackId int32, tag string) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	_, err := rep.DB.ExecContext(ctx, UpdateTrackTagQuery, trackId, tag)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // get most played Track with num arg
 // create route to increment PlayCount
 // selectcnt

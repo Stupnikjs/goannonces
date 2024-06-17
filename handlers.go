@@ -234,15 +234,12 @@ type tagRequest struct {
 
 func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Request) {
 	// test request content type
-	contentTypes := r.Header["Content-type"]
-	if !IsInSlice("application/json", contentTypes) {
-		http.Error(w, "Wrong conent type request", http.StatusBadRequest)
-		return
-	}
+
 	// read request body json
 	body, err := io.ReadAll(r.Body)
 
 	if err != nil {
+		fmt.Println(err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 
@@ -252,9 +249,17 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 
 	if tr.Tag != "" {
 		trackid := chi.URLParam(r, "id")
-		err = app.DB.UpdateTrackTag(trackid, tr.Tag)
+		trackidInt, err := strconv.Atoi(trackid)
+		if err != nil {
+			fmt.Println(err)
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		trackidInt32 := int32(trackidInt)
+		err = app.DB.UpdateTrackTag(trackidInt32, tr.Tag)
 
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 
@@ -263,5 +268,6 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 	}
 
 	defer r.Body.Close()
-
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("tag updated succefuly"))
 }

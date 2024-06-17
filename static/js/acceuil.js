@@ -58,7 +58,8 @@ for ( let i = 0; i < cards.length; i++ ){
     sumbitTagBtn.addEventListener("click", async (e) => {
         e.preventDefault()
         let input = cards[i].querySelector(".tagInput")
-        let resp = await fetch(`/tracks/tag/${trackid}`, {
+        let trackid = sumbitTagBtn.id
+        let resp = await fetch(`/track/tag/${trackid}`, {
             method: "POST", 
             headers: {
                 'Content-Type': 'application/json'
@@ -69,7 +70,9 @@ for ( let i = 0; i < cards.length; i++ ){
 
         })
         if (resp.ok) {
-            window.location("/")
+            window.location.assign("/")
+        } else {
+            console.log(resp.body)
         }
        
     })
