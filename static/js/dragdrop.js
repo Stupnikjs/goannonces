@@ -71,9 +71,9 @@ function displayFileName(name) {
     // switch to drop zone 
     // on submit delete all content 
     // create a cancel btn 
-    
-    let dragZone = document.querySelector("#drag_zone")
+
+    let dropZone = document.querySelector("#drop_zone")
     const p = document.createElement("p");
     p.textContent = name;
-    dragZone.appendChild(p);
+    dropZone.appendChild(p);
 }

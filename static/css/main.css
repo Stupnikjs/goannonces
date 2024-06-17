@@ -104,14 +104,18 @@ left: 10%;
 
 #drop_zone {
   border: 5px solid blue;
-  width: 200px;
-  height: 100px;
+ width: 50vw;
+ height: 50vh;
+ margin: auto; 
+ overflow: scroll; 
 }
 
+
+#drop_zone p {
+  top: 5px;
+}
 #drag_zone {
  border: 2px solid black; 
- width: 200px;
-  height: 100px;
 
 }
 
