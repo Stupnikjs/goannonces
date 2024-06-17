@@ -1,13 +1,29 @@
-function allowDrop(ev) {
-    ev.preventDefault();
-  }
+function dropHandler(ev) {
+    console.log("File(s) dropped");
   
-  function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-  }
-  
-  function drop(ev) {
+    // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
+  
+    if (ev.dataTransfer.items) {
+      // Use DataTransferItemList interface to access the file(s)
+      [...ev.dataTransfer.items].forEach((item, i) => {
+        // If dropped items aren't files, reject them
+        if (item.kind === "file") {
+          const file = item.getAsFile();
+          console.log(`… file[${i}].name = ${file.name}`);
+        }
+      });
+    } else {
+      // Use DataTransfer interface to access the file(s)
+      [...ev.dataTransfer.files].forEach((file, i) => {
+        console.log(`… file[${i}].name = ${file.name}`);
+      });
+    }
+  }
+
+  function dragOverHandler(ev) {
+    console.log("File(s) in drop zone");
+  
+    // Prevent default behavior (Prevent file from being opened)
+    ev.preventDefault();
   }

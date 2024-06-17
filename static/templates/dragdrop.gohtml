@@ -3,8 +3,12 @@
 {{define "content"}}
     <section >
        
-      <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-      <img id="drag1"  draggable="true" ondragstart="drag(event)" width="336" height="69">
+        <div
+    id="drop_zone"
+    ondrop="dropHandler(event);"
+    ondragover="dragOverHandler(event);">
+    <p>Drag one or more files to this <i>drop zone</i>.</p>
+    </div>
 
     </section>
     <script defer src="/static/js/dragdrop.js"></script>

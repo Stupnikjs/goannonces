@@ -206,11 +206,13 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 }
 
 func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Request) {
-	reqStruct := reqStruct{}
+	/*
+		reqStruct := reqStruct{}
 
-	bytes, err := io.ReadAll(r.Body)
-	err = json.Unmarshal(bytes, reqStruct)
-
+		bytes, err := io.ReadAll(r.Body)
+		err = json.Unmarshal(bytes, reqStruct)
+	*/
+	trackid := ""
 	trackidInt, err := strconv.Atoi(trackid)
 	if err != nil {
 		WriteErrorToResponse(w, err, 404)
