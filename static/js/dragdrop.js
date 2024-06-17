@@ -5,7 +5,7 @@ let submitdrag = document.querySelector("#submit_drag")
 
 function dropHandler(ev) {
     console.log("File(s) dropped");
-    let dragZone = document.querySelector("#drag_zone")
+    
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
   
@@ -17,16 +17,14 @@ function dropHandler(ev) {
           const file = item.getAsFile();
           console.log(`… file[${i}].name = ${file.name}`);
           files.push(file)
-          
+          displayFileName(file.name)
         }
       });
     } else {
       // Use DataTransfer interface to access the file(s)
       [...ev.dataTransfer.files].forEach((file, i) => {
         console.log(`… file[${i}].name = ${file.name}`);
-        let p = document.createElement("p")
-        p.textContent = file.name
-        dragZone.appendChild(p)
+        displayFileName(file.name)
         files.push(file)  
       });
     }
@@ -41,7 +39,7 @@ function dropHandler(ev) {
 
   function submitHandler() {
 
-    console.log("submit handler")
+  console.log("submit handler")
   const formData = new FormData();
 
   files.forEach((file, index) => {
@@ -52,7 +50,6 @@ function dropHandler(ev) {
       method: 'POST',
       body: formData
   })
-  .then(response => response.json())
   .then(data => {
       console.log('Success:', data);
       window.location.assign("/dragdrop")
@@ -69,3 +66,10 @@ e.preventDefault()
 submitHandler()
 
 })
+
+function displayFileName(name) {
+    let dragZone = document.querySelector("#drag_zone")
+    const p = document.createElement("p");
+    p.textContent = name;
+    dragZone.appendChild(p);
+}

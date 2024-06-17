@@ -12,13 +12,12 @@ func (app *Application) routes() http.Handler {
 
 	// register routes
 	mux.Get("/", app.RenderAccueil)
-	mux.Get("/loader", app.RenderLoader)
 	mux.Get("/urls", ListObjectHandler)
 	mux.Post("/upload", app.UploadFile)
 	mux.Get("/stream/sound/{id}", app.UploadTrackFromGCPHandler)
 	mux.Post("/track/tag/{id}", app.UpdateTrackTagHandler)
 	mux.Post("/track/delete", app.DeleteTrackHandler)
-	mux.Get("/dragdrop", app.RenderDragDrop)
+	mux.Get("/loader", app.RenderDragDrop)
 	// static assets
 
 	fileServer := http.FileServer(http.Dir("./static/"))
