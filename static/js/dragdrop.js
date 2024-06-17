@@ -1,7 +1,7 @@
 
 let files = []
 
-let submitdrag = document.querySelector("#sumbit_drag")
+let submitdrag = document.querySelector("#submit_drag")
 
 function dropHandler(ev) {
     console.log("File(s) dropped");
@@ -41,6 +41,7 @@ function dropHandler(ev) {
 
   function submitHandler() {
 
+    console.log("submit handler")
   const formData = new FormData();
 
   files.forEach((file, index) => {
