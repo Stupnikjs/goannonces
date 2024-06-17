@@ -1,6 +1,6 @@
 function dropHandler(ev) {
     console.log("File(s) dropped");
-  
+    let dragZone = document.querySelector("#drag_zone")
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
   
@@ -11,6 +11,10 @@ function dropHandler(ev) {
         if (item.kind === "file") {
           const file = item.getAsFile();
           console.log(`… file[${i}].name = ${file.name}`);
+          let p = document.createElement("p")
+          p.textContent = file.name
+          dragZone.appendChild(p)
+          console.log("michel")
         }
       });
     } else {
