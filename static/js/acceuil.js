@@ -107,7 +107,10 @@ for ( let i = 0; i < cards.length; i++ ){
                 'Content-Type': 'application/json'
             }, 
             body: JSON.stringify({
-                "tag": input.value 
+                                "action": "update",
+                "object": "track.tag"
+                "id": trackid,
+                "body": input.value,
             })
 
         })
