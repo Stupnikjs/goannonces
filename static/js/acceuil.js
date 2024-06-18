@@ -66,8 +66,10 @@ for ( let i = 0; i < cards.length; i++ ){
                 'Content-Type': 'application/json'
             }, 
             body: JSON.stringify({
-                "trackid": trackid,
-
+                "action": "delete",
+                "object": "track",
+                "id": trackid,
+                "body": "",
 
             })
 
