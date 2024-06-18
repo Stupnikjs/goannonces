@@ -44,14 +44,16 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 
 }
 
+// reqModel 
+
 func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Request) {
 	/*
-		reqStruct := reqStruct{}
+		req := reqModel{}
 
 		bytes, err := io.ReadAll(r.Body)
-		err = json.Unmarshal(bytes, reqStruct)
+		err = json.Unmarshal(bytes, req)
 	*/
-	trackid := ""
+	trackid := req.Id
 	trackidInt, err := strconv.Atoi(trackid)
 	if err != nil {
 		WriteErrorToResponse(w, err, 404)
@@ -66,6 +68,7 @@ func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Reques
 	w.Write([]byte("track deleted succefully"))
 }
 
+// reqModel
 func (app *Application) DeleteGCPObjectHandler(w http.ResponseWriter, r *http.Request) {
 	// call to app
 	trackid := chi.URLParam(r, "id")
@@ -96,7 +99,7 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 	req := ReqModel{}
 	json.Unmarshal(body, &req)
 
-	if req.Body != "" && req.Object == "tag" && req.Action == "update" {
+	if req.Field == "tag" && req.Object == "track" && req.Action == "update" {
 		trackid := chi.URLParam(r, "id")
 		trackidInt, err := strconv.Atoi(trackid)
 		if err != nil {
