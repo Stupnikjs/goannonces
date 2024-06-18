@@ -10,7 +10,13 @@ CREATE TABLE IF NOT EXISTS tracks (
 	listen_count INTEGER, 
 	size INTEGER,
 	tag VARCHAR 
-	)
+	); 
+
+CREATE TABLE IF NOT EXISTS playlist (
+	trackid INTEGER REFERENCES tracks(id),
+	id INTEGER,
+	name VARCHAR
+);
 `
 
 var InsertTrackQuery string = `

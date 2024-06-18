@@ -6,6 +6,12 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+type ReqModel struct {
+	Action string `json:"action"`
+	Object string `json:"object"`
+	Body   string `json:"body"`
+}
+
 func (app *Application) routes() http.Handler {
 
 	mux := chi.NewRouter()
@@ -18,6 +24,11 @@ func (app *Application) routes() http.Handler {
 	mux.Post("/track/tag/{id}", app.UpdateTrackTagHandler)
 	mux.Post("/track/delete", app.DeleteTrackHandler)
 	mux.Get("/loader", app.RenderDragDrop)
+
+	mux.Post("/playlist/create", app.CreatePlaylistHandler)
+	mux.Post("/playlist/append", app.AppendToPlaylistHandler)
+	mux.Post("/playlist/remove", app.RemoveToPlaylistHandler)
+
 	// static assets
 
 	fileServer := http.FileServer(http.Dir("./static/"))
