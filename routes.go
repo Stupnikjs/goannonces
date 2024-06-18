@@ -9,6 +9,7 @@ import (
 type ReqModel struct {
 	Action string `json:"action"`
 	Object string `json:"object"`
+ Field string  json:"field"`
 	Body   string `json:"body"`
 }
 
