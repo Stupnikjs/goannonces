@@ -7,17 +7,15 @@ import (
 )
 
 type JsonReq struct {
-	Action string `json:"action"`
+	Action string    `json:"action"`
 	Object ApiObject `json:"object"`
- Field string  `json:"field"`
-	Body   string `json:"body"`
 }
 
-type ApiObject {
-  Type `json:"type"`
-  Id `json:"id"`
-  
-
+type ApiObject struct {
+	Type  string `json:"type"`
+	Id    string `json:"id"`
+	Body  string `json:"body,omitempty"`
+	Field string `json:"field,omitempty"`
 }
 
 func (app *Application) routes() http.Handler {
@@ -26,16 +24,19 @@ func (app *Application) routes() http.Handler {
 
 	// register routes
 	mux.Get("/", app.RenderAccueil)
-	mux.Get("/urls", ListObjectHandler)
-	mux.Post("/upload", app.UploadFile)
-	mux.Get("/stream/sound/{id}", app.UploadTrackFromGCPHandler)
-	mux.Post("/track/tag/{id}", app.UpdateTrackTagHandler)
-	mux.Post("/track/delete", app.DeleteTrackHandler)
 	mux.Get("/loader", app.RenderDragDrop)
 
-	mux.Post("/playlist/create", app.CreatePlaylistHandler)
-	mux.Post("/playlist/append", app.AppendToPlaylistHandler)
-	mux.Post("/playlist/remove", app.RemoveToPlaylistHandler)
+	mux.Get("/urls", ListObjectHandler)
+
+	mux.Post("/upload", app.UploadFile)
+	mux.Get("/stream/sound/{id}", app.UploadTrackFromGCPHandler)
+
+	mux.Post("/api/track/tag", app.UpdateTrackTagHandler)
+	mux.Post("/api/track/remove", app.DeleteTrackHandler)
+
+	mux.Post("/api/playlist/create", app.CreatePlaylistHandler)
+	mux.Post("/api/playlist/append", app.AppendToPlaylistHandler)
+	mux.Post("/api/playlist/remove", app.RemoveToPlaylistHandler)
 
 	// static assets
 

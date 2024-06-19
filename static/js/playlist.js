@@ -1,0 +1,1 @@
+let createPlaylistBtn = document.querySelector(".createPlaylistBtn")

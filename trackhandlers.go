@@ -44,16 +44,19 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 
 }
 
-// reqModel 
+// reqModel
 
 func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Request) {
-	/*
-		req := JsonReq{}
 
-		bytes, err := io.ReadAll(r.Body)
-		err = json.Unmarshal(bytes, req)
-	*/
-	trackid := req.Id
+	req := JsonReq{}
+	bytes, err := io.ReadAll(r.Body)
+	err = json.Unmarshal(bytes, &req)
+	if err != nil {
+		fmt.Println(err)
+		WriteErrorToResponse(w, err, 404)
+		return
+	}
+	trackid := req.Object.Id
 	trackidInt, err := strconv.Atoi(trackid)
 	if err != nil {
 		WriteErrorToResponse(w, err, 404)
@@ -65,6 +68,7 @@ func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Reques
 		WriteErrorToResponse(w, err, 404)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("track deleted succefully"))
 }
 
@@ -91,23 +95,29 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 
 	// read request body json
 	body, err := io.ReadAll(r.Body)
-
+	defer r.Body.Close()
 	if err != nil {
 		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	req := JsonReq{}
-	json.Unmarshal(body, &req)
+	err = json.Unmarshal(body, &req)
 
-	if req.Field == "tag" && req.Object == "track" && req.Action == "update" {
-		trackid := chi.URLParam(r, "id")
-		trackidInt, err := strconv.Atoi(trackid)
+	if err != nil {
+		fmt.Println(err)
+		WriteErrorToResponse(w, err, 404)
+		return
+	}
+
+	if req.Object.Field == "tag" && req.Object.Type == "track" && req.Action == "update" {
+
+		trackidInt, err := strconv.Atoi(req.Object.Id)
 		if err != nil {
 			WriteErrorToResponse(w, err, 404)
 			return
 		}
 		trackidInt32 := int32(trackidInt)
-		err = app.DB.UpdateTrackTag(trackidInt32, req.Body)
+		err = app.DB.UpdateTrackTag(trackidInt32, req.Object.Body)
 
 		if err != nil {
 			WriteErrorToResponse(w, err, 404)
@@ -115,9 +125,12 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 
 		}
 
-	}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("tag updated succefuly"))
+		return
 
-	defer r.Body.Close()
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("tag updated succefuly"))
+	}
+	WriteErrorToResponse(w, fmt.Errorf("Wrong request format %s", ""), http.StatusBadRequest)
+	return
+
 }

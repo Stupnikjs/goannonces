@@ -5,7 +5,7 @@ for ( let i = 0; i < cards.length; i++ ){
     let tagBtn = cards[i].querySelector(".tagBtn")
     let selectedBtn = cards[i].querySelector(".selectedBtn")
     let sumbitTagBtn = cards[i].querySelector(".submitTagBtn")
-    let deleteBtn = cards[i].querySelector(".submitTagBtn")
+    let deleteBtn = cards[i].querySelector(".deleteBtn")
 
     // create toggle button (todo) 
     button.addEventListener("click", (e) => {
@@ -60,17 +60,17 @@ for ( let i = 0; i < cards.length; i++ ){
         e.preventDefault()
         
         let trackid = deleteBtn.id
-        let resp = await fetch(`/track/delete`, {
+        let resp = await fetch(`/api/track/remove`, {
             method: "POST", 
             headers: {
                 'Content-Type': 'application/json'
             }, 
             body: JSON.stringify({
                 "action": "delete",
-                "object": "track",
-                "id": trackid,
-                "body": "",
-
+                "object": {
+                   "type" : "track" ,
+                    "id": trackid
+                }
             })
 
         })
@@ -78,6 +78,7 @@ for ( let i = 0; i < cards.length; i++ ){
             window.location.assign("/")
         } else {
             console.log(resp.body)
+            console.log(resp)
         }
        
     })
@@ -101,16 +102,19 @@ for ( let i = 0; i < cards.length; i++ ){
         e.preventDefault()
         let input = cards[i].querySelector(".tagInput")
         let trackid = sumbitTagBtn.id
-        let resp = await fetch(`/track/tag/${trackid}`, {
+        let resp = await fetch(`/api/track/tag`, {
             method: "POST", 
             headers: {
                 'Content-Type': 'application/json'
             }, 
             body: JSON.stringify({
                                 "action": "update",
-                "object": "track.tag"
-                "id": trackid,
-                "body": input.value,
+                "object": {
+                    "type" : "track",
+                    "id": trackid,
+                    "field" : "tag",
+                    "body": input.value
+                }
             })
 
         })
@@ -118,6 +122,7 @@ for ( let i = 0; i < cards.length; i++ ){
             window.location.assign("/")
         } else {
             console.log(resp.body)
+            console.log(resp)
         }
        
     })
