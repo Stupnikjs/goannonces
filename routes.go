@@ -6,7 +6,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type ReqModel struct {
+type JsonReq struct {
 	Action string `json:"action"`
 	Object ApiObject `json:"object"`
  Field string  `json:"field"`
