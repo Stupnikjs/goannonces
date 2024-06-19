@@ -14,8 +14,8 @@ type ReqModel struct {
 }
 
 type ApiObject {
-  ObjectName `json:"name"`
-  ObjectId `json:"id"`
+  Name `json:"name"`
+  Id `json:"id"`
 
 }
 
