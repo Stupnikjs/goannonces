@@ -8,10 +8,15 @@ import (
 
 type ReqModel struct {
 	Action string `json:"action"`
-	Object string `json:"object"`
- Id string      `json:"id"`
+	Object ApiObject `json:"object"`
  Field string  `json:"field"`
 	Body   string `json:"body"`
+}
+
+type ApiObject {
+  ObjectName `json:"name"`
+  ObjectId `json:"id"`
+
 }
 
 func (app *Application) routes() http.Handler {
