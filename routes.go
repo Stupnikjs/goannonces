@@ -14,8 +14,9 @@ type JsonReq struct {
 }
 
 type ApiObject {
-  Name `json:"name"`
+  Type `json:"type"`
   Id `json:"id"`
+  
 
 }
 
