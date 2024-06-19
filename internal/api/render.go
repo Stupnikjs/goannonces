@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"encoding/json"
@@ -7,7 +7,8 @@ import (
 	"net/http"
 	"path"
 
-	"github.com/Stupnikjs/zik/pkg/gstore"
+	"github.com/Stupnikjs/zik/internal/gstore"
+	"github.com/Stupnikjs/zik/pkg/util"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -85,16 +86,16 @@ func (app *Application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Retrieve the file from the form data
-	msg, err := app.LoadMultipartReqToBucket(r, BucketName)
+	msg, err := app.LoadMultipartReqToBucket(r, app.BucketName)
 	if err != nil {
-		WriteErrorToResponse(w, err, 404)
+		util.WriteErrorToResponse(w, err, 404)
 	}
 
 	w.Write([]byte(fmt.Sprintf("%s", msg)))
 }
 
-func ListObjectHandler(w http.ResponseWriter, r *http.Request) {
-	names, err := gstore.ListObjectsBucket(BucketName)
+func (app *Application) ListObjectHandler(w http.ResponseWriter, r *http.Request) {
+	names, err := gstore.ListObjectsBucket(app.BucketName)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -103,7 +104,7 @@ func ListObjectHandler(w http.ResponseWriter, r *http.Request) {
 	byteNames, err := json.Marshal(names)
 
 	if err != nil {
-		WriteErrorToResponse(w, err, 404)
+		util.WriteErrorToResponse(w, err, 404)
 	}
 
 	w.Write(byteNames)

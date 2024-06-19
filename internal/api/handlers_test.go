@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"crypto/tls"
@@ -21,7 +21,7 @@ func Test_application_handlers(t *testing.T) {
 		{"404", "/fish", http.StatusNotFound, "/fish", http.StatusNotFound},
 	}
 
-	routes := app.routes()
+	routes := app.Routes()
 
 	// create a test server
 	ts := httptest.NewTLSServer(routes)

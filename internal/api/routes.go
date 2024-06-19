@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"net/http"
@@ -6,19 +6,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type JsonReq struct {
-	Action string    `json:"action"`
-	Object ApiObject `json:"object"`
-}
-
-type ApiObject struct {
-	Type  string `json:"type"`
-	Id    string `json:"id"`
-	Body  string `json:"body,omitempty"`
-	Field string `json:"field,omitempty"`
-}
-
-func (app *Application) routes() http.Handler {
+func (app *Application) Routes() http.Handler {
 
 	mux := chi.NewRouter()
 
@@ -26,7 +14,7 @@ func (app *Application) routes() http.Handler {
 	mux.Get("/", app.RenderAccueil)
 	mux.Get("/loader", app.RenderDragDrop)
 
-	mux.Get("/urls", ListObjectHandler)
+	mux.Get("/urls", app.ListObjectHandler)
 
 	mux.Post("/upload", app.UploadFile)
 	mux.Get("/stream/sound/{id}", app.UploadTrackFromGCPHandler)

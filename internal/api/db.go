@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"database/sql"
@@ -43,7 +43,7 @@ func openDB() (*sql.DB, error) {
 	return db, nil
 }
 
-func (app *Application) connectToDB() (*sql.DB, error) {
+func (app *Application) ConnectToDB() (*sql.DB, error) {
 
 	connection, err := openDB()
 

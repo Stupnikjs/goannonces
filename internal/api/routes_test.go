@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"net/http"
@@ -19,7 +19,7 @@ func Test_application_routes(t *testing.T) {
 		{"/static/*", "GET"},
 	}
 
-	mux := app.routes()
+	mux := app.Routes()
 	chiRoutes := mux.(chi.Routes)
 
 	for _, route := range registered {
