@@ -48,7 +48,7 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 
 func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Request) {
 	/*
-		req := reqModel{}
+		req := JsonReq{}
 
 		bytes, err := io.ReadAll(r.Body)
 		err = json.Unmarshal(bytes, req)
@@ -96,7 +96,7 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 		WriteErrorToResponse(w, err, 404)
 		return
 	}
-	req := ReqModel{}
+	req := JsonReq{}
 	json.Unmarshal(body, &req)
 
 	if req.Field == "tag" && req.Object == "track" && req.Action == "update" {
