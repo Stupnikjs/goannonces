@@ -49,10 +49,13 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 // Not working
 
 func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("here mutherucka")
 	req := JsonReq{}
 	bytes, err := io.ReadAll(r.Body)
-	fmt.Println(err)
+	if err != nil {
+		fmt.Println(err)
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		return
+	}
 	defer r.Body.Close()
 	err = json.Unmarshal(bytes, &req)
 	if err != nil {
@@ -64,14 +67,14 @@ func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Reques
 	trackid := req.Object.Id
 	trackidInt, err := strconv.Atoi(trackid)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, 404)
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 	trackidInt32 := int32(trackidInt)
 	err = app.DB.DeleteTrack(trackidInt32)
-	fmt.Println(err)
+
 	if err != nil {
-		util.WriteErrorToResponse(w, err, 404)
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 	w.WriteHeader(http.StatusOK)

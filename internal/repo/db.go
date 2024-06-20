@@ -108,7 +108,7 @@ func (rep *PostgresRepo) GetAllTracks() ([]Track, error) {
 func (rep *PostgresRepo) DeleteTrack(trackId int32) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	_, err := rep.DB.ExecContext(ctx, DeleteTrackQuery)
+	_, err := rep.DB.ExecContext(ctx, DeleteTrackQuery, trackId)
 	if err != nil {
 		return err
 	}
