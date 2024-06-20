@@ -46,7 +46,7 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 
 }
 
-// reqModel
+// Not working
 
 func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("here mutherucka")
