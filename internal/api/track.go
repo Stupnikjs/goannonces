@@ -1,4 +1,4 @@
-package api
+depackage api
 
 import (
 	"context"
