@@ -7,7 +7,6 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/Stupnikjs/zik/util"
 	"github.com/kkdai/youtube/v2"
 )
 
@@ -51,10 +50,7 @@ func Download(videoID string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	// file, err := os.Create(title + ".mp4")
-	if err != nil {
-		return "", err
-	}
+
 	defer temp.Close()
 
 	_, err = io.Copy(temp, stream)
@@ -62,15 +58,11 @@ func Download(videoID string) (string, error) {
 		return "", err
 	}
 	mp3name := title + ".mp3"
+
 	if err = convertToMP3(temp.Name(), mp3name); err != nil {
 		return "", err
 	}
 
-	err = util.CleanAllTempDir(curr)
-
-	if err != nil {
-		return "", err
-	}
 	return mp3name, nil
 
 }

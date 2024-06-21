@@ -19,11 +19,9 @@ type Track struct {
 }
 
 type Playlist struct {
-Name string 
-ID int32
-TracksIDs []int32
-
-
+	Name      string
+	ID        int32
+	TracksIDs []int32
 }
 
 type PostgresRepo struct {
@@ -138,10 +136,13 @@ func (rep *PostgresRepo) UpdateTrackTag(trackId int32, tag string) error {
 // selectcnt
 
 func (rep *PostgresRepo) CreatePlaylist(playlist Playlist) error {
-ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-   for _,trackid := range playlist.TracksIDs {
-   err := rep.DB.ExecContext(ctx, InsertPlaylistTrackQuery, playlist.Name, trackid,playlist.ID)
-}
-
+	for _, trackid := range playlist.TracksIDs {
+		_, err := rep.DB.ExecContext(ctx, InsertPlaylistTrackQuery, playlist.Name, trackid, playlist.ID)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

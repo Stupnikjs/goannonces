@@ -207,20 +207,25 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 
 func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Request) {
 	ytid := chi.URLParam(r, "id")
-
 	mp3file, err := ytbmp3.Download(ytid)
 
 	if err != nil {
+		fmt.Println(err)
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		return
 	}
 	// load MP3 filed to bicket
+	fmt.Println(mp3file)
 	file, err := os.Open(mp3file)
+	defer file.Close()
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		return
 	}
 	bytes, err := util.ByteFromMegaFile(file)
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		return
 	}
 	err = gstore.LoadToBucket(app.BucketName, mp3file, bytes)
 }

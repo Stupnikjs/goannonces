@@ -68,3 +68,8 @@ UPDATE tracks
 	SET tag = $2
  	WHERE id = $1; 
 `
+
+var InsertPlaylistTrackQuery string = `
+INSERT INTO playlist ( trackid, id, name)  
+VALUES ( $1, $2, $3) ; 
+`
