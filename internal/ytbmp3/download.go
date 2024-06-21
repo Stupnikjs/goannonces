@@ -11,11 +11,11 @@ import (
 	"github.com/kkdai/youtube/v2"
 )
 
-func Download(videoID string) error {
+func Download(videoID string) (string,error) {
 	client := youtube.Client{}
 	video, err := client.GetVideo(videoID)
 	if err != nil {
-		return err
+		return "", err
 	}
 	title := video.Title
 
