@@ -18,6 +18,14 @@ type Track struct {
 	Tag            string
 }
 
+type Playlist struct {
+Name string 
+ID int32
+TrackIDs []int32
+
+
+}
+
 type PostgresRepo struct {
 	DB *sql.DB
 }
