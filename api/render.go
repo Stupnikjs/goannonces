@@ -74,6 +74,12 @@ func (app *Application) RenderDragDrop(w http.ResponseWriter, r *http.Request) {
 
 	_ = render(w, r, "/dragdrop.gohtml", &td)
 }
+func (app *Application) RenderYoutube(w http.ResponseWriter, r *http.Request) {
+
+	td := TemplateData{}
+
+	_ = render(w, r, "/youtube.gohtml", &td)
+}
 
 func (app *Application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	// load file to gcp bucket

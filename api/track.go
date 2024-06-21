@@ -228,4 +228,21 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	err = gstore.LoadToBucket(app.BucketName, mp3file, bytes)
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		return
+	}
+	track := repo.Track{
+		Name: mp3file,
+	}
+	err = app.DB.PushTrackToSQL(track)
+
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	util.CleanAllTempDir()
+	w.Write([]byte("youtube music uploaded on gcp"))
+
 }

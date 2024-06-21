@@ -2,6 +2,7 @@ package util
 
 import (
 	"os"
+	"path"
 	"strings"
 )
 
@@ -15,16 +16,22 @@ func IsInSlice[T comparable](str T, arr []T) bool {
 	return false
 }
 
-func CleanAllTempDir(dirName string) error {
+func CleanAllTempDir() error {
 
-	entries, err := os.ReadDir(dirName)
+	curr, err := os.Getwd()
+
+	if err != nil {
+		return err
+	}
+
+	entries, err := os.ReadDir(path.Join(curr, "/static/download"))
 
 	if err != nil {
 		return err
 	}
 	for _, e := range entries {
 		if strings.Contains(e.Name(), "temp") {
-			err = os.RemoveAll(e.Name())
+			err = os.RemoveAll(path.Join(curr, "/static/download", e.Name()))
 			if err != nil {
 				return err
 			}

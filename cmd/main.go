@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	_ "cloud.google.com/go/storage"
 	"github.com/Stupnikjs/zik/api"
 	"github.com/Stupnikjs/zik/repo"
-	"github.com/Stupnikjs/zik/util"
 	"github.com/joho/godotenv"
 	_ "google.golang.org/api/option"
 )
@@ -39,12 +37,5 @@ func main() {
 	app.DB.InitTable()
 
 	http.ListenAndServe(fmt.Sprintf(":%d", app.Port), app.Routes())
-
-	curr, err := os.Getwd()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer util.CleanAllTempDir(curr)
 
 }

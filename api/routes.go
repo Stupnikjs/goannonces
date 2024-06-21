@@ -13,6 +13,7 @@ func (app *Application) Routes() http.Handler {
 	// register routes
 	mux.Get("/", app.RenderAccueil)
 	mux.Get("/loader", app.RenderDragDrop)
+	mux.Get("/youtube", app.RenderYoutube)
 
 	mux.Get("/urls", app.ListObjectHandler)
 

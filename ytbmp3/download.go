@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path"
 	"strings"
 
 	"github.com/kkdai/youtube/v2"
@@ -18,16 +19,11 @@ func Download(videoID string) (string, error) {
 	}
 	title := video.Title
 
-	var mp4Formats []youtube.Format
-	for _, format := range video.Formats.WithAudioChannels() {
-		if strings.Contains(format.MimeType, "video/mp4") {
-			mp4Formats = append(mp4Formats, format)
-		}
-	}
-	if len(mp4Formats) == 0 {
-		return "", fmt.Errorf("no mp4 formats with audio available")
-	}
+	mp4Formats, err := getFormatFromVid(*video)
 
+	if err != nil {
+		return "", err
+	}
 	// Select the best quality MP4 format (you can define your own criteria for "best")
 	bestFormat := selectBestFormat(mp4Formats)
 
@@ -44,9 +40,7 @@ func Download(videoID string) (string, error) {
 	}
 	// check if temp dir exist
 
-	tempDir, err := os.MkdirTemp(curr, "temp")
-
-	temp, err := os.CreateTemp(tempDir, "tempvideofile")
+	temp, err := os.CreateTemp(path.Join(curr, "/static/download"), "tempvideofile")
 	if err != nil {
 		return "", err
 	}
@@ -59,12 +53,26 @@ func Download(videoID string) (string, error) {
 	}
 	mp3name := title + ".mp3"
 
-	if err = convertToMP3(temp.Name(), mp3name); err != nil {
+	fmt.Println(path.Join("/static", mp3name))
+	if err = convertToMP3(temp.Name(), path.Join(curr, "/static/download", mp3name)); err != nil {
 		return "", err
 	}
 
 	return mp3name, nil
 
+}
+
+func getFormatFromVid(video youtube.Video) ([]youtube.Format, error) {
+	var mp4Formats []youtube.Format
+	for _, format := range video.Formats.WithAudioChannels() {
+		if strings.Contains(format.MimeType, "video/mp4") {
+			mp4Formats = append(mp4Formats, format)
+		}
+	}
+	if len(mp4Formats) == 0 {
+		return nil, fmt.Errorf("no mp4 formats with audio available")
+	}
+	return mp4Formats, nil
 }
 
 func selectBestFormat(formats []youtube.Format) youtube.Format {
