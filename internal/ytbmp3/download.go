@@ -26,7 +26,7 @@ func Download(videoID string) (string,error) {
 		}
 	}
 	if len(mp4Formats) == 0 {
-		return fmt.Errorf("no mp4 formats with audio available")
+		return "", fmt.Errorf("no mp4 formats with audio available")
 	}
 
 	// Select the best quality MP4 format (you can define your own criteria for "best")
@@ -35,38 +35,43 @@ func Download(videoID string) (string,error) {
 	stream, _, err := client.GetStream(video, &bestFormat)
 
 	if err != nil {
-		fmt.Println(err)
+		return "", err
 	}
 	defer stream.Close()
 
 	curr, err := os.Getwd()
-
+ if err != nil {
+		return "", err
+	}
 	// check if temp dir exist
 
 	tempDir, err := os.MkdirTemp(curr, "temp")
-
+ 
 	temp, err := os.CreateTemp(tempDir, "tempvideofile")
+if err != nil {
+		return "", err
+	}
 	// file, err := os.Create(title + ".mp4")
 	if err != nil {
-		return err
+		return "", err
 	}
 	defer temp.Close()
 
 	_, err = io.Copy(temp, stream)
 	if err != nil {
-		return err
+		return "", err
 	}
-
-	if err = convertToMP3(temp.Name(), title+".mp3"); err != nil {
-		return err
+ mp3name := title + ".mp3"
+	if err = convertToMP3(temp.Name(), mp3name); err != nil {
+		return "", err
 	}
 
 	err = util.CleanAllTempDir(curr)
 
 	if err != nil {
-		return err
+		return "",err
 	}
-	return nil
+	return mp3name, nil
 
 }
 
