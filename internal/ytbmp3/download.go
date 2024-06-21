@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/Stupnikjs/zik/pkg/util"
 	"github.com/kkdai/youtube/v2"
 )
 
@@ -39,14 +40,17 @@ func Download(videoID string) error {
 	defer stream.Close()
 
 	curr, err := os.Getwd()
-	temp, err := os.CreateTemp(curr, "tempvideofile")
+
+	// check if temp dir exist
+
+	tempDir, err := os.MkdirTemp(curr, "temp")
+
+	temp, err := os.CreateTemp(tempDir, "tempvideofile")
 	// file, err := os.Create(title + ".mp4")
 	if err != nil {
 		return err
 	}
 	defer temp.Close()
-	fmt.Println(temp.Name())
-	defer os.Remove(temp.Name())
 
 	_, err = io.Copy(temp, stream)
 	if err != nil {
@@ -54,6 +58,12 @@ func Download(videoID string) error {
 	}
 
 	if err = convertToMP3(temp.Name(), title+".mp3"); err != nil {
+		return err
+	}
+
+	err = util.CleanAllTempDir(curr)
+
+	if err != nil {
 		return err
 	}
 	return nil
