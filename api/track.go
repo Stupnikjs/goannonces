@@ -1,4 +1,4 @@
-depackage api
+package api
 
 import (
 	"context"
@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 
 	"cloud.google.com/go/storage"
-	"github.com/Stupnikjs/zik/internal/gstore"
-	"github.com/Stupnikjs/zik/internal/repo"
-	"github.com/Stupnikjs/zik/internal/ytbmp3"
-	"github.com/Stupnikjs/zik/pkg/util"
+	"github.com/Stupnikjs/zik/gstore"
+	"github.com/Stupnikjs/zik/repo"
+	"github.com/Stupnikjs/zik/util"
+	"github.com/Stupnikjs/zik/ytbmp3"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -204,7 +205,7 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 
 }
 
-func YoutubeToGCPHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Request) {
 	ytid := chi.URLParam(r, "id")
 
 	mp3file, err := ytbmp3.Download(ytid)
@@ -212,7 +213,14 @@ func YoutubeToGCPHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 	}
- // load MP3 filed to bicket
- 
- err = gstore.LoadToBucket()
+	// load MP3 filed to bicket
+	file, err := os.Open(mp3file)
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+	}
+	bytes, err := util.ByteFromMegaFile(file)
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+	}
+	err = gstore.LoadToBucket(app.BucketName, mp3file, bytes)
 }

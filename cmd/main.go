@@ -1,16 +1,17 @@
 package main
 
 import (
-	_ "cloud.google.com/go/storage"
 	"fmt"
-	"github.com/Stupnikjs/zik/internal/api"
-	"github.com/Stupnikjs/zik/internal/repo"
-	"github.com/Stupnikjs/zik/pkg/util"
-	"github.com/joho/godotenv"
-	_ "google.golang.org/api/option"
 	"log"
 	"net/http"
 	"os"
+
+	_ "cloud.google.com/go/storage"
+	"github.com/Stupnikjs/zik/api"
+	"github.com/Stupnikjs/zik/repo"
+	"github.com/Stupnikjs/zik/util"
+	"github.com/joho/godotenv"
+	_ "google.golang.org/api/option"
 )
 
 var BucketName string = "firstappbucknamezikapp"

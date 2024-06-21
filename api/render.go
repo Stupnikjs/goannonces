@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"path"
 
-	"github.com/Stupnikjs/zik/internal/gstore"
-	"github.com/Stupnikjs/zik/pkg/util"
+	"github.com/Stupnikjs/zik/gstore"
+	"github.com/Stupnikjs/zik/util"
 	"github.com/go-chi/chi/v5"
 )
 

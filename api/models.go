@@ -1,6 +1,6 @@
 package api
 
-import "github.com/Stupnikjs/zik/internal/repo"
+import "github.com/Stupnikjs/zik/repo"
 
 type JsonReq struct {
 	Action string    `json:"action"`
