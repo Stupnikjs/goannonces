@@ -11,6 +11,7 @@ import (
 	"cloud.google.com/go/storage"
 	"github.com/Stupnikjs/zik/internal/gstore"
 	"github.com/Stupnikjs/zik/internal/repo"
+	"github.com/Stupnikjs/zik/internal/ytbmp3"
 	"github.com/Stupnikjs/zik/pkg/util"
 	"github.com/go-chi/chi/v5"
 )
@@ -200,5 +201,16 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 		msg += fmt.Sprintf(" %s were alreaddy in bucket ", s)
 	}
 	return msg, nil
+
+}
+
+func YoutubeToGCPHandler(w http.ResponseWriter, r *http.Request) {
+	ytid := chi.URLParam(r, "id")
+
+	err := ytbmp3.Download(ytid)
+
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+	}
 
 }
