@@ -77,8 +77,7 @@ for ( let i = 0; i < cards.length; i++ ){
         if (resp.ok) {
             window.location.assign("/")
         } else {
-            console.log(resp.body)
-            console.log(resp)
+            console.log(resp.json())
         }
        
     })
@@ -121,8 +120,7 @@ for ( let i = 0; i < cards.length; i++ ){
         if (resp.ok) {
             window.location.assign("/")
         } else {
-            console.log(resp.body)
-            console.log(resp)
+            console.log(resp.json())
         }
        
     })

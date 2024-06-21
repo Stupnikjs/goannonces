@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"strings"
@@ -39,4 +40,19 @@ func CleanAllTempDir() error {
 		}
 	}
 	return nil
+}
+
+func ProcessMp3Name(mp3name string) string {
+	firstSplit := strings.Split(mp3name, ".mp3")
+
+	if len(firstSplit) == 1 {
+		return mp3name
+	}
+
+	nodotmp3 := firstSplit[0]
+
+	secsplit := strings.Split(nodotmp3, "/")
+	fmt.Println(secsplit[len(secsplit)-1])
+	return secsplit[len(secsplit)-1]
+
 }

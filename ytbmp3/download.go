@@ -58,7 +58,7 @@ func Download(videoID string) (string, error) {
 		return "", err
 	}
 
-	return mp3name, nil
+	return path.Join(curr, "/static/download", mp3name), nil
 
 }
 

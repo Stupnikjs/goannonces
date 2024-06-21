@@ -19,7 +19,13 @@ import (
 
 func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http.Request) {
 	trackid := chi.URLParam(r, "id")
-	track, err := app.DB.GetTrackFromId(trackid)
+
+	trackidInt, err := strconv.Atoi(trackid)
+	if err != nil {
+		util.WriteErrorToResponse(w, err, 404)
+	}
+
+	track, err := app.DB.GetTrackFromId(int32(trackidInt))
 	if err != nil {
 		util.WriteErrorToResponse(w, err, 404)
 		return
@@ -73,32 +79,27 @@ func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 	trackidInt32 := int32(trackidInt)
-	err = app.DB.DeleteTrack(trackidInt32)
 
+	track, err := app.DB.GetTrackFromId(trackidInt32)
+
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	err = app.DB.DeleteTrack(trackidInt32)
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	err = gstore.DeleteObjectInBucket(app.BucketName, track.Name)
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("track deleted succefully"))
-}
-
-// reqModel
-func (app *Application) DeleteGCPObjectHandler(w http.ResponseWriter, r *http.Request) {
-	// call to app
-	trackid := chi.URLParam(r, "id")
-	track, err := app.DB.GetTrackFromId(trackid)
-	if err != nil {
-		util.WriteErrorToResponse(w, err, 404)
-		return
-	}
-	err = gstore.DeleteObjectInBucket(app.BucketName, track.Name)
-	if err != nil {
-		util.WriteErrorToResponse(w, err, 404)
-		return
-	}
-	w.Write([]byte(fmt.Sprintf("file %s deleted succesfully in bucker", track.Name)))
-
 }
 
 func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Request) {
@@ -205,9 +206,18 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 
 }
 
+type ytRequest struct {
+	YtID string `json:"ytid"`
+}
+
 func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Request) {
-	ytid := chi.URLParam(r, "id")
-	mp3file, err := ytbmp3.Download(ytid)
+
+	ytReq := ytRequest{}
+
+	bytes, err := io.ReadAll(r.Body)
+	json.Unmarshal(bytes, &ytReq)
+
+	mp3file, err := ytbmp3.Download(ytReq.YtID)
 
 	if err != nil {
 		fmt.Println(err)
@@ -215,18 +225,20 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	// load MP3 filed to bicket
-	fmt.Println(mp3file)
+
 	file, err := os.Open(mp3file)
 	defer file.Close()
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
-	bytes, err := util.ByteFromMegaFile(file)
+	bytes, err = util.ByteFromMegaFile(file)
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
+
+	mp3file = util.ProcessMp3Name(mp3file)
 	err = gstore.LoadToBucket(app.BucketName, mp3file, bytes)
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)

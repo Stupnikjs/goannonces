@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"log"
-	"strconv"
 )
 
 type Track struct {
@@ -48,18 +47,13 @@ func (rep *PostgresRepo) PushTrackToSQL(track Track) error {
 	return nil
 }
 
-func (rep *PostgresRepo) GetTrackFromId(id string) (*Track, error) {
+func (rep *PostgresRepo) GetTrackFromId(id int32) (*Track, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	row := rep.DB.QueryRowContext(ctx, GetTrackFromIdQuery, id)
 	track := &Track{}
-	intID, err := strconv.Atoi(id)
 
-	if err != nil {
-		return nil, err
-
-	}
-	track.ID = int32(intID)
+	track.ID = id
 	row.Scan(
 		&track.Name,
 		&track.StoreURL,

@@ -9,7 +9,6 @@ import (
 
 	"github.com/Stupnikjs/zik/gstore"
 	"github.com/Stupnikjs/zik/util"
-	"github.com/go-chi/chi/v5"
 )
 
 var pathToTemplates = "./static/templates/"
@@ -52,20 +51,6 @@ func (app *Application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 func (app *Application) RenderLoader(w http.ResponseWriter, r *http.Request) {
 
 	_ = render(w, r, "/loader.gohtml", &TemplateData{})
-}
-
-func (app *Application) RenderSingleTrack(w http.ResponseWriter, r *http.Request) {
-	trackid := chi.URLParam(r, "id")
-	td := TemplateData{}
-	track, err := app.DB.GetTrackFromId(trackid)
-	td.Data = map[string]any{}
-	td.Data["Track"] = track
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	_ = render(w, r, "/singletrack.gohtml", &td)
 }
 
 func (app *Application) RenderDragDrop(w http.ResponseWriter, r *http.Request) {
