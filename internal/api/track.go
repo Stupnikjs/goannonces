@@ -213,4 +213,5 @@ func YoutubeToGCPHandler(w http.ResponseWriter, r *http.Request) {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 	}
  // load MP3 filed to bicket
+ err = LoadToBucket()
 }
