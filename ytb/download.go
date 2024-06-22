@@ -1,4 +1,4 @@
-package ytbmp3
+package ytb
 
 import (
 	"fmt"

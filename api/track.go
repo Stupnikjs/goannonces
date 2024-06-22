@@ -13,7 +13,7 @@ import (
 	"github.com/Stupnikjs/zik/gstore"
 	"github.com/Stupnikjs/zik/repo"
 	"github.com/Stupnikjs/zik/util"
-	"github.com/Stupnikjs/zik/ytbmp3"
+	"github.com/Stupnikjs/zik/ytb"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -217,7 +217,7 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 	bytes, err := io.ReadAll(r.Body)
 	json.Unmarshal(bytes, &ytReq)
 
-	mp3file, err := ytbmp3.Download(ytReq.YtID)
+	mp3file, err := ytb.Download(ytReq.YtID)
 
 	if err != nil {
 		fmt.Println(err)
