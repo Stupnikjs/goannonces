@@ -32,7 +32,6 @@ func CreateBucket(bucketName string) error {
 		return err
 	}
 
-	fmt.Print("Bucket created.\n")
 	return nil
 
 }
@@ -114,7 +113,6 @@ func ListObjectsBucket(bucketName string) ([]string, error) {
 			break
 		}
 		if err != nil {
-			log.Fatal(err)
 			return nil, err
 		}
 		names = append(names, attrs.Name)

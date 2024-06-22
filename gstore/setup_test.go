@@ -20,6 +20,14 @@ func TestMain(m *testing.M) {
 	}
 
 	code := m.Run()
+
+	cleanup()
+	// Exit with the received code
+	os.Exit(code)
+}
+
+func setup() {
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	client, err := storage.NewClient(ctx)
@@ -38,14 +46,24 @@ func TestMain(m *testing.M) {
 	// Creates the new bucket.
 
 	if err := bucket.Create(ctx, projectID, bucketAttrs); err != nil {
+		fmt.Println("here")
 		log.Fatalf("Failed to create bucket: %v", err)
 	}
 
-	fmt.Print("Bucket created.\n")
+}
 
-	defer func() {
-		client.Bucket(TestBucket).Delete(ctx)
-	}()
-	// Exit with the received code
-	os.Exit(code)
+func cleanup() {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	client, err := storage.NewClient(ctx)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	bucket := client.Bucket(TestBucketName)
+
+	err = bucket.Delete(ctx)
+	fmt.Println("here", err)
+
 }
