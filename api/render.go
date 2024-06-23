@@ -110,3 +110,13 @@ func (app *Application) IncrementPlayCountHandler(w http.ResponseWriter, r *http
 type tagRequest struct {
 	Tag string `json:"tag"`
 }
+
+
+func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
+
+        td := TemplateData{}
+        td.Data = make(map[string]any)
+        td.Data["Tracks"] = app.DB.GetAllTracks()
+
+        _ = render(w, r, "/youtube.gohtml", &td)
+}
