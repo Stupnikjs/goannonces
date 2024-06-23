@@ -14,6 +14,7 @@ func (app *Application) Routes() http.Handler {
 	mux.Get("/", app.RenderAccueil)
 	mux.Get("/loader", app.RenderDragDrop)
 	mux.Get("/youtube", app.RenderYoutube)
+ mux.Get("/playlist", app.RenderPlaylist)
 
 	mux.Get("/urls", app.ListObjectHandler)
 
