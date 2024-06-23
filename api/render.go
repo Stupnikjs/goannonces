@@ -113,10 +113,10 @@ type tagRequest struct {
 
 
 func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
-
+        tracks ,err := app.DB.GetAllTracks()
         td := TemplateData{}
         td.Data = make(map[string]any)
-        td.Data["Tracks"] = app.DB.GetAllTracks()
+        td.Data["Tracks"] = tracks
 
-        _ = render(w, r, "/youtube.gohtml", &td)
+        _ = render(w, r, "/playlist.gohtml", &td)
 }
