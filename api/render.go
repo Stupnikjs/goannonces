@@ -8,6 +8,7 @@ import (
 	"path"
 
 	"github.com/Stupnikjs/zik/gstore"
+	"github.com/Stupnikjs/zik/repo"
 	"github.com/Stupnikjs/zik/util"
 )
 
@@ -111,12 +112,17 @@ type tagRequest struct {
 	Tag string `json:"tag"`
 }
 
-
 func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
-        tracks ,err := app.DB.GetAllTracks()
-        td := TemplateData{}
-        td.Data = make(map[string]any)
-        td.Data["Tracks"] = tracks
+	tracks, err := app.DB.GetAllTracks()
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+	}
+	playlists := []repo.Playlist{}
+	bytes, err := json.Marshal(tracks)
+	td := TemplateData{}
+	td.Data = make(map[string]any)
+	td.Data["Tracks"] = string(bytes)
+	td.Data["Playlists"] = playlists
 
-        _ = render(w, r, "/playlist.gohtml", &td)
+	_ = render(w, r, "/playlist.gohtml", &td)
 }
