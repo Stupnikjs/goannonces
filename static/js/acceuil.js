@@ -24,19 +24,20 @@ for ( let i = 0; i < cards.length; i++ ){
     tagBtn.addEventListener("click", (e) => {
         e.preventDefault()
         let selected = tagBtn.getAttribute("selected")
+        console.log(selected)
         if (selected == "false") {
             selected = null
         }
         if (!selected){
             tagBtn.setAttribute("selected", "true")
-            let hiddenTagDiv = cards[i].querySelector(".hiddenTagDiv")
-            hiddenTagDiv.classList.remove("hiddenTagDiv")
-            // hiddenTagDiv.style.display = "block" 
+            let tagDiv = cards[i].querySelector(".tagDiv")
+            tagDiv.classList.remove("display-none")
+
         } else {
             tagBtn.setAttribute("selected", "false")
             // trouver autre chose 
-            let hiddenTagDiv = cards[i].querySelector(".hiddenTagDiv")
-            hiddenTagDiv.classList.add("hiddenTagDiv")
+            let tagDiv = cards[i].querySelector(".tagDiv")
+            tagDiv.classList.add("display-none")
         }
        
     })

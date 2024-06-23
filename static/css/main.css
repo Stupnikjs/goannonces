@@ -55,25 +55,25 @@ nav > ul > li > a {
 
 .audiocard{
 position: relative; 
-margin:  1rem auto;
-display: flex; 
-flex-direction: column; 
-align-items: center; 
-padding: 1rem ; 
+margin:  .5rem auto; 
 background-color: lightblue; 
 border : 3px solid black; 
 width: 50%; 
- 
+padding: 1rem; 
+}
+
+.audiocard audio {
+max-height: 5vh; 
 }
 
 .audiocard > p {
 
-margin: 10% 0 0 0 ; 
+margin: 2% 0 0 0 ; 
 }
 
 .audiocard button{
 
-padding: .5rem;
+padding: 0 .5rem;
 }
 
 .btnDiv{
@@ -84,9 +84,8 @@ top: 2%;
 
 }
 
-.hiddenTagDiv {
-
-display: none; 
+.tagDiv {
+ background-color: azure; 
 }
 
 .selectedHeart {
@@ -95,9 +94,11 @@ color: gray;
 }
 
 .tagp {
-background-color: gray; 
+background-color: azure; 
 padding: .2rem 0; 
 left: 10%;
+width:fit-content; 
+padding: 0.1rem 1rem;  
 }
 
 /* dragdrop */
@@ -154,7 +155,13 @@ background-color:azure;
 
 }
 
+/* utils */ 
 
+.display-none {
+
+display: none; 
+
+}
 
 
 
