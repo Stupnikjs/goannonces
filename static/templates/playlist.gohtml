@@ -3,7 +3,7 @@
 {{define "content"}}
     
     <section>
-        <div data="{{ .Data.Tracks }}"></div>
+        <div data-json="{{ .Data.Tracks }}"></div>
         <button class="createPlaylistBtn"> Create Playlist </button>
         {{ range .Playlists}}
 
