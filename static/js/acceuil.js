@@ -85,10 +85,8 @@ for ( let i = 0; i < cards.length; i++ ){
     selectedBtn.addEventListener("click", (e) => {
         e.preventDefault()
         let selected = selectedBtn.getAttribute("selected")
-        if (selected == "false") {
-            selected = null
-        }
-        if (!selected){
+        
+        if (!selected || selected == "false"){
             selectedBtn.setAttribute("selected", "true")
             selectedBtn.classList.add("selectedHeart")
         } else {
