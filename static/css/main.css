@@ -59,13 +59,12 @@ margin:  .5rem auto;
 background-color: lightblue; 
 border : 3px solid black; 
 width: 50%; 
-padding: 0 1rem; 
+padding: 1rem; 
 }
 
 .audiocard audio {
 max-height: 5vh; 
 margin: .3rem; 
-max-width: fit-content; 
 }
 
 .audiocard > p {
