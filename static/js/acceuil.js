@@ -24,7 +24,6 @@ for ( let i = 0; i < cards.length; i++ ){
     tagBtn.addEventListener("click", (e) => {
         e.preventDefault()
         let selected = tagBtn.getAttribute("selected")
-        console.log(selected)
         if (selected == "false") {
             selected = null
         }
