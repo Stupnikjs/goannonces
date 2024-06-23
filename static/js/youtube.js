@@ -17,15 +17,12 @@ ytBtn.addEventListener("click", async(e) => {
         })
 
     })
-let respDiv = document.querySelector(".respDiv")
-    
+    let responseText = await resp.json()
+            
     if (resp.ok) {
-       respDiv.textContent = resp.json()
-        window.location.assign("/")
+        respDiv.textContent = responseText
     } else {
-        respDiv.textContent = resp.json()
-        
+        respDiv.textContent = `Error: ${responseText}`
     }
-   
 })
 

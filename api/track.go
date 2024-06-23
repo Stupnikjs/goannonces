@@ -129,7 +129,12 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 			return
 		}
 		trackidInt32 := int32(trackidInt)
-		err = app.DB.UpdateTrackTag(trackidInt32, req.Object.Body)
+		tag, ok := req.Object.Body.(string)
+		if !ok {
+			util.WriteErrorToResponse(w, fmt.Errorf("Body malformed"), 404)
+			return
+		}
+		err = app.DB.UpdateTrackTag(trackidInt32, tag)
 
 		if err != nil {
 			util.WriteErrorToResponse(w, err, 404)

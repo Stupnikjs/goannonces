@@ -9,8 +9,8 @@ type JsonReq struct {
 
 type ApiObject struct {
 	Type  string `json:"type"`
-	Id    string `json:"id"`
-	Body  string `json:"body,omitempty"`
+	Id    string `json:"id,omitempty"`
+	Body  any    `json:"body,omitempty"`
 	Field string `json:"field,omitempty"`
 }
 

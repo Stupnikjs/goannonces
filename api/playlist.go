@@ -1,9 +1,26 @@
 package api
 
-import "net/http"
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+
+	"github.com/Stupnikjs/zik/util"
+)
 
 func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Request) {
-	// call to app
+	reqJson := JsonReq{}
+	bytes, err := io.ReadAll(r.Body)
+	r.Body.Close()
+
+	json.Unmarshal(bytes, &reqJson)
+
+	fmt.Println(reqJson)
+
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+	}
 
 }
 

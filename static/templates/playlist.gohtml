@@ -3,12 +3,9 @@
 {{define "content"}}
     
     <section>
-        <div data-json="{{ .Data.Tracks }}"></div>
+        <div id="trackDiv" data-json="{{ .Data.Tracks }}"></div>
         <button class="createPlaylistBtn"> Create Playlist </button>
-        {{ range .Playlists}}
-
-
-        {{ end }}
+        
     </section>
     <script defer src="/static/js/playlist.js"></script>
     <script defer src="https://kit.fontawesome.com/8c6e47f935.js" crossorigin="anonymous"></script>
