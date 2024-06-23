@@ -14,7 +14,7 @@ func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Req
 	bytes, err := io.ReadAll(r.Body)
 	r.Body.Close()
 
-	json.Unmarshal(bytes, &reqJson)
+	err = json.Unmarshal(bytes, &reqJson)
 
 	fmt.Println(reqJson)
 
