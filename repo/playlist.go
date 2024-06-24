@@ -25,6 +25,20 @@ func (rep *PostgresRepo) CreatePlaylist(playlistName string) error {
         }
         return nil
 }
+
+
+func (rep *PostgresRepo) DeletePlaylist(playlistName string) error {
+        ctx, cancel := context.WithCancel(context.Background())
+        defer cancel()
+
+                _, err := rep.DB.ExecContext(ctx, DeletePlaylistQuery, playlistName)
+                if err != nil {
+                        return err
+                }
+        }
+        return nil
+}
+
 func (rep *PostgresRepo) PushPlaylistItem(playlistName string, trackId int32) error {
         ctx, cancel := context.WithCancel(context.Background())
         defer cancel()
