@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS tracks (
 	); 
 
 CREATE TABLE IF NOT EXISTS playlists (
-	trackid INTEGER REFERENCES tracks(id),
-	playlistid INTEGER REFERENCES playlists(id)
+	id SERIAL PRIMARY KEY,
+ name VARCHAR
 	
 );
 
