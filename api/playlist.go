@@ -9,6 +9,8 @@ import (
 	"github.com/Stupnikjs/zik/util"
 )
 
+
+
 func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Request) {
 	reqJson := JsonReq{}
 	bytes, err := io.ReadAll(r.Body)
@@ -16,10 +18,12 @@ func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Req
 
 	err = json.Unmarshal(bytes, &reqJson)
 
-	fmt.Println(reqJson)
- if reqJson.Action == "create" && reqJson.Object.Type == "playlist {
-   
-
+	body, ok := reqJson.Object.Body.(map[string]string)
+ if reqJson.Action == "create" && reqJson.Object.Type == "playlist && ok  {
+   tracksIds := body["ids"] 
+   for _, id := range tracksIds {
+   app.DB.PushPlaylistItem(body["name"],id)
+}
 }
 
 	if err != nil {
