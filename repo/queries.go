@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS playlists (
 );
 
 CREATE TABLE IF NOT EXISTS playlist_items (
-	trackid INTEGER REFERENCES tracks(id),
+	trackid INTEGER REFERENCES tracks(id)
+ ON DELETE CASCADE,
 	playlistid INTEGER REFERENCES playlists(id) 
  ON DELETE CASCADE
 	
