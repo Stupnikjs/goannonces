@@ -18,6 +18,10 @@ func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Req
 
 	err = json.Unmarshal(bytes, &reqJson)
 
+if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusBadRequest)
+	}
+
 	body, ok := reqJson.Object.Body.(map[string]string)
  if reqJson.Action == "create" && reqJson.Object.Type == "playlist && ok  {
    tracksIds := body["ids"] 
@@ -26,9 +30,7 @@ func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Req
 }
 }
 
-	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
-	}
+	
 
 }
 
