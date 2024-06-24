@@ -12,11 +12,19 @@ CREATE TABLE IF NOT EXISTS tracks (
 	tag VARCHAR 
 	); 
 
-CREATE TABLE IF NOT EXISTS playlist (
+CREATE TABLE IF NOT EXISTS playlists (
 	trackid INTEGER REFERENCES tracks(id),
-	id INTEGER,
-	name VARCHAR
+	playlistid INTEGER REFERENCES playlists(id)
+	
 );
+
+CREATE TABLE IF NOT EXISTS playlist_items (
+	trackid INTEGER REFERENCES tracks(id),
+	playlistid INTEGER REFERENCES playlists(id)
+	
+);
+
+
 `
 
 var InsertTrackQuery string = `
