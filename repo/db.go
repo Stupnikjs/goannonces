@@ -129,7 +129,7 @@ func (rep *PostgresRepo) UpdateTrackTag(trackId int32, tag string) error {
 // create route to increment PlayCount
 // selectcnt
 
-func (rep *PostgresRepo) CreatePlaylist(playlist Playlist) error {
+func (rep *PostgresRepo) PushPlaylist(playlist Playlist) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	for _, trackid := range playlist.TracksIDs {
