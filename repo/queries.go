@@ -84,6 +84,6 @@ VALUES ( $1, $2 ) ;
 
 
 var DeletePlaylistQuery string = `
-DELETE playlist 
+DELETE FROM playlist 
 WHERE name = $1; 
 `
