@@ -81,3 +81,9 @@ var InsertPlaylistTrackQuery string = `
 INSERT INTO playlist (name,trackid)  
 VALUES ( $1, $2 ) ; 
 `
+
+
+var DeletePlaylistQuery string = `
+DELETE playlist 
+WHERE name = $1; 
+`
