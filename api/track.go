@@ -25,7 +25,7 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 		util.WriteErrorToResponse(w, err, 404)
 	}
 
-	track, err := app.DB.GetTrackFromId(int32(trackidInt))
+	track, err := app.DB.GetTrackFromId(trackidInt)
 	if err != nil {
 		util.WriteErrorToResponse(w, err, 404)
 		return
@@ -78,9 +78,8 @@ func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Reques
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
-	trackidInt32 := int32(trackidInt)
 
-	track, err := app.DB.GetTrackFromId(trackidInt32)
+	track, err := app.DB.GetTrackFromId(trackidInt)
 
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
@@ -128,13 +127,12 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 			util.WriteErrorToResponse(w, err, 404)
 			return
 		}
-		trackidInt32 := int32(trackidInt)
 		tag, ok := req.Object.Body.(string)
 		if !ok {
 			util.WriteErrorToResponse(w, fmt.Errorf("Body malformed"), 404)
 			return
 		}
-		err = app.DB.UpdateTrackTag(trackidInt32, tag)
+		err = app.DB.UpdateTrackTag(trackidInt, tag)
 
 		if err != nil {
 			util.WriteErrorToResponse(w, err, 404)

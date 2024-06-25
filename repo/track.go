@@ -7,16 +7,14 @@ import (
 )
 
 type Track struct {
-	ID             int32
-	Name           string
-	StoreURL       string
-	Selected       bool
-	SelectionCount int
-	PlayCount      int
-	Size           int32
-	Tag            string
+	ID       int
+	Name     string
+	StoreURL string
+	Selected bool
+	UserId   int
+	Size     int32
+	Tag      string
 }
-
 
 type PostgresRepo struct {
 	DB *sql.DB
@@ -31,8 +29,6 @@ func (rep *PostgresRepo) PushTrackToSQL(track Track) error {
 		track.Name,
 		track.StoreURL,
 		track.Selected,
-		track.SelectionCount,
-		track.PlayCount,
 		track.Size,
 		track.Tag,
 	)
@@ -42,7 +38,7 @@ func (rep *PostgresRepo) PushTrackToSQL(track Track) error {
 	return nil
 }
 
-func (rep *PostgresRepo) GetTrackFromId(id int32) (*Track, error) {
+func (rep *PostgresRepo) GetTrackFromId(id int) (*Track, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	row := rep.DB.QueryRowContext(ctx, GetTrackFromIdQuery, id)
@@ -53,8 +49,6 @@ func (rep *PostgresRepo) GetTrackFromId(id int32) (*Track, error) {
 		&track.Name,
 		&track.StoreURL,
 		&track.Selected,
-		&track.PlayCount,
-		&track.SelectionCount,
 		&track.Size,
 		&track.Tag,
 	)
@@ -86,8 +80,6 @@ func (rep *PostgresRepo) GetAllTracks() ([]Track, error) {
 			&track.Name,
 			&track.StoreURL,
 			&track.Selected,
-			&track.PlayCount,
-			&track.SelectionCount,
 			&track.Size,
 			&track.Tag,
 		)
@@ -100,7 +92,7 @@ func (rep *PostgresRepo) GetAllTracks() ([]Track, error) {
 	return tracks, nil
 }
 
-func (rep *PostgresRepo) DeleteTrack(trackId int32) error {
+func (rep *PostgresRepo) DeleteTrack(trackId int) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	_, err := rep.DB.ExecContext(ctx, DeleteTrackQuery, trackId)
@@ -123,6 +115,3 @@ func (rep *PostgresRepo) UpdateTrackTag(trackId int32, tag string) error {
 // get most played Track with num arg
 // create route to increment PlayCount
 // selectcnt
-
-
-

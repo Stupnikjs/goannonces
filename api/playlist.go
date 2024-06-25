@@ -2,14 +2,11 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
 	"github.com/Stupnikjs/zik/util"
 )
-
-
 
 func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Request) {
 	reqJson := JsonReq{}
@@ -18,19 +15,17 @@ func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Req
 
 	err = json.Unmarshal(bytes, &reqJson)
 
-if err != nil {
+	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusBadRequest)
 	}
 
 	body, ok := reqJson.Object.Body.(map[string]string)
- if reqJson.Action == "create" && reqJson.Object.Type == "playlist && ok  {
-   tracksIds := body["ids"] 
-   for _, id := range tracksIds {
-   app.DB.PushPlaylistItem(body["name"],id)
-}
-}
-
-	
+	if reqJson.Action == "create" && reqJson.Object.Type == "playlist" && ok {
+		tracksIds := body["ids"]
+		for _, id := range tracksIds {
+			app.DB.PushPlaylistItem(body["name"], id)
+		}
+	}
 
 }
 

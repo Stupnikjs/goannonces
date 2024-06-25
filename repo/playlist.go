@@ -1,11 +1,6 @@
 package repo
 
-
-import (
-
-)
-
-
+import "context"
 
 type Playlist struct {
 	Name      string
@@ -13,40 +8,37 @@ type Playlist struct {
 	TracksIDs []int32
 }
 
-
 func (rep *PostgresRepo) CreatePlaylist(playlistName string) error {
-        ctx, cancel := context.WithCancel(context.Background())
-        defer cancel()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
-                _, err := rep.DB.ExecContext(ctx, InsertPlaylistQuery, playlistName)
-                if err != nil {
-                        return err
-                }
-        }
-        return nil
+	_, err := rep.DB.ExecContext(ctx, CreatePlaylistQuery, playlistName)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
-
 
 func (rep *PostgresRepo) DeletePlaylist(playlistName string) error {
-        ctx, cancel := context.WithCancel(context.Background())
-        defer cancel()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
-                _, err := rep.DB.ExecContext(ctx, DeletePlaylistQuery, playlistName)
-                if err != nil {
-                        return err
-                }
-        }
-        return nil
+	_, err := rep.DB.ExecContext(ctx, DeletePlaylistQuery, playlistName)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (rep *PostgresRepo) PushPlaylistItem(playlistName string, trackId int32) error {
-        ctx, cancel := context.WithCancel(context.Background())
-        defer cancel()
+func (rep *PostgresRepo) PushPlaylistItem(playlistName string, trackId int) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
-                _, err := rep.DB.ExecContext(ctx, InsertPlaylistTrackQuery, playlistName, trackid)
-                if err != nil {
-                        return err
-                }
-        }
-        return nil
+	_, err := rep.DB.ExecContext(ctx, InsertPlaylistTrackQuery, playlistName, trackId)
+	if err != nil {
+		return err
+	}
+	return nil
 }

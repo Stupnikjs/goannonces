@@ -4,7 +4,7 @@ type DBrepo interface {
 	InitTable()
 	GetAllTracks() ([]Track, error)
 	PushTrackToSQL(Track) error
-	GetTrackFromId(int32) (*Track, error)
-	DeleteTrack(int32) error
-	UpdateTrackTag(int32, string) error
+	GetTrackFromId(int) (*Track, error)
+	DeleteTrack(int) error
+	UpdateTrackTag(int, string) error
 }

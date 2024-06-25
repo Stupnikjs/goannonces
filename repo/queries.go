@@ -79,11 +79,15 @@ UPDATE tracks
  	WHERE id = $1; 
 `
 
-var InsertPlaylistTrackQuery string = `
+var InsertPlaylistQuery string = `
 INSERT INTO playlist (name,trackid)  
 VALUES ( $1, $2 ) ; 
 `
 
+var InsertPlaylistTrackQuery string = `
+INSERT INTO playlist (name,trackid)  
+VALUES ( $1, $2 ) ; 
+`
 
 var DeletePlaylistQuery string = `
 DELETE FROM playlist 
