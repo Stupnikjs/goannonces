@@ -79,17 +79,32 @@ UPDATE tracks
  	WHERE id = $1; 
 `
 
+// Playlist
+
 var CreatePlaylistQuery string = `
 INSERT INTO playlist (name)  
 VALUES ($1) ; 
 `
 
 var InsertPlaylistTrackQuery string = `
-INSERT INTO playlist (name,trackid)  
+INSERT INTO playlist_items (trackid, playlistid)  
 VALUES ( $1, $2 ) ; 
 `
 
 var DeletePlaylistQuery string = `
 DELETE FROM playlist 
 WHERE name = $1; 
+`
+
+var GetPlaylistWithTrackByPlaylistIdQuery string = `
+SELECT pi.trackid 
+FROM playlist_items pi
+WHERE pi.playlistid = $1; 
+`
+
+var GetPlaylistWithTrackByPlaylistNameQuery string = `
+SELECT pi.trackid 
+FROM playlist_items pi
+JOIN playlist p ON pi.playlistid = p.id 
+WHERE p.name = $1; 
 `

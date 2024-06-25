@@ -23,7 +23,7 @@ func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Req
 	if reqJson.Action == "create" && reqJson.Object.Type == "playlist" && ok {
 		tracksIds := body["ids"]
 		for _, id := range tracksIds {
-			app.DB.InsertPlaylistTrack(body["name"], id)
+			err := app.DB.InsertPlaylistTrack(body["name"], id)
 		}
 	}
 
