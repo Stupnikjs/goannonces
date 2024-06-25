@@ -19,14 +19,9 @@ func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Req
 		util.WriteErrorToResponse(w, err, http.StatusBadRequest)
 	}
 
-	body, ok := reqJson.Object.Body.(map[string]string)
+	body, ok := reqJson.Object.Body.(string)
 	if reqJson.Action == "create" && reqJson.Object.Type == "playlist" && ok {
-		tracksIds := body["ids"]
-		for _, id := range tracksIds {
-			i := 1
-			err = app.DB.InsertPlaylistTrack("name", i)
-		}
-	}
+	err =	app.DB.InsertPlaylist(body)
 
 }
 
