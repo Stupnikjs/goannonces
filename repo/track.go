@@ -102,7 +102,7 @@ func (rep *PostgresRepo) DeleteTrack(trackId int) error {
 	return nil
 }
 
-func (rep *PostgresRepo) UpdateTrackTag(trackId int32, tag string) error {
+func (rep *PostgresRepo) UpdateTrackTag(trackId int, tag string) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	_, err := rep.DB.ExecContext(ctx, UpdateTrackTagQuery, trackId, tag)

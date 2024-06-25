@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS tracks (
 
 CREATE TABLE IF NOT EXISTS playlists (
 	id SERIAL PRIMARY KEY,
- name VARCHAR
+ 	name VARCHAR
 	
 );
 
@@ -79,9 +79,9 @@ UPDATE tracks
  	WHERE id = $1; 
 `
 
-var InsertPlaylistQuery string = `
-INSERT INTO playlist (name,trackid)  
-VALUES ( $1, $2 ) ; 
+var CreatePlaylistQuery string = `
+INSERT INTO playlist (name)  
+VALUES ($1) ; 
 `
 
 var InsertPlaylistTrackQuery string = `

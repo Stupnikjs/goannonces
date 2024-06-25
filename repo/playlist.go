@@ -32,7 +32,7 @@ func (rep *PostgresRepo) DeletePlaylist(playlistName string) error {
 	return nil
 }
 
-func (rep *PostgresRepo) PushPlaylistItem(playlistName string, trackId int) error {
+func (rep *PostgresRepo) InsertPlaylistTrack(playlistName string, trackId int) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 

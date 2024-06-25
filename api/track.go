@@ -86,7 +86,7 @@ func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	err = app.DB.DeleteTrack(trackidInt32)
+	err = app.DB.DeleteTrack(trackidInt)
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
