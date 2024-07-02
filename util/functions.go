@@ -61,6 +61,18 @@ func ProcessMp3Name(mp3name string) string {
 }
 
 func GetJsonStructFromReq(r *http.Request) (*api.JsonReq, error) {
+ jsonReq := api.JsonReq{} 
+ bytes, err := io.ReadAll(r.Body)
+ defer r.Body.Close()
+ if err != nil {
+ return nil, err 
 
-	return nil, nil
+}
+
+ err = json.Unmarshall(bytes, &jsonReq)
+ if err != nil {
+ return nil, err 
+
+}
+	return &jsonReq, nil
 }
