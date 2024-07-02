@@ -19,7 +19,7 @@ func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Req
 		util.WriteErrorToResponse(w, err, http.StatusBadRequest)
 	}
 
-	body, ok := reqJson.Object.Body.(string)
+	body, ok := reqJson.Object.Body.(map[string]string)
 	if reqJson.Action == "create" && reqJson.Object.Type == "playlist" && ok {
 		name := body["name"]
 		app.DB.CreatePlaylist(name)
@@ -30,6 +30,8 @@ func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Req
 
 func (app *Application) AppendToPlaylistHandler(w http.ResponseWriter, r *http.Request) {
 	// call to app
+
+	// get playlist id and track id from req
 
 }
 
