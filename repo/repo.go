@@ -9,5 +9,6 @@ type DBrepo interface {
 	UpdateTrackTag(int, string) error
 
 	// Playlist
-	InsertPlaylistTrack(string, int)
+	InsertPlaylistTrack(int, int) error
+	CreatePlaylist(string) error
 }

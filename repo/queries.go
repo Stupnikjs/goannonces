@@ -87,7 +87,7 @@ VALUES ($1) ;
 `
 
 var InsertPlaylistTrackQuery string = `
-INSERT INTO playlist_items (trackid, playlistid)  
+INSERT INTO playlist_items (playlistid, trackid)  
 VALUES ( $1, $2 ) ; 
 `
 
