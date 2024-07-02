@@ -117,8 +117,12 @@ func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 	}
-	playlists := []repo.Playlist{}
+	playlists, err := app.DB.GetAllPlaylists()
+ if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+	}
 	bytes, err := json.Marshal(tracks)
+ 
 	td := TemplateData{}
 	td.Data = make(map[string]any)
 	td.Data["Tracks"] = string(bytes)
