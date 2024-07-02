@@ -2,11 +2,7 @@ package repo
 
 import "context"
 
-type Playlist struct {
-	Name      string
-	ID        int32
-	TracksIDs []int32
-}
+
 
 func (rep *PostgresRepo) CreatePlaylist(playlistName string) error {
 	ctx, cancel := context.WithCancel(context.Background())
