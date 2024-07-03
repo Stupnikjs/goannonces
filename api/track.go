@@ -191,6 +191,11 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 
 			track := repo.Track{}
 			url, err := gstore.GetObjectURL(bucketName, h.Filename)
+
+			if err != nil {
+				return "", err
+			}
+
 			track.StoreURL = url
 			track.Name = h.Filename
 			track.Selected = false
@@ -218,6 +223,12 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 	ytReq := ytRequest{}
 
 	bytes, err := io.ReadAll(r.Body)
+
+	if err != nil {
+		fmt.Println(err)
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		return
+	}
 	json.Unmarshal(bytes, &ytReq)
 
 	mp3file, err := ytb.Download(ytReq.YtID)
@@ -230,11 +241,12 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 	// load MP3 filed to bicket
 
 	file, err := os.Open(mp3file)
-	defer file.Close()
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
+	defer file.Close()
+
 	bytes, err = util.ByteFromMegaFile(file)
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)

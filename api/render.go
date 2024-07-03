@@ -8,7 +8,6 @@ import (
 	"path"
 
 	"github.com/Stupnikjs/zik/gstore"
-	"github.com/Stupnikjs/zik/repo"
 	"github.com/Stupnikjs/zik/util"
 )
 
@@ -108,21 +107,18 @@ func (app *Application) IncrementPlayCountHandler(w http.ResponseWriter, r *http
 
 }
 
-type tagRequest struct {
-	Tag string `json:"tag"`
-}
-
 func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
 	tracks, err := app.DB.GetAllTracks()
 	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 	}
-	playlists, err := app.DB.GetAllPlaylists()
- if err != nil {
+	// playlists, err := app.DB.GetAllPlaylists()
+	var playlists []int
+	if err != nil {
 		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
 	}
 	bytes, err := json.Marshal(tracks)
- 
+
 	td := TemplateData{}
 	td.Data = make(map[string]any)
 	td.Data["Tracks"] = string(bytes)

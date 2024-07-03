@@ -11,7 +11,6 @@ type Track struct {
 	Name     string
 	StoreURL string
 	Selected bool
-	UserId   int
 	Size     int32
 	Tag      string
 }

@@ -5,9 +5,8 @@ CREATE TABLE IF NOT EXISTS tracks (
 	id serial PRIMARY KEY,
 	name VARCHAR,
 	storage_url VARCHAR,
-	selected BOOLEAN,
-	selected_count INTEGER, 
-	listen_count INTEGER, 
+	selected BOOLEAN, 
+	listen_count INTEGER,
 	size INTEGER,
 	tag VARCHAR 
 	); 
@@ -34,8 +33,6 @@ INSERT INTO tracks (
 	name,
 	storage_url, 
 	selected,
-	selected_count, 
-	listen_count, 
 	size, 
 	tag
 ) VALUES (
@@ -48,9 +45,7 @@ SELECT
 	id, 
 	name,
 	storage_url, 
-	selected,
-	selected_count, 
-	listen_count, 
+	selected, 
 	size,
 	tag
 FROM tracks 
@@ -60,9 +55,7 @@ var GetTrackFromIdQuery string = `
 SELECT  
 	name,
 	storage_url,
-	selected,  
-	selected_count, 
-	listen_count, 
+	selected,   
 	size, 
 	tag
 FROM tracks 

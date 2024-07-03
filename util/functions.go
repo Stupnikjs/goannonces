@@ -2,12 +2,9 @@ package util
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 	"path"
 	"strings"
-
-	"github.com/Stupnikjs/zik/api"
 )
 
 func IsInSlice[T comparable](str T, arr []T) bool {
@@ -58,21 +55,4 @@ func ProcessMp3Name(mp3name string) string {
 	fmt.Println(secsplit[len(secsplit)-1])
 	return secsplit[len(secsplit)-1]
 
-}
-
-func GetJsonStructFromReq(r *http.Request) (*api.JsonReq, error) {
- jsonReq := api.JsonReq{} 
- bytes, err := io.ReadAll(r.Body)
- defer r.Body.Close()
- if err != nil {
- return nil, err 
-
-}
-
- err = json.Unmarshall(bytes, &jsonReq)
- if err != nil {
- return nil, err 
-
-}
-	return &jsonReq, nil
 }
