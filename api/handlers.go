@@ -77,14 +77,14 @@ func (app *Application) RenderYoutube(w http.ResponseWriter, r *http.Request) {
 func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
 	tracks, err := app.DB.GetAllTracks()
 	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 	}
 	// playlists, err := app.DB.GetAllPlaylists()
 	var playlists []int
 
 	bytes, err := json.Marshal(tracks)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 	}
 
 	td := TemplateData{}
@@ -110,7 +110,7 @@ func (app *Application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	// Retrieve the file from the form data
 	msg, err := app.LoadMultipartReqToBucket(r, app.BucketName)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, 404)
+		WriteErrorToResponse(w, err, 404)
 	}
 
 	w.Write([]byte(msg))
@@ -126,7 +126,7 @@ func (app *Application) ListObjectHandler(w http.ResponseWriter, r *http.Request
 	byteNames, err := json.Marshal(names)
 
 	if err != nil {
-		util.WriteErrorToResponse(w, err, 404)
+		WriteErrorToResponse(w, err, 404)
 	}
 
 	w.Write(byteNames)
@@ -138,19 +138,19 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 
 	trackidInt, err := strconv.Atoi(trackid)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, 404)
+		WriteErrorToResponse(w, err, 404)
 	}
 
 	track, err := app.DB.GetTrackFromId(trackidInt)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, 404)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, 404)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	bucket := client.Bucket(app.BucketName)
@@ -158,7 +158,7 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 	defer client.Close()
 	reader, err := obj.NewReader(ctx)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, 404)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	defer reader.Close()
@@ -177,40 +177,40 @@ func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Reques
 	bytes, err := io.ReadAll(r.Body)
 	if err != nil {
 		fmt.Println(err)
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 	defer r.Body.Close()
 	err = json.Unmarshal(bytes, &req)
 	if err != nil {
 		fmt.Println(err)
-		util.WriteErrorToResponse(w, err, 404)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	fmt.Println(req)
 	trackid := req.Object.Id
 	trackidInt, err := strconv.Atoi(trackid)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	track, err := app.DB.GetTrackFromId(trackidInt)
 
 	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	err = app.DB.DeleteTrack(trackidInt)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	err = gstore.DeleteObjectInBucket(app.BucketName, track.Name)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -224,7 +224,7 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 	body, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		util.WriteErrorToResponse(w, err, 404)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	req := JsonReq{}
@@ -232,7 +232,7 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 
 	if err != nil {
 		fmt.Println(err)
-		util.WriteErrorToResponse(w, err, 404)
+		WriteErrorToResponse(w, err, 404)
 		return
 	}
 
@@ -240,18 +240,18 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 
 		trackidInt, err := strconv.Atoi(req.Object.Id)
 		if err != nil {
-			util.WriteErrorToResponse(w, err, 404)
+			WriteErrorToResponse(w, err, 404)
 			return
 		}
 		tag, ok := req.Object.Body.(string)
 		if !ok {
-			util.WriteErrorToResponse(w, fmt.Errorf("body malformed"), 404)
+			WriteErrorToResponse(w, fmt.Errorf("body malformed"), 404)
 			return
 		}
 		err = app.DB.UpdateTrackTag(trackidInt, tag)
 
 		if err != nil {
-			util.WriteErrorToResponse(w, err, 404)
+			WriteErrorToResponse(w, err, 404)
 			return
 
 		}
@@ -261,7 +261,7 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 		return
 
 	}
-	util.WriteErrorToResponse(w, fmt.Errorf("wrong request format %s", ""), http.StatusBadRequest)
+	WriteErrorToResponse(w, fmt.Errorf("wrong request format %s", ""), http.StatusBadRequest)
 
 }
 
@@ -341,7 +341,7 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 
 	if err != nil {
 		fmt.Println(err)
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		riteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 	json.Unmarshal(bytes, &ytReq)
@@ -350,28 +350,28 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 
 	if err != nil {
 		fmt.Println(err)
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 	// load MP3 filed to bicket
 
 	file, err := os.Open(mp3file)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 	defer file.Close()
 
 	bytes, err = util.ByteFromMegaFile(file)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 
 	mp3file = util.ProcessMp3Name(mp3file)
 	err = gstore.LoadToBucket(app.BucketName, mp3file, bytes)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 	track := repo.Track{
@@ -380,7 +380,7 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 	err = app.DB.PushTrackToSQL(track)
 
 	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -395,7 +395,7 @@ func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Req
 	reqJson := JsonReq{}
 	bytes, err := io.ReadAll(r.Body)
 	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusBadRequest)
+		WriteErrorToResponse(w, err, http.StatusBadRequest)
 	}
 
 	r.Body.Close()
@@ -403,7 +403,7 @@ func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Req
 	err = json.Unmarshal(bytes, &reqJson)
 
 	if err != nil {
-		util.WriteErrorToResponse(w, err, http.StatusBadRequest)
+		WriteErrorToResponse(w, err, http.StatusBadRequest)
 	}
 
 	body, ok := reqJson.Object.Body.(map[string]string)
