@@ -1,1 +1,12 @@
-// ok
+{{template "base" .}}
+
+{{define "content"}}
+    <section >
+            <label>Youtube sound url </label>
+            <input type="text">
+            <button class="ytBtn"> Submit </button>
+            <div class="respDiv">
+            </div>
+    </section>
+    <script defer src="/static/js/youtube.js"></script>
+{{end}}

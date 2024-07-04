@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io"
 	"net/http"
 	"os"
+	"path"
 	"strconv"
 
 	"cloud.google.com/go/storage"
@@ -16,6 +18,120 @@ import (
 	"github.com/Stupnikjs/zik/ytb"
 	"github.com/go-chi/chi/v5"
 )
+
+var pathToTemplates = "./static/templates/"
+
+type TemplateData struct {
+	Data map[string]any
+}
+
+func render(w http.ResponseWriter, r *http.Request, t string, td *TemplateData) error {
+	_ = r.Method
+
+	parsedTemplate, err := template.ParseFiles(path.Join(pathToTemplates, t), path.Join(pathToTemplates, "/base.layout.gohtml"))
+	if err != nil {
+		return err
+	}
+	err = parsedTemplate.Execute(w, td)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}
+
+// template rendering
+
+func (app *Application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
+
+	td := TemplateData{}
+	tracks, err := app.DB.GetAllTracks()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	td.Data = make(map[string]any)
+	td.Data["Tracks"] = tracks
+	_ = render(w, r, "/acceuil.gohtml", &td)
+}
+
+func (app *Application) RenderLoader(w http.ResponseWriter, r *http.Request) {
+
+	_ = render(w, r, "/loader.gohtml", &TemplateData{})
+}
+
+func (app *Application) RenderDragDrop(w http.ResponseWriter, r *http.Request) {
+
+	td := TemplateData{}
+
+	_ = render(w, r, "/dragdrop.gohtml", &td)
+}
+func (app *Application) RenderYoutube(w http.ResponseWriter, r *http.Request) {
+
+	td := TemplateData{}
+
+	_ = render(w, r, "/youtube.gohtml", &td)
+}
+
+func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
+	tracks, err := app.DB.GetAllTracks()
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+	}
+	// playlists, err := app.DB.GetAllPlaylists()
+	var playlists []int
+
+	bytes, err := json.Marshal(tracks)
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusInternalServerError)
+	}
+
+	td := TemplateData{}
+	td.Data = make(map[string]any)
+	td.Data["Tracks"] = string(bytes)
+	td.Data["Playlists"] = playlists
+
+	_ = render(w, r, "/playlist.gohtml", &td)
+}
+
+/* Api calls */
+
+func (app *Application) UploadFile(w http.ResponseWriter, r *http.Request) {
+	// load file to gcp bucket
+
+	// Parse the multipart form
+	err := r.ParseMultipartForm(10 << 20) // 10 MB
+	if err != nil {
+		http.Error(w, "Unable to parse form", http.StatusBadRequest)
+		return
+	}
+
+	// Retrieve the file from the form data
+	msg, err := app.LoadMultipartReqToBucket(r, app.BucketName)
+	if err != nil {
+		util.WriteErrorToResponse(w, err, 404)
+	}
+
+	w.Write([]byte(msg))
+}
+
+func (app *Application) ListObjectHandler(w http.ResponseWriter, r *http.Request) {
+	names, err := gstore.ListObjectsBucket(app.BucketName)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+
+	byteNames, err := json.Marshal(names)
+
+	if err != nil {
+		util.WriteErrorToResponse(w, err, 404)
+	}
+
+	w.Write(byteNames)
+
+}
 
 func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http.Request) {
 	trackid := chi.URLParam(r, "id")
@@ -41,12 +157,12 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 	obj := bucket.Object(track.Name)
 	defer client.Close()
 	reader, err := obj.NewReader(ctx)
-
-	defer reader.Close()
 	if err != nil {
 		util.WriteErrorToResponse(w, err, 404)
 		return
 	}
+	defer reader.Close()
+
 	w.Header().Set("Content-Type", "audio/mpeg")
 	w.WriteHeader(http.StatusOK)
 
@@ -54,7 +170,7 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 
 }
 
-// Not working
+/* Tracks */
 
 func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Request) {
 	req := JsonReq{}
@@ -129,7 +245,7 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 		}
 		tag, ok := req.Object.Body.(string)
 		if !ok {
-			util.WriteErrorToResponse(w, fmt.Errorf("Body malformed"), 404)
+			util.WriteErrorToResponse(w, fmt.Errorf("body malformed"), 404)
 			return
 		}
 		err = app.DB.UpdateTrackTag(trackidInt, tag)
@@ -145,8 +261,7 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 		return
 
 	}
-	util.WriteErrorToResponse(w, fmt.Errorf("Wrong request format %s", ""), http.StatusBadRequest)
-	return
+	util.WriteErrorToResponse(w, fmt.Errorf("wrong request format %s", ""), http.StatusBadRequest)
 
 }
 
@@ -271,5 +386,43 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 
 	util.CleanAllTempDir()
 	w.Write([]byte("youtube music uploaded on gcp"))
+
+}
+
+/* Playlist */
+
+func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Request) {
+	reqJson := JsonReq{}
+	bytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusBadRequest)
+	}
+
+	r.Body.Close()
+
+	err = json.Unmarshal(bytes, &reqJson)
+
+	if err != nil {
+		util.WriteErrorToResponse(w, err, http.StatusBadRequest)
+	}
+
+	body, ok := reqJson.Object.Body.(map[string]string)
+	if reqJson.Action == "create" && reqJson.Object.Type == "playlist" && ok {
+		name := body["name"]
+		app.DB.CreatePlaylist(name)
+
+	}
+
+}
+
+func (app *Application) AppendToPlaylistHandler(w http.ResponseWriter, r *http.Request) {
+	// call to app
+
+	// get playlist id and track id from req
+
+}
+
+func (app *Application) RemoveToPlaylistHandler(w http.ResponseWriter, r *http.Request) {
+	// call to app
 
 }
