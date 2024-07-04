@@ -79,9 +79,12 @@ func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 	}
-	// playlists, err := app.DB.GetAllPlaylists()
-	var playlists []int
+	playlists, err := app.DB.GetAllPlaylists()
 
+	if err != nil {
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
+	}
+	fmt.Println(playlists)
 	bytes, err := json.Marshal(tracks)
 	if err != nil {
 		WriteErrorToResponse(w, err, http.StatusInternalServerError)
@@ -134,9 +137,10 @@ func (app *Application) ListObjectHandler(w http.ResponseWriter, r *http.Request
 }
 
 func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http.Request) {
-	trackid := chi.URLParam(r, "id")
 
+	trackid := chi.URLParam(r, "id")
 	trackidInt, err := strconv.Atoi(trackid)
+
 	if err != nil {
 		WriteErrorToResponse(w, err, 404)
 	}
@@ -173,22 +177,12 @@ func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http
 /* Tracks */
 
 func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Request) {
-	req := JsonReq{}
-	bytes, err := io.ReadAll(r.Body)
+	jsonReq, err := ParseJsonReq(r)
 	if err != nil {
-		fmt.Println(err)
 		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
-	defer r.Body.Close()
-	err = json.Unmarshal(bytes, &req)
-	if err != nil {
-		fmt.Println(err)
-		WriteErrorToResponse(w, err, 404)
-		return
-	}
-	fmt.Println(req)
-	trackid := req.Object.Id
+	trackid := jsonReq.Object.Id
 	trackidInt, err := strconv.Atoi(trackid)
 	if err != nil {
 		WriteErrorToResponse(w, err, http.StatusInternalServerError)
@@ -218,32 +212,21 @@ func (app *Application) DeleteTrackHandler(w http.ResponseWriter, r *http.Reques
 }
 
 func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Request) {
-	// test request content type
+	jsonReq, err := ParseJsonReq(r)
 
-	// read request body json
-	body, err := io.ReadAll(r.Body)
-	defer r.Body.Close()
 	if err != nil {
 		WriteErrorToResponse(w, err, 404)
 		return
 	}
-	req := JsonReq{}
-	err = json.Unmarshal(body, &req)
 
-	if err != nil {
-		fmt.Println(err)
-		WriteErrorToResponse(w, err, 404)
-		return
-	}
+	if jsonReq.Object.Field == "tag" && jsonReq.Object.Type == "track" && jsonReq.Action == "update" {
 
-	if req.Object.Field == "tag" && req.Object.Type == "track" && req.Action == "update" {
-
-		trackidInt, err := strconv.Atoi(req.Object.Id)
+		trackidInt, err := strconv.Atoi(jsonReq.Object.Id)
 		if err != nil {
 			WriteErrorToResponse(w, err, 404)
 			return
 		}
-		tag, ok := req.Object.Body.(string)
+		tag, ok := jsonReq.Object.Body.(string)
 		if !ok {
 			WriteErrorToResponse(w, fmt.Errorf("body malformed"), 404)
 			return
@@ -265,70 +248,6 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 
 }
 
-func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName string) (string, error) {
-	objNames, err := gstore.ListObjectsBucket(app.BucketName)
-
-	already := []string{}
-	if err != nil {
-		return "", err
-	}
-
-	for _, headers := range r.MultipartForm.File {
-
-		for _, h := range headers {
-
-			if util.IsInSlice(h.Filename, objNames) {
-				// format a messgage with already present files
-				already = append(already, h.Filename)
-
-				break
-			}
-
-			file, err := h.Open()
-
-			if err != nil {
-				return "", err
-			}
-
-			defer file.Close()
-
-			finalByteArr, err := util.ByteFromMegaFile(file)
-
-			if err != nil {
-				return "", err
-			}
-
-			err = gstore.LoadToBucket(bucketName, h.Filename, finalByteArr)
-
-			if err != nil {
-				return "", err
-			}
-
-			track := repo.Track{}
-			url, err := gstore.GetObjectURL(bucketName, h.Filename)
-
-			if err != nil {
-				return "", err
-			}
-
-			track.StoreURL = url
-			track.Name = h.Filename
-			track.Selected = false
-			err = app.DB.PushTrackToSQL(track)
-			if err != nil {
-				return "", err
-			}
-		}
-
-	}
-	msg := ""
-	for _, s := range already {
-		msg += fmt.Sprintf(" %s were alreaddy in bucket ", s)
-	}
-	return msg, nil
-
-}
-
 type ytRequest struct {
 	YtID string `json:"ytid"`
 }
@@ -341,7 +260,7 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 
 	if err != nil {
 		fmt.Println(err)
-		riteErrorToResponse(w, err, http.StatusInternalServerError)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 	json.Unmarshal(bytes, &ytReq)
@@ -362,7 +281,7 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 	}
 	defer file.Close()
 
-	bytes, err = util.ByteFromMegaFile(file)
+	bytes, err = ByteFromMegaFile(file)
 	if err != nil {
 		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
@@ -392,25 +311,21 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 /* Playlist */
 
 func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Request) {
-	reqJson := JsonReq{}
-	bytes, err := io.ReadAll(r.Body)
-	if err != nil {
-		WriteErrorToResponse(w, err, http.StatusBadRequest)
-	}
-
-	r.Body.Close()
-
-	err = json.Unmarshal(bytes, &reqJson)
+	reqJson, err := ParseJsonReq(r)
 
 	if err != nil {
 		WriteErrorToResponse(w, err, http.StatusBadRequest)
+		return
 	}
-
 	body, ok := reqJson.Object.Body.(map[string]string)
 	if reqJson.Action == "create" && reqJson.Object.Type == "playlist" && ok {
 		name := body["name"]
-		app.DB.CreatePlaylist(name)
+		err = app.DB.CreatePlaylist(name)
 
+		if err != nil {
+			WriteErrorToResponse(w, err, http.StatusBadRequest)
+			return
+		}
 	}
 
 }

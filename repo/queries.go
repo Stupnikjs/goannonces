@@ -79,6 +79,11 @@ INSERT INTO playlist (name)
 VALUES ($1) ; 
 `
 
+var GetAllPlaylistsQuery string = `
+SELECT p.name  
+FROM playlists p; 
+`
+
 var InsertPlaylistTrackQuery string = `
 INSERT INTO playlist_items (playlistid, trackid)  
 VALUES ( $1, $2 ) ; 

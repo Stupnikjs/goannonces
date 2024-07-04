@@ -1,6 +1,12 @@
 package api
 
-import "github.com/Stupnikjs/zik/repo"
+import (
+	"encoding/json"
+	"io"
+	"net/http"
+
+	"github.com/Stupnikjs/zik/repo"
+)
 
 type JsonReq struct {
 	Action string    `json:"action"`
@@ -18,4 +24,23 @@ type Application struct {
 	DB         repo.DBrepo
 	Port       int
 	BucketName string
+}
+
+func ParseJsonReq(r *http.Request) (*JsonReq, error) {
+
+	reqJson := JsonReq{}
+	bytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	r.Body.Close()
+
+	err = json.Unmarshal(bytes, &reqJson)
+
+	if err != nil {
+		return nil, err
+	}
+	return &reqJson, nil
+
 }

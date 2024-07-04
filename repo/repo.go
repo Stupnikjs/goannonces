@@ -11,4 +11,5 @@ type DBrepo interface {
 	// Playlist
 	InsertPlaylistTrack(int, int) error
 	CreatePlaylist(string) error
+	GetAllPlaylists() ([]Playlist, error)
 }

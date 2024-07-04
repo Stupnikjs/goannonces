@@ -1,6 +1,7 @@
 let createPlaylistBtn = document.querySelector(".createPlaylistBtn")
 let dataDiv = document.querySelector("#trackDiv")
 let tracks = dataDiv.getAttribute("data-json")
+let errDiv = document.querySelector("#errDiv")
 
 tracks = JSON.parse(tracks)
 
@@ -18,14 +19,6 @@ createPlaylistBtn.addEventListener("click", (e) => {
     submitBtn.textContent = "Submit Playlist"
 
     submitBtn.addEventListener("click", async(e) => {
-        let choiceDiv = document.querySelector("#trackDiv")
-        let lists = choiceDiv.querySelectorAll("li")
-        let playlistIds = []
-        for ( let li of lists){
-            if (li.ariaSelected == "true"){
-                playlistIds.push(li.id)
-            }
-        }
         
         let apiObject = {
             "action": "create",
@@ -33,7 +26,6 @@ createPlaylistBtn.addEventListener("click", (e) => {
                "type" : "playlist",
                 "body": {
                     "name": inputName.value,
-                    "ids": playlistIds
                 }
             }
         }
@@ -44,16 +36,16 @@ createPlaylistBtn.addEventListener("click", (e) => {
             }, 
             body: JSON.stringify(apiObject)
         })
-
-        console.log(apiObject)
-        console.log(resp)
+        if (resp.ok) {
+            
+            errDiv.textContent = await resp.text()
+        }
 
 
     })
     dataDiv.appendChild(labelName)
     dataDiv.appendChild(inputName)
     dataDiv.appendChild(submitBtn)
-    loadTrackChoice()
 
 })
 
