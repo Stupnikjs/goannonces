@@ -2,3 +2,5 @@ Dockerfile
 clean util package? 
 refactor track playlist 
 error.go in api 
+finish playlist crud
+test handlers route storage
