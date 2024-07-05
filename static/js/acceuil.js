@@ -1,5 +1,7 @@
 let cards = document.querySelectorAll(".audiocard")
 
+
+// loping over each sound card 
 for ( let i = 0; i < cards.length; i++ ){
     let button = cards[i].querySelector(".nameBtn")
     let tagBtn = cards[i].querySelector(".tagBtn")
@@ -7,7 +9,7 @@ for ( let i = 0; i < cards.length; i++ ){
     let sumbitTagBtn = cards[i].querySelector(".submitTagBtn")
     let deleteBtn = cards[i].querySelector(".deleteBtn")
 
-    // create toggle button (todo) 
+    // Button to display the audio player  
     button.addEventListener("click", (e) => {
         e.preventDefault()
         let selected = button.getAttribute("selected")
@@ -21,6 +23,9 @@ for ( let i = 0; i < cards.length; i++ ){
         }
        
     })
+
+    
+    // button to display tag input 
     tagBtn.addEventListener("click", (e) => {
         e.preventDefault()
         let selected = tagBtn.getAttribute("selected")
@@ -41,6 +46,9 @@ for ( let i = 0; i < cards.length; i++ ){
        
     })
 
+    
+
+    // heart selected 
     selectedBtn.addEventListener("click", (e) => {
         e.preventDefault()
         let selected = selectedBtn.getAttribute("selected")
@@ -54,6 +62,11 @@ for ( let i = 0; i < cards.length; i++ ){
         }
        
     })
+
+
+    
+    
+    // delete the track then refresh 
     deleteBtn.addEventListener("click", async (e) => {
         e.preventDefault()
         
@@ -80,19 +93,9 @@ for ( let i = 0; i < cards.length; i++ ){
        
     })
 
-    selectedBtn.addEventListener("click", (e) => {
-        e.preventDefault()
-        let selected = selectedBtn.getAttribute("selected")
-        
-        if (!selected || selected == "false"){
-            selectedBtn.setAttribute("selected", "true")
-            selectedBtn.classList.add("selectedHeart")
-        } else {
-            selectedBtn.setAttribute("selected", "false")
-            selectedBtn.classList.remove("selectedHeart")
-        }
-       
-    })
+
+
+    // post the tag then refresh 
     sumbitTagBtn.addEventListener("click", async (e) => {
         e.preventDefault()
         let input = cards[i].querySelector(".tagInput")
