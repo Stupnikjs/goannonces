@@ -100,24 +100,6 @@ func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
 
 /* Api calls */
 
-func (app *Application) UploadFile(w http.ResponseWriter, r *http.Request) {
-	// load file to gcp bucket
-
-	// Parse the multipart form
-	err := r.ParseMultipartForm(10 << 20) // 10 MB
-	if err != nil {
-		http.Error(w, "Unable to parse form", http.StatusBadRequest)
-		return
-	}
-
-	// Retrieve the file from the form data
-	msg, err := app.LoadMultipartReqToBucket(r, app.BucketName)
-	if err != nil {
-		WriteErrorToResponse(w, err, 404)
-	}
-
-	w.Write([]byte(msg))
-}
 
 func (app *Application) ListObjectHandler(w http.ResponseWriter, r *http.Request) {
 	names, err := gstore.ListObjectsBucket(app.BucketName)
