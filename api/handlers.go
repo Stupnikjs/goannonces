@@ -293,6 +293,7 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
+	
 	track := repo.Track{
 		Name: mp3file,
 	}
