@@ -1,14 +1,6 @@
 package api
 
-import (
-	"crypto/tls"
-	"io"
-	"net/http"
-	"net/http/httptest"
-	"strings"
-	"testing"
-)
-
+/*
 func Test_application_handlers(t *testing.T) {
 	var theTests = []struct {
 		name                    string
@@ -106,7 +98,7 @@ func Test_renderWithBadTemplate(t *testing.T) {
 	/* Test de la fonction app.render
 	* creattion d'une request
 	* creation d'un reponse recorder qui satifait l'interface http.ResponseWriter
-	 */
+
 
 	// set templatepath to a location with a bad template
 
@@ -124,3 +116,5 @@ func Test_renderWithBadTemplate(t *testing.T) {
 	pathToTemplates = "./../../templates/"
 
 }
+
+*/

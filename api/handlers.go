@@ -100,7 +100,6 @@ func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
 
 /* Api calls */
 
-
 func (app *Application) ListObjectHandler(w http.ResponseWriter, r *http.Request) {
 	names, err := gstore.ListObjectsBucket(app.BucketName)
 
@@ -118,7 +117,7 @@ func (app *Application) ListObjectHandler(w http.ResponseWriter, r *http.Request
 
 }
 
-func (app *Application) UploadTrackFromGCPHandler(w http.ResponseWriter, r *http.Request) {
+func (app *Application) StreamTrackFromGCPHandler(w http.ResponseWriter, r *http.Request) {
 
 	trackid := chi.URLParam(r, "id")
 	trackidInt, err := strconv.Atoi(trackid)
@@ -275,7 +274,7 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 		WriteErrorToResponse(w, err, http.StatusInternalServerError)
 		return
 	}
-	
+
 	track := repo.Track{
 		Name: mp3file,
 	}
