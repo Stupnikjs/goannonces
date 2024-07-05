@@ -16,7 +16,7 @@ createPlaylistBtn.addEventListener("click", (e) => {
     labelName.style.display = "block"
     labelName.textContent = "Name your Playlist"
     let submitBtn = document.createElement("button")
-    submitBtn.textContent = "Submit Playlist"
+    submitBtn.textContent = "Create Playlist"
 
     submitBtn.addEventListener("click", async(e) => {
         
@@ -37,8 +37,9 @@ createPlaylistBtn.addEventListener("click", (e) => {
             body: JSON.stringify(apiObject)
         })
         if (resp.ok) {
-            
-            errDiv.textContent = await resp.text()
+            window.location.assign("/")
+        } else {
+             errDiv.textContent = await resp.text()
         }
 
 
