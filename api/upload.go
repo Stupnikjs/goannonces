@@ -12,6 +12,7 @@ import (
 	"github.com/Stupnikjs/zik/util"
 )
 
+// Compare speed with io.ReadAll() 
 func ByteFromMegaFile(file io.Reader) ([]byte, error) {
 
 	reader := bufio.NewReader(file)
@@ -74,7 +75,6 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 			err = app.DB.PushTrackToSQL(track)
 			
 			if err != nil {
-				fmt.Println("")
 				err = fmt.Errorf(" error pushing track to sql and %w", err) 
 				_ = gstore.DeleteObjectInBucket(bucketName, h.Filename)
 				return "", err
