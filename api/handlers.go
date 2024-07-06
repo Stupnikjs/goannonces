@@ -134,6 +134,8 @@ func (app *Application) StreamTrackFromGCPHandler(w http.ResponseWriter, r *http
 		WriteErrorToResponse(w, err, 404)
 		return
 	}
+	
+	// to refactor in gstorage ReaderFromObjName  
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	client, err := storage.NewClient(ctx)
@@ -150,6 +152,7 @@ func (app *Application) StreamTrackFromGCPHandler(w http.ResponseWriter, r *http
 		return
 	}
 	defer reader.Close()
+	// refactor end 
 
 	w.Header().Set("Content-Type", "audio/mpeg")
 	w.WriteHeader(http.StatusOK)
