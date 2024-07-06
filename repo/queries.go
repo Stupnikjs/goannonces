@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS tracks (
 	name VARCHAR,
 	storage_url VARCHAR,
 	selected BOOLEAN, 
-	listen_count INTEGER,
 	size INTEGER,
 	tag VARCHAR 
 	); 
