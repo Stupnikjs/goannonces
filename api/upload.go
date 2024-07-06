@@ -74,8 +74,9 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 			err = app.DB.PushTrackToSQL(track)
 			
 			if err != nil {
-				fmt.Println("error appened pushing track to sql after pushing to storage, so deleting object in strorage")
-				errDelete := gstore.DeleteObject()
+				fmt.Println("")
+				err = fmt.Errorf(" error pushing track to sql and %w", err) 
+				_ = gstore.DeleteObjectInBucket(bucketName, h.Filename)
 				return "", err
 			}
 		}
