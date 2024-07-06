@@ -8,8 +8,9 @@ import (
 
 func TestByteFromMegaFile(t *testing.T) {
 
+   testFilePath := `C:\Users\nboud\OneDrive\Bureau\Go_Projects\zik\static\download\test.mp3`)
+
 	file, _ := os.Open(`C:\Users\nboud\OneDrive\Bureau\Go_Projects\zik\static\download\test.mp3`)
-	defer file.Close()
 	b, _ := io.ReadAll(file)
 
 	newFile, _ := os.Open(`C:\Users\nboud\OneDrive\Bureau\Go_Projects\zik\static\download\test.mp3`)
