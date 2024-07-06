@@ -73,6 +73,9 @@ UPDATE tracks
 
 // Playlist
 
+
+/*
+
 var CreatePlaylistQuery string = `
 INSERT INTO playlist (name)  
 VALUES ($1) ; 
@@ -105,3 +108,4 @@ FROM playlist_items pi
 JOIN playlist p ON pi.playlistid = p.id 
 WHERE p.name = $1; 
 `
+*/
