@@ -74,6 +74,8 @@ func (app *Application) RenderYoutube(w http.ResponseWriter, r *http.Request) {
 	_ = render(w, r, "/youtube.gohtml", &td)
 }
 
+/*
+
 func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
 	tracks, err := app.DB.GetAllTracks()
 	if err != nil {
@@ -98,6 +100,7 @@ func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
 	_ = render(w, r, "/playlist.gohtml", &td)
 }
 
+*/
 /* Api calls */
 
 func (app *Application) ListObjectHandler(w http.ResponseWriter, r *http.Request) {
