@@ -290,8 +290,10 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 
 }
 
-/* Playlist */
-
+/* Playlist 
+*
+*
+*
 func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Request) {
 	reqJson, err := ParseJsonReq(r)
 
@@ -323,3 +325,5 @@ func (app *Application) RemoveToPlaylistHandler(w http.ResponseWriter, r *http.R
 	// call to app
 
 }
+
+*/
