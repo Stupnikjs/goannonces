@@ -8,12 +8,12 @@ import (
 
 func TestByteFromMegaFile(t *testing.T) {
 
-   testFilePath := `C:\Users\nboud\OneDrive\Bureau\Go_Projects\zik\static\download\test.mp3`)
+	testFilePath := `C:\Users\nboud\OneDrive\Bureau\Go_Projects\zik\static\download\test.mp3`
 
-	file, _ := os.Open(`C:\Users\nboud\OneDrive\Bureau\Go_Projects\zik\static\download\test.mp3`)
+	file, _ := os.Open(testFilePath)
 	b, _ := io.ReadAll(file)
 
-	newFile, _ := os.Open(`C:\Users\nboud\OneDrive\Bureau\Go_Projects\zik\static\download\test.mp3`)
+	newFile, _ := os.Open(testFilePath)
 	respByte, _ := ByteFromMegaFile(newFile)
 
 	if len(b) != len(respByte) {
