@@ -35,7 +35,7 @@ INSERT INTO tracks (
 	size, 
 	tag
 ) VALUES (
-	$1, $2, $3, $4, $5, $6,$7
+	$1, $2, $3, $4, $5
 )
 `
 
@@ -73,39 +73,38 @@ UPDATE tracks
 
 // Playlist
 
-
 /*
 
 var CreatePlaylistQuery string = `
-INSERT INTO playlist (name)  
-VALUES ($1) ; 
+INSERT INTO playlist (name)
+VALUES ($1) ;
 `
 
 var GetAllPlaylistsQuery string = `
-SELECT p.name  
-FROM playlists p; 
+SELECT p.name
+FROM playlists p;
 `
 
 var InsertPlaylistTrackQuery string = `
-INSERT INTO playlist_items (playlistid, trackid)  
-VALUES ( $1, $2 ) ; 
+INSERT INTO playlist_items (playlistid, trackid)
+VALUES ( $1, $2 ) ;
 `
 
 var DeletePlaylistQuery string = `
-DELETE FROM playlist 
-WHERE name = $1; 
+DELETE FROM playlist
+WHERE name = $1;
 `
 
 var GetPlaylistWithTrackByPlaylistIdQuery string = `
-SELECT pi.trackid 
+SELECT pi.trackid
 FROM playlist_items pi
-WHERE pi.playlistid = $1; 
+WHERE pi.playlistid = $1;
 `
 
 var GetPlaylistWithTrackByPlaylistNameQuery string = `
-SELECT pi.trackid 
+SELECT pi.trackid
 FROM playlist_items pi
-JOIN playlist p ON pi.playlistid = p.id 
-WHERE p.name = $1; 
+JOIN playlist p ON pi.playlistid = p.id
+WHERE p.name = $1;
 `
 */

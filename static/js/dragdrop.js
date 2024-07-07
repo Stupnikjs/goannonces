@@ -53,7 +53,7 @@ function dropHandler(ev) {
   })
   .then(data => {
       console.log('Success:', data);
-      window.location.assign("/dragdrop")
+      // window.location.assign("/")
   })
   .catch(error => {
       console.error('Error:', error);
@@ -71,6 +71,7 @@ function displayFileName(name) {
     let dropZone = document.querySelector("#drop_zone")
     let div = document.createElement("div");
     div.classList.add("file_item")
+    div.innerHTML = `<i class="fa-solid fa-music"></i>`
     div.textContent = name;
     dropZone.appendChild(div);
 }

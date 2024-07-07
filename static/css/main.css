@@ -105,9 +105,9 @@ padding: 0.1rem 1rem;
 /* dragdrop */
 
 #drop_zone {
-  border: 5px solid blue;
- width: 50vw;
- height: 50vh;
+  border: 2px solid rgb(86, 86, 97);
+ width: 30vw;
+ height: 30vh;
  margin: auto; 
  overflow: scroll; 
 }
@@ -125,7 +125,7 @@ padding: 0.1rem 1rem;
 
 #selectFileNum{
 
-background-color: azure";
+background-color: azure;
 padding: 1rem;
 border: 1px solid black;
 

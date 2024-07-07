@@ -12,7 +12,7 @@ import (
 	"github.com/Stupnikjs/zik/util"
 )
 
-// Compare speed with io.ReadAll() 
+// Compare speed with io.ReadAll()
 func ByteFromMegaFile(file io.Reader) ([]byte, error) {
 
 	reader := bufio.NewReader(file)
@@ -28,19 +28,17 @@ func ByteFromMegaFile(file io.Reader) ([]byte, error) {
 	return finalByteArr, nil
 }
 
-
-
 func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName string) (string, error) {
 	objNames, err := gstore.ListObjectsBucket(app.BucketName)
-	
-	// filename with already present storage object names 
+
+	// filename with already present storage object names
 	already := []string{}
 	if err != nil {
 		return "", err
 	}
+	// map[files[]:[0x26a7a40]]
+	fmt.Println(r.MultipartForm.File["files[]"])
 
-	fmt.Println(r.MultipartForm.File)
-	
 	for _, headers := range r.MultipartForm.File {
 
 		for _, h := range headers {
@@ -65,17 +63,19 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 				return "", err
 			}
 
-			track := repo.Track{}
 			url, err := gstore.GetObjectURL(bucketName, h.Filename)
 			if err != nil {
 				return "", err
 			}
+
+			track := repo.Track{}
 			track.StoreURL = url
 			track.Name = h.Filename
 			err = app.DB.PushTrackToSQL(track)
-			
+			fmt.Println(err)
+
 			if err != nil {
-				err = fmt.Errorf(" error pushing track to sql and %w", err) 
+				err = fmt.Errorf(" error pushing track to sql and %w", err)
 				_ = gstore.DeleteObjectInBucket(bucketName, h.Filename)
 				return "", err
 			}
@@ -103,7 +103,8 @@ func (app *Application) UploadFile(w http.ResponseWriter, r *http.Request) {
 	// Retrieve the file from the form data
 	msg, err := app.LoadMultipartReqToBucket(r, app.BucketName)
 	if err != nil {
-		WriteErrorToResponse(w, err, 404)
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
+		return
 	}
 
 	w.Write([]byte(msg))
