@@ -58,10 +58,12 @@ function dropHandler(ev) {
   msgDiv.textContent = "uploading files"
 
   if ( resp.ok ) {
+      msgDiv.textContent = "success uploading"
       console.log('Success:', resp.body);
       // window.location.assign("/")
   } else {
       console.error('Error:', error);
+      msgDiv.textContent = error 
   }
 }
 
