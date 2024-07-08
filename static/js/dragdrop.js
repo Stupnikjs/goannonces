@@ -38,7 +38,7 @@ function dropHandler(ev) {
     ev.preventDefault();
   }
 
-  function submitHandler() {
+ async function submitHandler() {
 
   console.log("submit handler")
   const formData = new FormData();
@@ -47,23 +47,23 @@ function dropHandler(ev) {
       formData.append('files[]', file, file.name);
   });
 
-  fetch('/upload', {
+  let resp = await fetch('/upload', {
       method: 'POST',
       body: formData
   })
-  .then(data => {
-      console.log('Success:', data);
+  if ( resp.ok ) {
+
+      console.log('Success:', resp.body);
       // window.location.assign("/")
-  })
-  .catch(error => {
+  } else {
       console.error('Error:', error);
-  });
+  }
 }
 
 
 submitdrag.addEventListener("click", (e) => {
 e.preventDefault()
-submitHandler()
+await submitHandler()
 
 })
 
