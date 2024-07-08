@@ -23,5 +23,19 @@ func TestParseJsonReq(t *testing.T){
             } 
 
      */
+
+    // pass json to request 
+
+    jsonReq, err := ParseJsonReq(req)
+
+  if err != nil {
+  t.Errorf("expected no error but got %s", err.Error())
+    }
+
+  if jsonReq.Action != "update" {
+    t.Errorf("expected update action but go %s", jsonReq.Action) 
+    }
+
+             
     }
   
