@@ -1,4 +1,22 @@
-let cards = document.querySelectorAll(".audiocard")
+let cards = document.querySelectorAll(".audiocard"); 
+let filterDiv = document.querySelector("#filterDiv"); 
+let inputFilter = document.querySelector("#inputFilter");  
+
+
+inputFilter.addEventListener("change", (e) => {
+    filter = e.target.value
+    
+    for ( let i = 0; i < cards.length; i++ ){
+        let tag = cards[i].querySelector(".tagp") 
+        let name = cards[i].querySelector(".name")
+            
+       if (!name.textContent.includes(filter) || !tag.textContent.includes(filter) ){ 
+           cards[i].style.display = "none"  
+        }
+    }
+}) 
+
+
 
 
 // loping over each sound card 
