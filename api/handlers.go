@@ -287,40 +287,4 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 
 }
 
-/* Playlist 
-*
-*
-*
-func (app *Application) CreatePlaylistHandler(w http.ResponseWriter, r *http.Request) {
-	reqJson, err := ParseJsonReq(r)
 
-	if err != nil {
-		WriteErrorToResponse(w, err, http.StatusBadRequest)
-		return
-	}
-	body, ok := reqJson.Object.Body.(map[string]string)
-	if reqJson.Action == "create" && reqJson.Object.Type == "playlist" && ok {
-		name := body["name"]
-		err = app.DB.CreatePlaylist(name)
-
-		if err != nil {
-			WriteErrorToResponse(w, err, http.StatusBadRequest)
-			return
-		}
-	}
-
-}
-
-func (app *Application) AppendToPlaylistHandler(w http.ResponseWriter, r *http.Request) {
-	// call to app
-
-	// get playlist id and track id from req
-
-}
-
-func (app *Application) RemoveToPlaylistHandler(w http.ResponseWriter, r *http.Request) {
-	// call to app
-
-}
-
-*/
