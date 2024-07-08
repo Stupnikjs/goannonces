@@ -132,3 +132,23 @@ func DeleteObjectInBucket(bucketName string, objectName string) error {
 
 	return nil
 }
+
+func ReadFromObjectName(objectName string) (io.Reader, error) {
+	
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		return nil , err 
+	}
+	bucket := client.Bucket(app.BucketName)
+	obj := bucket.Object(track.Name)
+	defer client.Close()
+	reader, err := obj.NewReader(ctx)
+
+	if err != nil {
+		return nil , err 
+	}
+	return reader, nil 
+
+}
