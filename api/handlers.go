@@ -136,17 +136,7 @@ func (app *Application) StreamTrackFromGCPHandler(w http.ResponseWriter, r *http
 	}
 	
 	// to refactor in gstorage ReaderFromObjName  
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	client, err := storage.NewClient(ctx)
-	if err != nil {
-		WriteErrorToResponse(w, err, 404)
-		return
-	}
-	bucket := client.Bucket(app.BucketName)
-	obj := bucket.Object(track.Name)
-	defer client.Close()
-	reader, err := obj.NewReader(ctx)
+	
 	if err != nil {
 		WriteErrorToResponse(w, err, 404)
 		return
