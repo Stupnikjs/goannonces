@@ -135,7 +135,8 @@ func (app *Application) StreamTrackFromGCPHandler(w http.ResponseWriter, r *http
 		return
 	}
 	
-	// to refactor in gstorage ReaderFromObjName  
+	// to refactor in gstorage ReaderFromObjName
+	reader, err := ReaderFromObjectName(app.BucketName, track.Name) 
 	
 	if err != nil {
 		WriteErrorToResponse(w, err, 404)
