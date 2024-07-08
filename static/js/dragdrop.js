@@ -51,8 +51,11 @@ function dropHandler(ev) {
       method: 'POST',
       body: formData
   })
-  if ( resp.ok ) {
+  
+  // do something while waiting resp 
+  // loader animation 
 
+  if ( resp.ok ) {
       console.log('Success:', resp.body);
       // window.location.assign("/")
   } else {
