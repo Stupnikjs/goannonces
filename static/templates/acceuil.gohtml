@@ -2,6 +2,11 @@
 
 {{define "content"}}
     <section class="accueil-section">
+
+           <div id="filterDiv"> 
+             <p> Search By Name </p>
+             <input type=text>
+           </div> 
          {{ range .Data.Tracks}} 
            <div class="audiocard"> 
               <p> {{ .Name }} </p>
