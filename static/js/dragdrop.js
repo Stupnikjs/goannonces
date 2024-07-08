@@ -1,6 +1,7 @@
 
 let files = []
 let submitdrag = document.querySelector("#submit_drag")
+let msgDiv = document.querySelector("#msg")
 
 // #drop_zone ondrop=dropHandler(ev)
 function dropHandler(ev) {
@@ -54,6 +55,7 @@ function dropHandler(ev) {
   
   // do something while waiting resp 
   // loader animation 
+  msgDiv.textContent = "uploading files"
 
   if ( resp.ok ) {
       console.log('Success:', resp.body);
