@@ -4,15 +4,20 @@ let inputFilter = document.querySelector("#inputFilter");
 let paddingGrids = document.querySelectorAll(".padding-grid")
 let selectedTrack = []
 
-inputFilter.addEventListener("change", (e) => {
+
+
+// filter logic 
+inputFilter.addEventListener("input", (e) => {
     filter = e.target.value
     
     for ( let i = 0; i < cards.length; i++ ){
         let tag = cards[i].querySelector(".tagp") 
         let name = cards[i].querySelector(".name")
-            
-       if (!name.textContent.includes(filter) || !tag.textContent.includes(filter) ){ 
+        
+       if (!name.textContent.includes(filter)){ 
            cards[i].style.display = "none"  
+        } else {
+            cards[i].style.display = "block" 
         }
     }
 }) 
@@ -77,23 +82,29 @@ for ( let i = 0; i < cards.length; i++ ){
     selectedBtn.addEventListener("click", (e) => {
         e.preventDefault()
         let selected = selectedBtn.getAttribute("selected")
-        
+        let gridSelected = paddingGrids[1]
+        let name = cards[i].querySelector(".name")
         if (!selected || selected == "false"){
-           selectedBtn.setAttribute("selected", "true")
+           
+            selectedBtn.setAttribute("selected", "true")
             selectedBtn.classList.add("selectedHeart")
-                    let name = cards[i].querySelector(".name")
-            selectedTrack.push(name.textContent)
-            /*
-            for (let i=0; i < selectedTrack.length - 1; i++){
-                let p = document.createElement("p")
-                p.textContent = selectedTrack[i]
-                
-                paddingGrids[1].appendChild(p)
+
+            
+            if (!selectedTrack.includes(name.textContent)){
+                let nameGrid = document.createElement("p")
+                nameGrid.textContent = name.textContent
+                // hash func 
+                nameGrid.id = crypto.subtle.encrypt(name.textContent)  
+                gridSelected.appendChild(nameGrid)
+                selectedTrack.push(name.textContent)
             }
-            */
+           
+            
         } else {
             selectedBtn.setAttribute("selected", "false")
             selectedBtn.classList.remove("selectedHeart")
+            let toremove = document.querySelector(`#${name.textContent}`)
+            toremove.remove()
         }
        
     })
