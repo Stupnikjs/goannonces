@@ -74,11 +74,7 @@ func (app *Application) RenderYoutube(w http.ResponseWriter, r *http.Request) {
 	_ = render(w, r, "/youtube.gohtml", &td)
 }
 
-
-
 /* Api calls */
-
-
 
 func (app *Application) ListObjectHandler(w http.ResponseWriter, r *http.Request) {
 	names, err := gstore.ListObjectsBucket(app.BucketName)
