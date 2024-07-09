@@ -79,13 +79,15 @@ for ( let i = 0; i < cards.length; i++ ){
         let selected = selectedBtn.getAttribute("selected")
         
         if (!selected || selected == "false"){
-            selectedBtn.setAttribute("selected", "true")
+           selectedBtn.setAttribute("selected", "true")
             selectedBtn.classList.add("selectedHeart")
-            selectedTrack.push("trackname")
+                    let name = cards[i].querySelector(".name")
+            selectedTrack.push(name.textContent)
             /*
             for (let i=0; i < selectedTrack.length - 1; i++){
                 let p = document.createElement("p")
                 p.textContent = selectedTrack[i]
+                
                 paddingGrids[1].appendChild(p)
             }
             */
