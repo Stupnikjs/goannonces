@@ -74,34 +74,11 @@ func (app *Application) RenderYoutube(w http.ResponseWriter, r *http.Request) {
 	_ = render(w, r, "/youtube.gohtml", &td)
 }
 
-/*
 
-func (app *Application) RenderPlaylist(w http.ResponseWriter, r *http.Request) {
-	tracks, err := app.DB.GetAllTracks()
-	if err != nil {
-		WriteErrorToResponse(w, err, http.StatusInternalServerError)
-	}
-	playlists, err := app.DB.GetAllPlaylists()
 
-	if err != nil {
-		WriteErrorToResponse(w, err, http.StatusInternalServerError)
-	}
-	fmt.Println(playlists)
-	bytes, err := json.Marshal(tracks)
-	if err != nil {
-		WriteErrorToResponse(w, err, http.StatusInternalServerError)
-	}
-
-	td := TemplateData{}
-	td.Data = make(map[string]any)
-	td.Data["Tracks"] = string(bytes)
-	td.Data["Playlists"] = playlists
-
-	_ = render(w, r, "/playlist.gohtml", &td)
-}
-
-*/
 /* Api calls */
+
+
 
 func (app *Application) ListObjectHandler(w http.ResponseWriter, r *http.Request) {
 	names, err := gstore.ListObjectsBucket(app.BucketName)
