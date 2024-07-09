@@ -19,8 +19,9 @@ func (app *Application) Routes() http.Handler {
 
 	mux.Post("/upload", app.UploadFile)
 	mux.Get("/stream/sound/{id}", app.StreamTrackFromGCPHandler)
-	mux.Post("/youtube/mp3", app.YoutubeToGCPHandler)
 
+	mux.Post("/youtube/mp3", app.YoutubeToGCPHandler)
+	mux.Post("/api/track/upload", app.UploadTrackListHandler)
 	mux.Post("/api/track/tag", app.UpdateTrackTagHandler)
 	mux.Post("/api/track/remove", app.DeleteTrackHandler)
 

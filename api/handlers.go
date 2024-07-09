@@ -211,6 +211,25 @@ func (app *Application) UpdateTrackTagHandler(w http.ResponseWriter, r *http.Req
 
 }
 
+func (app *Application) UploadTrackListHandler(w http.ResponseWriter, r *http.Request) {
+	jsonReq, err := ParseJsonReq(r)
+
+	if err != nil {
+		WriteErrorToResponse(w, err, 404)
+		return
+	}
+
+	if jsonReq.Action == "upload" && jsonReq.Object.Type == "tracklist" {
+		tracklist, ok := jsonReq.Object.Body.([]string)
+		if ok {
+			for _, trackName := range tracklist {
+				fmt.Println(trackName)
+			}
+		}
+	}
+
+}
+
 type ytRequest struct {
 	YtID string `json:"ytid"`
 }

@@ -42,6 +42,7 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 	for _, headers := range r.MultipartForm.File {
 
 		for _, h := range headers {
+
 			if util.IsInSlice(h.Filename, objNames) {
 				already = append(already, h.Filename)
 				break

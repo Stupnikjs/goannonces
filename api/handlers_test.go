@@ -1,6 +1,14 @@
 package api
 
-/*
+import (
+	"crypto/tls"
+	"io"
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"testing"
+)
+
 func Test_application_handlers(t *testing.T) {
 	var theTests = []struct {
 		name                    string
@@ -93,28 +101,20 @@ func TestAppHome(t *testing.T) {
 
 }
 
-func Test_renderWithBadTemplate(t *testing.T) {
-
-	/* Test de la fonction app.render
-	* creattion d'une request
-	* creation d'un reponse recorder qui satifait l'interface http.ResponseWriter
+/*
 
 
-	// set templatepath to a location with a bad template
 
-	pathToTemplates = "./testdata/"
+mux.Get("/urls", app.ListObjectHandler)
+mux.Post("/upload", app.UploadFile)
 
-	req, _ := http.NewRequest("GET", "/", nil)
-	rr := httptest.NewRecorder()
 
-	err := render(rr, req, "bad.page.gohtml", &TemplateData{})
+mux.Get("/stream/sound/{id}", app.StreamTrackFromGCPHandler)
+test.mp3 pushed dans setup.go
 
-	if err == nil {
-		t.Error("expected error from bad template, bid did not get one")
-	}
 
-	pathToTemplates = "./../../templates/"
-
-}
+mux.Post("/api/track/upload", app.UploadTrackListHandler)
+mux.Post("/api/track/tag", app.UpdateTrackTagHandler)
+mux.Post("/api/track/remove", app.DeleteTrackHandler)
 
 */
