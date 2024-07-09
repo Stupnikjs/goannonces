@@ -5,7 +5,7 @@
 
            <div id="filterDiv"> 
              <p> Search By Name </p>
-             <input type=text>
+             <input type=text id="inputFilter">
            </div> 
          {{ range .Data.Tracks}} 
            <div class="audiocard"> 
@@ -28,5 +28,5 @@
          {{ end }}
     </section>
     <script defer src="/static/js/acceuil.js"></script>
-    <script defer src="https://kit.fontawesome.com/8c6e47f935.js" crossorigin="anonymous"></script>
+    
 {{end}}

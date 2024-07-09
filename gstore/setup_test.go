@@ -19,6 +19,8 @@ func TestMain(m *testing.M) {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 
+	setup()
+
 	code := m.Run()
 
 	cleanup()

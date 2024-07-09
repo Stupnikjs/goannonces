@@ -31,13 +31,19 @@ for ( let i = 0; i < cards.length; i++ ){
     button.addEventListener("click", (e) => {
         e.preventDefault()
         let selected = button.getAttribute("selected")
-        if (!selected){
+        if (!selected || button.getAttribute("selected") == "false"){
+            console.log(button.getAttribute("data-url") )
             button.setAttribute("selected", "true")
-            let audio = document.createElement("audio")
+            let audio = cards[i].querySelector("audio") ? cards[i].querySelector("audio") : document.createElement("audio");  
             audio.src = button.getAttribute("data-url") 
             audio.controls = true
             audio.preload = "auto"
+            audio.style.display = "block"
             cards[i].appendChild(audio)
+        } else {
+            button.setAttribute("selected", "false")
+            let audio = cards[i].querySelector("audio")
+            audio.style.display = "none"
         }
        
     })

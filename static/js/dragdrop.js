@@ -75,17 +75,20 @@ function dropHandler(ev) {
 }
 
 
-submitdrag.addEventListener("click", (e) => {
-e.preventDefault()
-await submitHandler()
+submitdrag.addEventListener("click", async (e) => {
+  e.preventDefault()
+  await submitHandler()
 
 })
 
 function displayFileName(name) {
     let dropZone = document.querySelector("#drop_zone")
     let div = document.createElement("div");
+    let icone = document.createElement("i")
+    icone.classList.add("fa-solid")
+    icone.classList.add("fa-music")
     div.classList.add("file_item")
-    div.innerHTML = `<i class="fa-solid fa-music"></i>`
     div.textContent = name;
+    div.appendChild(icone); 
     dropZone.appendChild(div);
 }

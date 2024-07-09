@@ -1,18 +1,13 @@
-package api 
-
+package api
 
 import (
-  "testing"
-  )
+	"net/http/httptest"
+	"testing"
+)
 
+func TestParseJsonReq(t *testing.T) {
 
-
-func TestParseJsonReq(t *testing.T){
-    // create mockrequest 
-    req := httptest.NewRequest() 
-    /* type POST
-    
-             {
+	_ = `{
                 "action": "update",
                 "object": {
                     "type" : "track",
@@ -20,22 +15,21 @@ func TestParseJsonReq(t *testing.T){
                     "field" : "tag",
                     "body": input.value
                 }
-            } 
+            }`
 
-     */
+	// create mockrequest
+	req := httptest.NewRequest("POST", "/", nil)
 
-    // pass json to request 
+	// pass json to request
 
-    jsonReq, err := ParseJsonReq(req)
+	jsonReq, err := ParseJsonReq(req)
 
-  if err != nil {
-  t.Errorf("expected no error but got %s", err.Error())
-    }
+	if err != nil {
+		t.Errorf("expected no error but got %s", err.Error())
+	}
 
-  if jsonReq.Action != "update" {
-    t.Errorf("expected update action but go %s", jsonReq.Action) 
-    }
+	if jsonReq.Action != "update" {
+		t.Errorf("expected update action but go %s", jsonReq.Action)
+	}
 
-             
-    }
-  
+}

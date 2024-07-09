@@ -134,16 +134,30 @@ func (app *Application) StreamTrackFromGCPHandler(w http.ResponseWriter, r *http
 		WriteErrorToResponse(w, err, 404)
 		return
 	}
-	
+
 	// to refactor in gstorage ReaderFromObjName
-	reader, err := ReaderFromObjectName(app.BucketName, track.Name) 
-	
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		WriteErrorToResponse(w, err, 500)
+		return
+	}
+
+	bucket := client.Bucket(app.BucketName)
+
+	obj := bucket.Object(track.Name)
+	defer client.Close()
+
+	reader, err := obj.NewReader(ctx)
+
 	if err != nil {
 		WriteErrorToResponse(w, err, 404)
 		return
 	}
 	defer reader.Close()
-	// refactor end 
+	// refactor end
 
 	w.Header().Set("Content-Type", "audio/mpeg")
 	w.WriteHeader(http.StatusOK)
@@ -286,5 +300,3 @@ func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Reque
 	w.Write([]byte("youtube music uploaded on gcp"))
 
 }
-
-
