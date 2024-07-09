@@ -146,7 +146,6 @@ func (app *Application) StreamTrackFromGCPHandler(w http.ResponseWriter, r *http
 	}
 
 	bucket := client.Bucket(app.BucketName)
-
 	obj := bucket.Object(track.Name)
 	defer client.Close()
 
@@ -157,7 +156,6 @@ func (app *Application) StreamTrackFromGCPHandler(w http.ResponseWriter, r *http
 		return
 	}
 	defer reader.Close()
-	// refactor end
 
 	w.Header().Set("Content-Type", "audio/mpeg")
 	w.WriteHeader(http.StatusOK)
