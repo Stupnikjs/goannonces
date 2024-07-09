@@ -82,11 +82,13 @@ for ( let i = 0; i < cards.length; i++ ){
             selectedBtn.setAttribute("selected", "true")
             selectedBtn.classList.add("selectedHeart")
             selectedTrack.push("trackname")
+            /*
             for (let i=0; i < selectedTrack.length - 1; i++){
                 let p = document.createElement("p")
                 p.textContent = selectedTrack[i]
                 paddingGrids[1].appendChild(p)
             }
+            */
         } else {
             selectedBtn.setAttribute("selected", "false")
             selectedBtn.classList.remove("selectedHeart")
