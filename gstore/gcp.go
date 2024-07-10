@@ -63,14 +63,26 @@ func LoadToBucket(bucketName string, fileName string, data []byte) error {
 }
 
 func DeleteBucket(bucketName string) error {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+
+	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 
 	if err != nil {
 		return err
 	}
 	bucket := client.Bucket(bucketName)
+	objList, err := ListObjectsBucket(bucketName)
+
+	fmt.Println(objList)
+	if err != nil {
+		return err
+	}
+	for _, obj := range objList {
+		err := DeleteObjectInBucket(bucketName, obj)
+		if err != nil {
+			return err
+		}
+	}
 	err = bucket.Delete(ctx)
 	if err != nil {
 		return err

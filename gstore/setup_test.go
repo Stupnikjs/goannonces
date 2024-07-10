@@ -2,7 +2,6 @@ package gstore
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"testing"
@@ -48,24 +47,14 @@ func setup() {
 	// Creates the new bucket.
 
 	if err := bucket.Create(ctx, projectID, bucketAttrs); err != nil {
-		fmt.Println("here")
+
 		log.Fatalf("Failed to create bucket: %v", err)
 	}
 
 }
 
 func cleanup() {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	client, err := storage.NewClient(ctx)
 
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	bucket := client.Bucket(TestBucketName)
-
-	err = bucket.Delete(ctx)
-	fmt.Println("here", err)
+	_ = DeleteBucket(TestBucketName)
 
 }

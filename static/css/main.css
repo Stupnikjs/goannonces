@@ -117,8 +117,7 @@ padding: 0.1rem 1rem;
   top: 5px;
 }
 #drag_zone {
- border: 2px solid black; 
-
+  display: block;
 }
 
 /* loader   */

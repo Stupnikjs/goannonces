@@ -94,7 +94,7 @@ for ( let i = 0; i < cards.length; i++ ){
                 let nameGrid = document.createElement("p")
                 nameGrid.textContent = name.textContent
                 // hash func 
-                nameGrid.id = crypto.subtle.encrypt(name.textContent)  
+                nameGrid.id = byteString(name.textContent)  
                 gridSelected.appendChild(nameGrid)
                 selectedTrack.push(name.textContent)
             }
@@ -103,7 +103,9 @@ for ( let i = 0; i < cards.length; i++ ){
         } else {
             selectedBtn.setAttribute("selected", "false")
             selectedBtn.classList.remove("selectedHeart")
-            let toremove = document.querySelector(`#${name.textContent}`)
+            let id = byteString(name.textContent)
+            let toremove = document.querySelector(`#${id}`)
+            
             toremove.remove()
         }
        
@@ -142,7 +144,7 @@ for ( let i = 0; i < cards.length; i++ ){
 
 
     // post the tag then refresh 
-    sumbitTagBtn.addEventListener("click", async (e) => {
+    sumbitTagBtn.addEventListener("click", async(e) => {
         e.preventDefault()
         let input = cards[i].querySelector(".tagInput")
         let trackid = sumbitTagBtn.id
@@ -171,3 +173,7 @@ for ( let i = 0; i < cards.length; i++ ){
     })
 
 }
+
+
+
+
