@@ -4,6 +4,8 @@ import (
 	"testing"
 )
 
+// no test on delete create
+
 var TestDeleteBucketName = "somedeletebuckettestname"
 
 func TestListObjectsBucket(t *testing.T) {
