@@ -7,7 +7,7 @@ type DBrepo interface {
 	GetTrackFromId(int) (*Track, error)
 	DeleteTrack(int) error
 	UpdateTrackTag(int, string) error
-
+	UpdateTrackArtist(int, string) error
 	// Playlist
 	// InsertPlaylistTrack(int, int) error
 	// CreatePlaylist(string) error

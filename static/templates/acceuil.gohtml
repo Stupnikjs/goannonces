@@ -8,7 +8,7 @@
              <input type=text id="inputFilter">
            </div> 
          {{ range .Data.Tracks}} 
-           <div class="audiocard"> 
+           <div class="audiocard" id={{ .ID }}> 
               <p class="name"> {{ .Name }} </p>
               <div class="btnDiv">
                 <button class="nameBtn" data-url="/stream/sound/{{ .ID }}">
@@ -17,12 +17,13 @@
                 <button class="selectedBtn"> <i class="fa-solid fa-heart"></i> </button>
                 <button class="tagBtn"><i class="fa-solid fa-pen"></i></button>
                 <button class="deleteBtn" id={{ .ID }} ><i class="fa-solid fa-trash"></i></button>
+                <button class="artistSuggest"> <i class="fa-solid fa-user"></i> <button>
                </div>
               <div class="tagDiv display-none">
                 <input type="text" class="tagInput">
                 <button class="submitTagBtn" id={{.ID}}> Submit Tag </button>
               </div>
-              
+              <h3> {{.Artist }} </h3>
               <p class="tagp"> {{ .Tag }} </p>
             </div>
          {{ end }}

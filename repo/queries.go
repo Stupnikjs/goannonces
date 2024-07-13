@@ -4,25 +4,12 @@ var InitTableQuery string = `
 CREATE TABLE IF NOT EXISTS tracks (
 	id serial PRIMARY KEY,
 	name VARCHAR,
+	artist VARCHAR,
 	storage_url VARCHAR,
 	selected BOOLEAN, 
 	size INTEGER,
 	tag VARCHAR 
 	); 
-
-CREATE TABLE IF NOT EXISTS playlists (
-	id SERIAL PRIMARY KEY,
- 	name VARCHAR
-	
-);
-
-CREATE TABLE IF NOT EXISTS playlist_items (
-	trackid INTEGER REFERENCES tracks(id)
- ON DELETE CASCADE,
-	playlistid INTEGER REFERENCES playlists(id) 
- ON DELETE CASCADE
-	
-);
 
 
 `
@@ -30,12 +17,13 @@ CREATE TABLE IF NOT EXISTS playlist_items (
 var InsertTrackQuery string = `
 INSERT INTO tracks ( 
 	name,
+	artist,
 	storage_url, 
 	selected,
 	size, 
 	tag
 ) VALUES (
-	$1, $2, $3, $4, $5
+	$1, $2, $3, $4, $5, $6
 )
 `
 
@@ -43,6 +31,7 @@ var GetAllTrackQuery string = `
 SELECT 
 	id, 
 	name,
+	artist,
 	storage_url, 
 	selected, 
 	size,
@@ -53,6 +42,7 @@ FROM tracks
 var GetTrackFromIdQuery string = `
 SELECT  
 	name,
+	artist,
 	storage_url,
 	selected,   
 	size, 
@@ -71,40 +61,8 @@ UPDATE tracks
  	WHERE id = $1; 
 `
 
-// Playlist
-
-/*
-
-var CreatePlaylistQuery string = `
-INSERT INTO playlist (name)
-VALUES ($1) ;
+var UpdateTrackArtistQuery string = `
+UPDATE tracks
+	SET artist = $2
+ 	WHERE id = $1; 
 `
-
-var GetAllPlaylistsQuery string = `
-SELECT p.name
-FROM playlists p;
-`
-
-var InsertPlaylistTrackQuery string = `
-INSERT INTO playlist_items (playlistid, trackid)
-VALUES ( $1, $2 ) ;
-`
-
-var DeletePlaylistQuery string = `
-DELETE FROM playlist
-WHERE name = $1;
-`
-
-var GetPlaylistWithTrackByPlaylistIdQuery string = `
-SELECT pi.trackid
-FROM playlist_items pi
-WHERE pi.playlistid = $1;
-`
-
-var GetPlaylistWithTrackByPlaylistNameQuery string = `
-SELECT pi.trackid
-FROM playlist_items pi
-JOIN playlist p ON pi.playlistid = p.id
-WHERE p.name = $1;
-`
-*/

@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"path"
 	"strconv"
+	"strings"
 
 	"cloud.google.com/go/storage"
 	"github.com/Stupnikjs/zik/gstore"
@@ -236,5 +237,66 @@ func (app *Application) UploadTrackListHandler(w http.ResponseWriter, r *http.Re
 			}
 		}
 	}
+
+}
+func (app *Application) SetArtistHandler(w http.ResponseWriter, r *http.Request) {
+	jsonReq, err := ParseJsonReq(r)
+
+	if err != nil {
+		WriteErrorToResponse(w, err, 404)
+		return
+	}
+
+	if jsonReq.Action == "update" && jsonReq.Object.Type == "track" {
+		artist, ok := jsonReq.Object.Body.(string)
+		id, err := strconv.Atoi(jsonReq.Object.Id)
+		if err != nil {
+			WriteErrorToResponse(w, err, 404)
+			return
+
+		}
+		if ok {
+			err = app.DB.UpdateTrackArtist(id, artist)
+			if err != nil {
+				WriteErrorToResponse(w, err, 404)
+				return
+
+			}
+			w.Write([]byte("artist updated"))
+		}
+	}
+
+}
+
+func (app *Application) GetArtistSuggestionHandler(w http.ResponseWriter, r *http.Request) {
+	jsonReq, err := ParseJsonReq(r)
+
+	if err != nil {
+		WriteErrorToResponse(w, err, 404)
+		return
+	}
+	if jsonReq.Action == "artist_suggestion" {
+		title, ok := jsonReq.Object.Body.(string)
+		if ok {
+			suggestions, err := getArtistSuggestion(title)
+			if err != nil {
+				WriteErrorToResponse(w, err, 404)
+				return
+			}
+			w.Write(suggestions)
+			return
+		}
+
+	}
+
+}
+
+func getArtistSuggestion(title string) ([]byte, error) {
+	strArr := strings.Split(title, "-")
+	bytes, err := json.Marshal(strArr)
+	if err != nil {
+		return nil, err
+	}
+	return bytes, nil
 
 }

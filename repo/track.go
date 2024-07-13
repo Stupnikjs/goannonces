@@ -8,6 +8,7 @@ import (
 
 type Track struct {
 	ID       int
+	Artist   string
 	Name     string
 	StoreURL string
 	Selected bool
@@ -26,6 +27,7 @@ func (rep *PostgresRepo) PushTrackToSQL(track Track) error {
 		ctx,
 		InsertTrackQuery,
 		track.Name,
+		track.Artist,
 		track.StoreURL,
 		track.Selected,
 		track.Size,
@@ -46,6 +48,7 @@ func (rep *PostgresRepo) GetTrackFromId(id int) (*Track, error) {
 	track.ID = id
 	row.Scan(
 		&track.Name,
+		&track.Artist,
 		&track.StoreURL,
 		&track.Selected,
 		&track.Size,
@@ -77,6 +80,7 @@ func (rep *PostgresRepo) GetAllTracks() ([]Track, error) {
 		err := rows.Scan(
 			&track.ID,
 			&track.Name,
+			&track.Artist,
 			&track.StoreURL,
 			&track.Selected,
 			&track.Size,
@@ -105,6 +109,16 @@ func (rep *PostgresRepo) UpdateTrackTag(trackId int, tag string) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	_, err := rep.DB.ExecContext(ctx, UpdateTrackTagQuery, trackId, tag)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (rep *PostgresRepo) UpdateTrackArtist(trackId int, artist string) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	_, err := rep.DB.ExecContext(ctx, UpdateTrackArtistQuery, trackId, artist)
 	if err != nil {
 		return err
 	}

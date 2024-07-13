@@ -1,6 +1,4 @@
 let cards = document.querySelectorAll(".audiocard"); 
-
-console.log(cards)
 let filterDiv = document.querySelector("#filterDiv"); 
 let inputFilter = document.querySelector("#inputFilter");  
 let paddingGrids = document.querySelectorAll(".padding-grid")
@@ -8,11 +6,11 @@ let selectedTrack = []
 
 
 
-    /* 
-    *  
-    *  Filter 
-    * 
-    */
+/* 
+*  
+*  Filter 
+* 
+*/
 
 inputFilter.addEventListener("input", (e) => {
     filter = e.target.value
@@ -38,12 +36,14 @@ for ( let i = 0; i < cards.length; i++ ){
     let selectedBtn = cards[i].querySelector(".selectedBtn")
     let sumbitTagBtn = cards[i].querySelector(".submitTagBtn")
     let deleteBtn = cards[i].querySelector(".deleteBtn")
-
-    /*  
-    *  
-    *  Audio Player
-    * 
-    */
+    let artistSuggestBtn = cards[i].querySelector(".artistSuggest")
+    let name = cards[i].querySelector(".name")
+    let trackid = cards[i].id
+/*  
+*  
+*  Audio Player
+* 
+*/
 
     button.addEventListener("click", (e) => {
         e.preventDefault()
@@ -66,11 +66,11 @@ for ( let i = 0; i < cards.length; i++ ){
     })
 
     
-    /*  
-    *  
-    *  Tag toggle 
-    * 
-    */ 
+/*  
+*  
+*  Tag toggle 
+* 
+*/ 
 
     tagBtn.addEventListener("click", (e) => {
         e.preventDefault()
@@ -94,11 +94,11 @@ for ( let i = 0; i < cards.length; i++ ){
 
     
 
-    /*  
-    *  
-    *  Selected 
-    * 
-    */
+/*  
+*  
+*  Selected 
+* 
+*/
 
     selectedBtn.addEventListener("click", (e) => {
 
@@ -106,7 +106,7 @@ for ( let i = 0; i < cards.length; i++ ){
 
         let selected = selectedBtn.getAttribute("selected")
         let gridSelected = paddingGrids[1]
-        let name = cards[i].querySelector(".name")
+        
 
         if (!selected || selected == "false"){
            
@@ -143,7 +143,7 @@ for ( let i = 0; i < cards.length; i++ ){
     deleteBtn.addEventListener("click", async (e) => {
         e.preventDefault()
         
-        let trackid = deleteBtn.id
+        
         let resp = await fetch(`/api/track/remove`, {
             method: "POST", 
             headers: {
@@ -172,7 +172,7 @@ for ( let i = 0; i < cards.length; i++ ){
     sumbitTagBtn.addEventListener("click", async(e) => {
         e.preventDefault()
         let input = cards[i].querySelector(".tagInput")
-        let trackid = sumbitTagBtn.id
+        // let trackid = sumbitTagBtn.id
         let resp = await fetch(`/api/track/tag`, {
             method: "POST", 
             headers: {
@@ -197,6 +197,44 @@ for ( let i = 0; i < cards.length; i++ ){
        
     })
 
+    /*  
+    *  
+    *  Artist Suggest 
+    * 
+    */ 
+
+    artistSuggestBtn.addEventListener("click", async(e) => {
+        e.preventDefault()
+        let resp = await fetch("/api/track/get/artist/suggestion", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify({
+                                "action": "artist_suggestion",
+                "object": {
+                    "type" : "track",
+                    "id": trackid,
+                    "field" : "name",
+                    "body": name.textContent 
+                }
+            })
+        })
+        let suggest = await resp.json()
+        let div = document.createElement("div")
+        for (let i=0 ; i < suggest.length + 1; i++){
+            let btn = document.createElement("button")
+            btn.textContent = suggest[i]
+            btn.addEventListener("click", async(e) => {
+                e.preventDefault()
+                fetchArtistSuggest(suggest[i], trackid)
+            })
+            div.appendChild(btn)
+        }
+        cards[i].appendChild(div)
+        
+    })
+
 }
 
 function simpleHash(input){
@@ -209,4 +247,22 @@ function simpleHash(input){
 
 }
 
+
+async function fetchArtistSuggest(artist, trackid){
+    let resp = await fetch("/api/track/set/artist", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify({
+            "action": "update",
+            "object": {
+                "type" : "track",
+                "id": trackid,
+                "field" : "name",
+                "body": artist 
+            }
+        })
+    })
+}
 

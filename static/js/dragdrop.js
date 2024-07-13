@@ -95,8 +95,8 @@ function dropHandler(ev) {
       console.log('Success:', resp.body);
       // window.location.assign("/")
   } else {
-      console.error('Error:', error);
-      msgDiv.textContent = error 
+      console.error('Error:', resp.text());
+      msgDiv.textContent = resp.text()
   }
 }
 
