@@ -39,11 +39,12 @@ for ( let i = 0; i < cards.length; i++ ){
     let artistSuggestBtn = cards[i].querySelector(".artistSuggest")
     let name = cards[i].querySelector(".name")
     let trackid = cards[i].id
-/*  
-*  
-*  Audio Player
-* 
-*/
+    
+    /*  
+    *  
+    *  Audio Player
+    * 
+    */
 
     button.addEventListener("click", (e) => {
         e.preventDefault()
@@ -66,11 +67,11 @@ for ( let i = 0; i < cards.length; i++ ){
     })
 
     
-/*  
-*  
-*  Tag toggle 
-* 
-*/ 
+    /*  
+    *  
+    *  Tag toggle 
+    * 
+    */ 
 
     tagBtn.addEventListener("click", (e) => {
         e.preventDefault()
@@ -94,11 +95,11 @@ for ( let i = 0; i < cards.length; i++ ){
 
     
 
-/*  
-*  
-*  Selected 
-* 
-*/
+    /*  
+    *  
+    *  Selected 
+    * 
+    */
 
     selectedBtn.addEventListener("click", (e) => {
 
