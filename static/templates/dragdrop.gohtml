@@ -4,15 +4,13 @@
     <section >
             <div data="{{ .Data.Tracks }}"></div>
             <div id="msg"></div>
-            <div
-        id="drop_zone"
-        ondrop="dropHandler(event);"
-        ondragover="dragOverHandler(event);">
-        <p>Drag one or more files to this <i>drop zone</i>.</p>
-        </div>
-        <div id="drag_zone">
-        </div>
-        <button id="submit_drag"> Submit </button>
+            <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+                <p>Drag one or more files to this <i>drop zone</i>.</p>
+                <button id="submit_drag"> Submit </button>
+            </div>
+            <div id="drag_zone">
+            </div>
+            
     </section>
     <script defer src="/static/js/dragdrop.js"></script>
 {{end}}

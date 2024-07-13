@@ -17,7 +17,7 @@ font-family: "voltaire";
 
 .grid-section {
 display: grid; 
-grid-template-columns: 10% 1fr 10%; 
+grid-template-columns: 20% 1fr 20%; 
 
 }
 
@@ -53,12 +53,22 @@ nav > ul > li > a {
 
 /* studio */
 
+.audioContainer{
+  display: flex;
+  flex-wrap: wrap; 
+
+}
+
 .audiocard{
 position: relative; 
 margin:  .5rem auto; 
 background-color: lightblue; 
-border : 3px solid black; 
-width: 50%; 
+border : .5px solid black;
+border-radius: .5rem; 
+width: 30%;
+display: flex;
+max-height: 5vw;
+overflow: hidden;
 padding: 1rem; 
 }
 
@@ -67,20 +77,37 @@ max-height: 5vh;
 margin: .3rem; 
 }
 
-.audiocard > p {
-margin: 2% 0 0 0 ; 
+.audiocard > .trackDiv > p {
+font-size: .7rem; 
 }
 
-.audiocard button{
-
-padding: 0 .5rem;
+.audiocard > .trackDiv > h1 {
+font-size: 1rem; 
 }
 
-.btnDiv{
-position: absolute; 
-display: flex;  
-left: 2%;
-top: 2%;
+
+
+
+
+.trackDiv {
+  flex:1; 
+  
+
+}
+
+.btnDiv{ 
+display: flex;
+flex-wrap: wrap; 
+width: 50%;
+flex: 1;
+width: 100%;  
+
+
+}
+
+.btnDiv button {
+min-width: 50%;
+
 
 }
 

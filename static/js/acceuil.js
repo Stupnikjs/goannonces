@@ -12,6 +12,7 @@ let selectedTrack = []
 * 
 */
 
+
 inputFilter.addEventListener("input", (e) => {
     filter = e.target.value
     
@@ -31,7 +32,7 @@ inputFilter.addEventListener("input", (e) => {
 
 // loping over each sound card 
 for ( let i = 0; i < cards.length; i++ ){
-    let button = cards[i].querySelector(".nameBtn")
+    let audioButton = cards[i].querySelector(".nameBtn")
     let tagBtn = cards[i].querySelector(".tagBtn")
     let selectedBtn = cards[i].querySelector(".selectedBtn")
     let sumbitTagBtn = cards[i].querySelector(".submitTagBtn")
@@ -46,22 +47,24 @@ for ( let i = 0; i < cards.length; i++ ){
     * 
     */
 
-    button.addEventListener("click", (e) => {
+    audioButton.addEventListener("click", (e) => {
         e.preventDefault()
-        let selected = button.getAttribute("selected")
-        if (!selected || button.getAttribute("selected") == "false"){
-            console.log(button.getAttribute("data-url") )
-            button.setAttribute("selected", "true")
+        let selected = audioButton.getAttribute("selected")
+        if (!selected || audioButton.getAttribute("selected") == "false"){
+            audioButton.setAttribute("selected", "true")
             let audio = cards[i].querySelector("audio") ? cards[i].querySelector("audio") : document.createElement("audio");  
-            audio.src = button.getAttribute("data-url") 
+            audio.src = audioButton.getAttribute("data-url") 
             audio.controls = true
             audio.preload = "auto"
-            audio.style.display = "block"
-            cards[i].appendChild(audio)
+            audio.style.display = "flex"
+            let audioPlayerDiv = document.querySelector("#audioPlayerDiv")
+            audioPlayerDiv.appendChild(audio)
         } else {
-            button.setAttribute("selected", "false")
-            let audio = cards[i].querySelector("audio")
-            audio.style.display = "none"
+            audioButton.setAttribute("selected", "false")
+            let audioPlayerDiv = document.querySelector("#audioPlayerDiv")
+            let audio = audioPlayerDiv.querySelector("audio")
+            audio.remove()
+            
         }
        
     })
@@ -130,8 +133,8 @@ for ( let i = 0; i < cards.length; i++ ){
             selectedBtn.classList.remove("selectedHeart")
             let id = simpleHash(name.textContent)
             let toremove = document.getElementById(id)
-            // selectedTrack = selectedTrack.filer( x => x != )
-            // remove trackName 
+            console.log(selectedTrack)
+            selectedTrack = selectedTrack.filter(x => x != name.textContent)
             toremove.remove()
         }
        
@@ -204,6 +207,7 @@ for ( let i = 0; i < cards.length; i++ ){
     * 
     */ 
 
+    
     artistSuggestBtn.addEventListener("click", async(e) => {
         e.preventDefault()
         let resp = await fetch("/api/track/get/artist/suggestion", {
@@ -223,7 +227,7 @@ for ( let i = 0; i < cards.length; i++ ){
         })
         let suggest = await resp.json()
         let div = document.createElement("div")
-        for (let i=0 ; i < suggest.length + 1; i++){
+        for (let i=0 ; i < suggest.length - 1; i++){
             let btn = document.createElement("button")
             btn.textContent = suggest[i]
             btn.addEventListener("click", async(e) => {
