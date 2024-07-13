@@ -15,23 +15,14 @@ func (app *Application) Routes() http.Handler {
 	mux.Get("/loader", app.RenderDragDrop)
 	mux.Get("/youtube", app.RenderYoutube)
 
-	mux.Get("/urls", app.ListObjectHandler)
+	mux.Get("/api/allobjects", app.ListObjectHandler)
 
 	mux.Post("/upload", app.UploadFile)
 	mux.Get("/stream/sound/{id}", app.StreamTrackFromGCPHandler)
 
-	mux.Post("/youtube/mp3", app.YoutubeToGCPHandler)
 	mux.Post("/api/track/upload", app.UploadTrackListHandler)
 	mux.Post("/api/track/tag", app.UpdateTrackTagHandler)
 	mux.Post("/api/track/remove", app.DeleteTrackHandler)
-
-	/*
-		    mux.Get("/playlists", app.RenderPlaylist)
-			mux.Post("/api/playlist/create", app.CreatePlaylistHandler)
-			mux.Post("/api/playlist/append", app.AppendToPlaylistHandler)
-			mux.Post("/api/playlist/remove", app.RemoveToPlaylistHandler)
-	*/
-	// static assets
 
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))

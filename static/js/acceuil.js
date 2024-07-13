@@ -1,4 +1,6 @@
 let cards = document.querySelectorAll(".audiocard"); 
+
+console.log(cards)
 let filterDiv = document.querySelector("#filterDiv"); 
 let inputFilter = document.querySelector("#inputFilter");  
 let paddingGrids = document.querySelectorAll(".padding-grid")
@@ -6,14 +8,18 @@ let selectedTrack = []
 
 
 
-// filter logic 
+    /* 
+    *  
+    *  Filter 
+    * 
+    */
+
 inputFilter.addEventListener("input", (e) => {
     filter = e.target.value
     
     for ( let i = 0; i < cards.length; i++ ){
         let tag = cards[i].querySelector(".tagp") 
         let name = cards[i].querySelector(".name")
-        
        if (!name.textContent.includes(filter)){ 
            cards[i].style.display = "none"  
         } else {
@@ -33,7 +39,12 @@ for ( let i = 0; i < cards.length; i++ ){
     let sumbitTagBtn = cards[i].querySelector(".submitTagBtn")
     let deleteBtn = cards[i].querySelector(".deleteBtn")
 
-    // Button to display the audio player  
+    /*  
+    *  
+    *  Audio Player
+    * 
+    */
+
     button.addEventListener("click", (e) => {
         e.preventDefault()
         let selected = button.getAttribute("selected")
@@ -55,7 +66,12 @@ for ( let i = 0; i < cards.length; i++ ){
     })
 
     
-    // button to display tag input 
+    /*  
+    *  
+    *  Tag toggle 
+    * 
+    */ 
+
     tagBtn.addEventListener("click", (e) => {
         e.preventDefault()
         let selected = tagBtn.getAttribute("selected")
@@ -78,12 +94,20 @@ for ( let i = 0; i < cards.length; i++ ){
 
     
 
-    // heart selected 
+    /*  
+    *  
+    *  Selected 
+    * 
+    */
+
     selectedBtn.addEventListener("click", (e) => {
+
         e.preventDefault()
+
         let selected = selectedBtn.getAttribute("selected")
         let gridSelected = paddingGrids[1]
         let name = cards[i].querySelector(".name")
+
         if (!selected || selected == "false"){
            
             selectedBtn.setAttribute("selected", "true")
@@ -93,8 +117,8 @@ for ( let i = 0; i < cards.length; i++ ){
             if (!selectedTrack.includes(name.textContent)){
                 let nameGrid = document.createElement("p")
                 nameGrid.textContent = name.textContent
-                // hash func 
-                nameGrid.id = byteString(name.textContent)  
+                let id = simpleHash(name.textContent) 
+                nameGrid.id = id 
                 gridSelected.appendChild(nameGrid)
                 selectedTrack.push(name.textContent)
             }
@@ -103,9 +127,10 @@ for ( let i = 0; i < cards.length; i++ ){
         } else {
             selectedBtn.setAttribute("selected", "false")
             selectedBtn.classList.remove("selectedHeart")
-            let id = byteString(name.textContent)
-            let toremove = document.querySelector(`#${id}`)
-            
+            let id = simpleHash(name.textContent)
+            let toremove = document.getElementById(id)
+            // selectedTrack = selectedTrack.filer( x => x != )
+            // remove trackName 
             toremove.remove()
         }
        
@@ -174,6 +199,14 @@ for ( let i = 0; i < cards.length; i++ ){
 
 }
 
+function simpleHash(input){
+    let code = 0
+    for ( let i=0; i < input.length-1; i++){
+        code += input[i].charCodeAt(0)
+    }
+    let hex = btoa(input)
+    return code.toString() + hex.slice(0, 5) 
 
+}
 
 

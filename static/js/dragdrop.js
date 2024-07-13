@@ -3,9 +3,20 @@ let files = []
 let submitdrag = document.querySelector("#submit_drag")
 let msgDiv = document.querySelector("#msg")
 
+
+let resp = await fetch("/api/allobjects", {
+method: "GET"
+})
+
+let trackObjects = await resp.json()
+console.log(trackObjects)
+
+
+
 // #drop_zone ondrop=dropHandler(ev)
 function dropHandler(ev) {
-    console.log("File(s) dropped");
+    
+    let alreadyInBucket = []
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
   
@@ -13,36 +24,51 @@ function dropHandler(ev) {
       
         [...ev.dataTransfer.items].forEach((item, i) => {
         // If dropped items aren't files, reject them
-          if (item.kind === "file") {
+          if (item.kind === "file")  {
           const file = item.getAsFile();
-          console.log(Object.keys(item));
-          files.push(file)
-          displayFileName(file.name)
+          if (trackObjects.includes(file.name)){
+            console.log(`${file.name} already in bucket`)
+            alreadyInBucket.push(file.name)
+          } else {
+            files.push(file)
+            displayFileName(file.name)
+          }
+          
         }
       });
     } else {
       
       [...ev.dataTransfer.files].forEach((file, i) => {
         console.log(`… file[${i}].name = ${file.name}`);
-        console.log(Object.keys(file))  
-        displayFileName(file.name)
-        files.push(file)  
+        if (trackObjects.includes(file.name)){
+          alreadyInBucket.push(file.name)
+        } else {
+          displayFileName(file.name)
+          files.push(file)  
+        }
+        
       });
+    }
+    let dropZone = document.querySelector("#drop_zone")
+    let alreadyInBucketUl = document.createElement("ul")
+    for (let i; i < alreadyInBucket.length; i++ ){
+      let li = document.createElement("li")
+      li.textContent = `file ${alreadyInBucket[i]} were already in bucket`
+      alreadyInBucketUl.appendChild(li)
     }
   }
 
   // #drag_zone ondrag=dragOverHandler(ev)
   function dragOverHandler(ev) {
     console.log("File(s) in drop zone");
-    
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault();
+    // work with chrome 
   }
   
   
   // 
  function removeFromDropZone(file){
-  
   
   }
 
@@ -84,11 +110,9 @@ submitdrag.addEventListener("click", async (e) => {
 function displayFileName(name) {
     let dropZone = document.querySelector("#drop_zone")
     let div = document.createElement("div");
-    let icone = document.createElement("i")
-    icone.classList.add("fa-solid")
-    icone.classList.add("fa-music")
+ 
     div.classList.add("file_item")
     div.textContent = name;
-    div.appendChild(icone); 
+  
     dropZone.appendChild(div);
 }

@@ -6,7 +6,7 @@ import (
 
 // no test on delete create
 
-var TestDeleteBucketName = "somedeletebuckettestname"
+var TestBucketName = "somedeletebuckettestname"
 
 func TestListObjectsBucket(t *testing.T) {
 

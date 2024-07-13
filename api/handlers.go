@@ -7,15 +7,11 @@ import (
 	"html/template"
 	"io"
 	"net/http"
-	"os"
 	"path"
 	"strconv"
 
 	"cloud.google.com/go/storage"
 	"github.com/Stupnikjs/zik/gstore"
-	"github.com/Stupnikjs/zik/repo"
-	"github.com/Stupnikjs/zik/util"
-	"github.com/Stupnikjs/zik/ytb"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -62,9 +58,22 @@ func (app *Application) RenderLoader(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Application) RenderDragDrop(w http.ResponseWriter, r *http.Request) {
-
+	var TracksNames = []string{}
 	td := TemplateData{}
+	TrackList, err := app.DB.GetAllTracks()
+	if err != nil {
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
+	}
+	for _, tr := range TrackList {
+		TracksNames = append(TracksNames, tr.Name)
+	}
+	bytes, err := json.Marshal(TracksNames)
 
+	if err != nil {
+		WriteErrorToResponse(w, err, http.StatusInternalServerError)
+	}
+	td.Data = map[string]any{}
+	td.Data["Tracks"] = string(bytes)
 	_ = render(w, r, "/dragdrop.gohtml", &td)
 }
 func (app *Application) RenderYoutube(w http.ResponseWriter, r *http.Request) {
@@ -227,66 +236,5 @@ func (app *Application) UploadTrackListHandler(w http.ResponseWriter, r *http.Re
 			}
 		}
 	}
-
-}
-
-type ytRequest struct {
-	YtID string `json:"ytid"`
-}
-
-func (app *Application) YoutubeToGCPHandler(w http.ResponseWriter, r *http.Request) {
-
-	ytReq := ytRequest{}
-
-	bytes, err := io.ReadAll(r.Body)
-
-	if err != nil {
-		fmt.Println(err)
-		WriteErrorToResponse(w, err, http.StatusInternalServerError)
-		return
-	}
-	json.Unmarshal(bytes, &ytReq)
-
-	mp3file, err := ytb.Download(ytReq.YtID)
-
-	if err != nil {
-		fmt.Println(err)
-		WriteErrorToResponse(w, err, http.StatusInternalServerError)
-		return
-	}
-	// load MP3 filed to bicket
-
-	file, err := os.Open(mp3file)
-	if err != nil {
-		WriteErrorToResponse(w, err, http.StatusInternalServerError)
-		return
-	}
-	defer file.Close()
-
-	bytes, err = ByteFromMegaFile(file)
-	if err != nil {
-		WriteErrorToResponse(w, err, http.StatusInternalServerError)
-		return
-	}
-
-	mp3file = util.ProcessMp3Name(mp3file)
-	err = gstore.LoadToBucket(app.BucketName, mp3file, bytes)
-	if err != nil {
-		WriteErrorToResponse(w, err, http.StatusInternalServerError)
-		return
-	}
-
-	track := repo.Track{
-		Name: mp3file,
-	}
-	err = app.DB.PushTrackToSQL(track)
-
-	if err != nil {
-		WriteErrorToResponse(w, err, http.StatusInternalServerError)
-		return
-	}
-
-	util.CleanAllTempDir()
-	w.Write([]byte("youtube music uploaded on gcp"))
 
 }
