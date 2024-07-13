@@ -36,8 +36,6 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 	if err != nil {
 		return "", err
 	}
-	// map[files[]:[0x26a7a40]]
-	fmt.Println(r.MultipartForm.File["files[]"])
 
 	for _, headers := range r.MultipartForm.File {
 
@@ -73,7 +71,6 @@ func (app *Application) LoadMultipartReqToBucket(r *http.Request, bucketName str
 			track.StoreURL = url
 			track.Name = h.Filename
 			err = app.DB.PushTrackToSQL(track)
-			fmt.Println(err)
 
 			if err != nil {
 				err = fmt.Errorf(" error pushing track to sql and %w", err)

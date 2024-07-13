@@ -22,7 +22,7 @@ inputFilter.addEventListener("input", (e) => {
        if (!name.textContent.includes(filter)){ 
            cards[i].style.display = "none"  
         } else {
-            cards[i].style.display = "block" 
+            cards[i].style.display = "flex" 
         }
     }
 }) 
