@@ -1,3 +1,0 @@
-Dockerfile
-acceuil.js Remove audio player on click // change background on click 
-selection 

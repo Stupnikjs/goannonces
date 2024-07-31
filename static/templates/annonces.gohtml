@@ -1,0 +1,16 @@
+{{template "base" .}}
+
+{{define "content"}}
+  
+<ul>
+    {{ range .Data.Annonces }}
+    
+    <li>
+     <span> {{. }}</span>   
+    </li>
+
+    {{ end }}
+</ul>
+    <script defer src="/static/js/annonces.js"></script>
+    
+{{end}}

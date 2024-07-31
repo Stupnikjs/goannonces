@@ -1,36 +1,11 @@
 {{template "base" .}}
 
 {{define "content"}}
-    <section class="accueil-section">
-          <div id="audioPlayerDiv"></div> 
-          <div id="filterDiv"> 
-             <p> Search By Name </p>
-             <input type=text id="inputFilter">
-           </div> 
-          <div class="audioContainer">
-         {{ range .Data.Tracks}} 
-           <div class="audiocard" id={{ .ID }}>
-              <div class="trackDiv">
-                <p class="name"> {{ .Name }} </p>
-                <h1> {{.Artist }} </h1>
-                <div class="tagDiv display-none">
-                  <input type="text" class="tagInput">
-                  <button class="submitTagBtn" id={{.ID}}> Submit Tag </button>
-                  <p class="tagp"> {{ .Tag }} </p>
-              </div>
-              </div> 
-              <div class="btnDiv">
-                <button class="nameBtn" data-url="/stream/sound/{{ .ID }}"><i class="fa-solid fa-play"></i></button>
-                <button class="selectedBtn"> <i class="fa-solid fa-heart"></i> </button>
-                <button class="tagBtn"><i class="fa-solid fa-pen"></i></button>
-                <button class="deleteBtn" id={{ .ID }} ><i class="fa-solid fa-trash"></i></button>
-                <button class="artistSuggest"> <i class="fa-solid fa-user"></i> <button>
-               </div>
-              
-            </div>
-         {{ end }}
-         </div>
-    </section>
+  
+    <h1> PharmAnnonces </h1>
+    <h2> Trouve ton job en Pharmacie d'officine </h2>
+    <a href="/login"> Je me connecte </a>
+ 
     <script defer src="/static/js/acceuil.js"></script>
     
 {{end}}
