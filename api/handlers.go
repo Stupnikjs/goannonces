@@ -1,6 +1,8 @@
 package api
 
 import (
+	"encoding/json"
+	"fmt"
 	"html/template"
 	"net/http"
 	"path"
@@ -30,18 +32,17 @@ func render(w http.ResponseWriter, r *http.Request, t string, td *TemplateData) 
 // template rendering
 
 func (app *Application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
+	annonces, err := LoadAnnonces()
+	if err != nil {
+		fmt.Println(err)
+	}
+	bytes, err := json.Marshal(annonces)
 
+	if err != nil {
+		fmt.Println(err)
+	}
 	td := TemplateData{}
-
 	td.Data = make(map[string]any)
-
+	td.Data["Annonces"] = string(bytes)
 	_ = render(w, r, "/acceuil.gohtml", &td)
-}
-func (app *Application) RenderLogged(w http.ResponseWriter, r *http.Request) {
-
-	td := TemplateData{}
-
-	td.Data = make(map[string]any)
-
-	_ = render(w, r, "/loged.gohtml", &td)
 }

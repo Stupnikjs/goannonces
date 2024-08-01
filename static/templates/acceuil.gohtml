@@ -2,10 +2,18 @@
 
 {{define "content"}}
   
-    <h1> PharmAnnonces </h1>
-    <h2> Trouve ton job en Pharmacie d'officine </h2>
-    <a href="/login"> Je me connecte </a>
- 
-    <script defer src="/static/js/acceuil.js"></script>
+
+            <div id="json" data-json="{{ .Data.Annonces }}"></div>
+            <h1> PharmAnnonces </h1>
+            <h2> Trouve ton job en Pharmacie d'officine </h2>
+            <div id="choiceDiv"> </div>
+            <div id="locationDiv" class="d-none"> 
+                <label> Dans quel departement recherche tu un emploi ? </label>
+                <input type="number"/>
+                <button id="submitDepBtn"> Valider </button> 
+            </div>
+            <div id="annoncesDiv"> </div>
+    
+    
     
 {{end}}

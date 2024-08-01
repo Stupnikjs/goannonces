@@ -12,182 +12,65 @@ font-family: "voltaire";
 
 }
 
-/* baselayout */
-
-
-.grid-section {
-display: grid; 
-grid-template-columns: 20% 1fr 20%; 
-
+.grid-section{
+  display: grid;
+  grid-template-columns: 20% 1fr 20%;
 }
 
 .padding-grid {
-width: 100%;
- 
-
+  flex: 1; 
+  width: 20%;
+  height: max-content;
 }
 
-.content {
-
-margin: 2rem; 
-}
-
-nav > ul {
-
-display: flex; 
-list-style-type: none; 
-background-color: lightblue; 
-}
-
-nav > ul  > li {
-padding: 1rem; 
-margin : auto; 
-background-color: white;
-color: black;  
-
-}
-
-nav > ul > li > a {
- text-decoration : none; 
-}
-
-/* studio */
-
-.audioContainer{
+#choiceDiv{
+  margin: 3rem auto;
   display: flex;
-  flex-wrap: wrap; 
+}
+
+#choiceDiv > button {
+  border: .5px solid gray ;
+  padding: 0.4rem 2rem ;
+  background-color: aliceblue;
+  border-radius: .3rem;
+}
+
+#choiceDiv > button:hover {
+  background-color: antiquewhite;
+}
+
+.showlocationDiv {
+  margin: 6rem 0;
+  display: flex;
+  align-items: center;
 
 }
 
-.audiocard{
-position: relative; 
-margin:  .5rem auto; 
-background-color: lightblue; 
-border : .5px solid black;
-border-radius: .5rem; 
-width: 30%;
-display: flex;
-max-height: 5vw;
-overflow: hidden;
-padding: 1rem; 
-}
-
-.audiocard audio {
-max-height: 5vh; 
-margin: .3rem; 
-}
-
-.audiocard > .trackDiv > p {
-font-size: .7rem; 
-}
-
-.audiocard > .trackDiv > h1 {
-font-size: 1rem; 
-}
-
-
-
-
-
-.trackDiv {
-  flex:1; 
+#locationDiv > input {
+  width: 7vw;
+  height: 5vh;
+  font-size: 2rem;
+  text-align: center;
   
+}
+#locationDiv > label {
+  width: 50%;
+  font-size: 1.1rem;
 
 }
-
-.btnDiv{ 
-display: flex;
-flex-wrap: wrap; 
-width: 50%;
-flex: 1;
-width: 100%;  
-
-
-}
-
-.btnDiv button {
-min-width: 50%;
-
-
-}
-
-.tagDiv {
- background-color: azure; 
-}
-
-.selectedHeart {
-background-color: black; 
-color: gray; 
-}
-
-.tagp {
-background-color: azure; 
-padding: .2rem 0; 
-left: 10%;
-width:fit-content; 
-padding: 0.1rem 1rem;  
-}
-
-/* dragdrop */
-
-#drop_zone {
-  border: 2px solid rgb(86, 86, 97);
- width: 30vw;
- height: 30vh;
- margin: auto; 
- overflow: scroll; 
-}
-
-
-#drop_zone p {
-  top: 5px;
-}
-#drag_zone {
-  display: block;
-}
-
-/* loader   */
-
-#selectFileNum{
-
-background-color: azure;
-padding: 1rem;
-border: 1px solid black;
-
-}
-
-#submitFileNum{
-background-color: azure;
-padding: 1rem;
-border: 1px solid black;
-
-}
-
-#loader-section {
-display: flex; 
-flex-direction: column; 
-
-}
-#loaderform {
-display:flex;
-flex-direction:column;
-background-color:azure;
-
-}
-
-#loaderform input {
-    padding : 1rem; 
-    background-color:lightblue;
-
-}
-
-/* utils */ 
-
-.display-none {
-
-display: none; 
+#locationDiv > button {
+  padding: 1rem 0;
 
 }
 
 
 
+.d-none {
+  display: none;
+}
+
+
+.annonceDiv{
+  padding: 1rem;
+  border: .1px solid gray;
+}
