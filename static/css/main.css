@@ -142,3 +142,39 @@ h1 {
   left: 1vw;
 }
 
+
+
+@media (min-width: 900px) and (max-width: 1200px) {
+    
+    
+  .grid-section{
+    display: grid;
+    grid-template-columns: 15fr 70fr 15fr ;
+    
+  }
+
+
+
+
+  }
+
+@media (max-width: 900px) {
+    
+    
+  .grid-section{
+    display: grid;
+    grid-template-columns: 10fr 80fr 10fr ;
+    
+  }
+  
+  #locationDiv > input {
+    width: 10vw;
+    height: 5vh;
+    font-size: 2rem;
+    text-align: center;
+    
+  }
+
+
+
+  }

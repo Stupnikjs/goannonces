@@ -1,7 +1,16 @@
 let annoncesRow = document.querySelector("#json").getAttribute("data-json")
 
 let annonces = JSON.parse(annoncesRow)
-console.log(annonces)
+
+
+let jobs = []
+
+for (let an of annonces){
+    if (!jobs.includes(an["profession"])){
+        console.log("hle")
+        jobs.push(an["profession"])
+    }
+}
 
 
 function loadAnnonces(profession, departement, annonces) {
@@ -34,25 +43,24 @@ function createAnnoncesElement(annonce){
     let contratSpan = document.createElement("span")
     contratSpan.classList.add("jobSpan")
 
-    if (annonce["lieu"]) {
-
-        lieuSpan.textContent = annonce["lieu"]
-        
+    if (annonce["region"]) {
+        lieuSpan.textContent = annonce["region"]
     }
     if (annonce["pubdate"]) {
-
-        dateSpan.textContent = annonce["pubdate"]
-        
-    }
-    
+        dateSpan.textContent = `mise en ligne le ${annonce["pubdate"]}` 
+    } 
     if (annonce["contrat"]) {
         contratSpan.textContent = annonce["contrat"]
         
     }
-
     if (annonce["departement"]){
         depSpan.textContent = (annonce["departement"])
     }
+    if (annonce["description"]){
+        descriptionSpan.textContent = (annonce["description"])
+    }
+
+
     if (annonce["url"]){
         a.href = annonce["url"]
     }

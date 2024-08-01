@@ -1,0 +1,8 @@
+Postgres cluster pharmadb created
+  Username:    postgres
+  Password:    nHnchCSlYryc6UZ   
+  Hostname:    pharmadb.internal 
+  Flycast:     fdaa:1:c372:0:1::6
+  Proxy port:  5432
+  Postgres port:  5433
+  Connection string: postgres://postgres:nHnchCSlYryc6UZ@pharmadb.flycast:5432
