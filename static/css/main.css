@@ -5,6 +5,16 @@
     /* You can include additional formats as needed */
   }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number]{
+  -moz-appearance: textfield;
+}
+
 html, body , ul{
 margin: 0; 
 padding: 0; 
@@ -12,9 +22,15 @@ font-family: "voltaire";
 
 }
 
+h1 {
+  color: green; 
+  background-color: aliceblue; 
+  padding: 0.5rem; 
+}
+
 .grid-section{
   display: grid;
-  grid-template-columns: 20% 1fr 20%;
+  grid-template-columns: 30% 1fr 30%;
 }
 
 .padding-grid {
@@ -26,17 +42,28 @@ font-family: "voltaire";
 #choiceDiv{
   margin: 3rem auto;
   display: flex;
+  justify-content: space-around;
+  gap: 5%; 
 }
 
 #choiceDiv > button {
-  border: .5px solid gray ;
+
   padding: 0.4rem 2rem ;
+  flex: 1;
+   font-family: "voltaire";
   background-color: aliceblue;
-  border-radius: .3rem;
+  border-radius: .2rem;
 }
+
+
+
 
 #choiceDiv > button:hover {
   background-color: antiquewhite;
+}
+
+#choiceDiv > span{
+ font-size: 2rem;
 }
 
 .showlocationDiv {
@@ -47,7 +74,7 @@ font-family: "voltaire";
 }
 
 #locationDiv > input {
-  width: 7vw;
+  width: 5vw;
   height: 5vh;
   font-size: 2rem;
   text-align: center;
@@ -69,8 +96,49 @@ font-family: "voltaire";
   display: none;
 }
 
-
-.annonceDiv{
-  padding: 1rem;
-  border: .1px solid gray;
+.annoncesDiv{
+  display: flex;
+  flex-direction: column;
+  gap: 2%;
 }
+
+#annoncesDiv{
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap:5%;
+ 
+}
+
+.annonceDiv {
+  background-color: aliceblue;
+  color: black; 
+  padding: 1rem;
+  display: flex;
+  flex: 1; 
+  min-height: 10vh;
+  text-decoration: none;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.lieuSpan{
+  text-decoration: none;
+  font-size: 0.5rem;
+  position: absolute;
+  bottom: 1vw;
+}
+ 
+.dateSpan{
+  position: absolute;
+  right: 1vw;
+}
+
+.depSpan{
+  position: absolute;
+  left: 1vw;
+}
+

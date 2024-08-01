@@ -2,11 +2,6 @@
 /* choice div */
 let choiceDiv = document.querySelector("#choiceDiv")
 let locationDiv = document.querySelector("#locationDiv")
-let annoncesRow = document.querySelector("#json").getAttribute("data-json")
-
-let annonces = JSON.parse(annoncesRow)
-
-console.log(annonces)
 
 let submitDepBtn = document.querySelector("#submitDepBtn")
 
@@ -35,23 +30,17 @@ choiceDiv.appendChild(rayonisteBtn)
 pharmacienBtn.addEventListener("click", (e) => {
     e.preventDefault()
     profession = "Pharmacien"
-    choiceDiv.style.display = "none" 
-    locationDiv.classList.remove("d-none")
-    locationDiv.classList.add("showlocationDiv")
+    processProfessionBtn()
 })
 preparateurBtn.addEventListener("click", (e) => {
     e.preventDefault()
     profession = "Préparateur"
-    choiceDiv.style.display = "none" 
-    locationDiv.classList.remove("d-none")
-    locationDiv.classList.add("showlocationDiv")
+    processProfessionBtn()
 })
 rayonisteBtn.addEventListener("click", (e) => {
     e.preventDefault()
     profession = "Rayoniste"
-    choiceDiv.style.display = "none" 
-    locationDiv.classList.remove("d-none")
-    locationDiv.classList.add("showlocationDiv")
+    processProfessionBtn()
 
 })
 
@@ -67,28 +56,15 @@ submitDepBtn.addEventListener("click", (e) => {
 
 
 
-function loadAnnonces(profession, departement, annonces) {
-    let annoncesDiv = document.querySelector("#annoncesDiv")
 
 
-    for (let annonce of annonces){
-        console.log(annonces["profession"])
-        let el = createAnnoncesElement(annonce)
-        annoncesDiv.appendChild(el) 
-    }
-    
-}
-
-
-
-function createAnnoncesElement(annonce){
-    
-    let div = document.createElement("div")
-    div.classList.add("annonceDiv")
+function processProfessionBtn(){
     let span = document.createElement("span")
-    if (annonce["profession"]) {
-        span.textContent = annonce["profession"]
-    }
-    div.appendChild(span)
-    return div
+    span.textContent = profession
+    choiceDiv.removeChild(pharmacienBtn)
+    choiceDiv.removeChild(preparateurBtn)
+    choiceDiv.removeChild(rayonisteBtn)
+    choiceDiv.appendChild(span)
+    locationDiv.classList.remove("d-none")
+    locationDiv.classList.add("showlocationDiv")
 }
