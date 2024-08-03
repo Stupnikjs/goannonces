@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/Stupnikjs/goannonces/api"
@@ -15,13 +14,15 @@ func main() {
 		Port: 8080,
 	}
 
-	db, err := app.ConnectToDB()
+	/*
+		db, err := app.ConnectToDB()
 
-	app.DB = db
+		app.DB = db
 
-	if err != nil {
-		log.Fatal(err)
-	}
+		if err != nil {
+			fmt.Println(err)
+		}
+	*/
 
 	http.ListenAndServe(fmt.Sprintf(":%d", app.Port), app.Routes())
 

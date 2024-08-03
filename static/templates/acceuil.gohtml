@@ -5,12 +5,16 @@
 
             <div id="json" data-json="{{ .Data.Annonces }}"></div>
             <h1> PharmAnnonces <i class="fa-solid fa-plus"></i></h1>
+            <ul id="iconeUl">
+                <li> <i class="fa-solid fa-briefcase"></i> </li>
+                <li> <i class="fa-solid fa-tablets"></i></li>
+                <li> <i class="fa-solid fa-prescription-bottle"></i></li>
+            </ul>
             <h2> Trouve ton job en Pharmacie d'officine </h2>
+            <div> Près de chez toi <i class="fa-solid fa-location-dot"></i> </div>
             <div id="choiceDiv"> </div>
             <div id="locationDiv" class="d-none"> 
-                <label> Dans quel departement recherche tu un emploi ? </label>
-                <input type="number"/>
-                <button id="submitDepBtn"> Valider </button> 
+                <label> Dans quel departement recherche tu un emploi ? </label> 
             </div>
             <div id="annoncesDiv"> </div>
     

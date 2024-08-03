@@ -1,19 +1,23 @@
+let annoncesRow = document.querySelector("#json").getAttribute("data-json")
+let annonces = JSON.parse(annoncesRow)
+console.log(annonces)
+
+
 
 /* choice div */
 let choiceDiv = document.querySelector("#choiceDiv")
 let locationDiv = document.querySelector("#locationDiv")
 
-let submitDepBtn = document.querySelector("#submitDepBtn")
 
 
 let pharmacienBtn = document.createElement("button") 
-pharmacienBtn.textContent = "Je suis Pharmacien"
+pharmacienBtn.textContent = "Tu es Pharmacien"
 
 let preparateurBtn = document.createElement("button") 
-preparateurBtn.textContent = "Je suis Preparateur"
+preparateurBtn.textContent = "Tu es Preparateur"
 
 let rayonisteBtn = document.createElement("button") 
-rayonisteBtn.textContent = "Je suis Rayoniste"
+rayonisteBtn.textContent = "Tu es Rayoniste"
 
 
 
@@ -47,24 +51,12 @@ rayonisteBtn.addEventListener("click", (e) => {
 
 
 
-submitDepBtn.addEventListener("click", (e) => {
-    e.preventDefault()
-    let input = document.querySelector("input[type='number']")
-    departement = parseInt(input.value)
-    loadAnnonces(profession, departement, annonces)
-})
-
-
-
 
 
 function processProfessionBtn(){
-    let span = document.createElement("span")
-    span.textContent = profession
-    choiceDiv.removeChild(pharmacienBtn)
-    choiceDiv.removeChild(preparateurBtn)
-    choiceDiv.removeChild(rayonisteBtn)
-    choiceDiv.appendChild(span)
+    choiceDiv.classList.add("d-none")
     locationDiv.classList.remove("d-none")
     locationDiv.classList.add("showlocationDiv")
+    let select = ReturnSelectDep(profession, annonces)
+    locationDiv.append(select)
 }

@@ -1,16 +1,3 @@
-let annoncesRow = document.querySelector("#json").getAttribute("data-json")
-
-let annonces = JSON.parse(annoncesRow)
-
-
-let jobs = []
-
-for (let an of annonces){
-    if (!jobs.includes(an["profession"])){
-        console.log("hle")
-        jobs.push(an["profession"])
-    }
-}
 
 
 function loadAnnonces(profession, departement, annonces) {
