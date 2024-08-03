@@ -116,7 +116,6 @@ function ReturnSelectDep(profession, annonces) {
    select.addEventListener('change', (e) => {
     e.preventDefault()
     dep = e.target.value.split(" ") 
-    console.log(e.target.value) 
     loadAnnonces(dep[0], profession, annonces)
     
    })

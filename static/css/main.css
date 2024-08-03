@@ -168,6 +168,7 @@ h1 {
  
 .dateSpan{
   position: absolute;
+  font-size: .5rem;
   right: 1vw;
 }
 
