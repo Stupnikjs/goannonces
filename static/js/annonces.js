@@ -1,13 +1,13 @@
 
 
-function loadAnnonces( departement, profession, annonces) {
+function loadAnnonces( deps, profession, annonces) {
     let annoncesDiv = document.querySelector("#annoncesDiv")
     console.log(profession)
     let filtered = annonces.filter( el => el["profession"] == profession)
 
-    filtered = filtered.filter(el => el["departement"] == departement) 
-    console.log(filtered)
-
+    filtered = filtered.filter(el => deps.includes(el["departement"])) 
+    
+    console.log(filtered, deps)
     for (let annonce of filtered){
         console.log(annonce)
         let el = createAnnoncesElement(annonce)

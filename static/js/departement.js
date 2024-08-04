@@ -106,17 +106,31 @@ const departements = {
 function ReturnSelectDep(profession, annonces) {
 
    let select = document.createElement("select")
+   let locationDiv = document.querySelector("#locationDiv")
    select.classList.add("selectDep")
    for ( let dep of Object.entries(departements)) {
     let option = document.createElement("option")
     option.textContent = `${dep[1]}  ${dep[0]}` 
     select.appendChild(option)
    }
-
+   let deps = []
    select.addEventListener('change', (e) => {
     e.preventDefault()
-    dep = e.target.value.split(" ") 
-    loadAnnonces(dep[0], profession, annonces)
+    let dep = e.target.value.split(" ") 
+	if (!deps.includes(parseInt(dep))){
+		deps.push(dep[0])
+		let depSelected = document.createElement("span")
+		depSelected.textContent = dep[1]
+		depSelected.addEventListener("click", (e) => {
+			console.log("remove")
+			deps = deps.filter( x => x != dep[0])
+		})
+		locationDiv.appendChild(depSelected)
+		
+	}
+
+	// ajouter un submit btn 
+    loadAnnonces(deps, profession, annonces)
     
    })
    return select
