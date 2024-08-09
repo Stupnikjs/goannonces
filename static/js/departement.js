@@ -119,18 +119,26 @@ function ReturnSelectDep(profession, annonces) {
     let dep = e.target.value.split(" ") 
 	if (!deps.includes(parseInt(dep))){
 		deps.push(dep[0])
-		let depSelected = document.createElement("span")
+		
+		let depSelected = document.createElement("div")
+		let span = document.createElement("span")
+		span.innerHTML = `
+		<i class="fa-solid fa-x></i>
+		`
+		depSelected.appendChild(span)
+		
 		depSelected.textContent = dep[1]
 		depSelected.addEventListener("click", (e) => {
 			console.log("remove")
 			deps = deps.filter( x => x != dep[0])
 		})
 		locationDiv.appendChild(depSelected)
-		
+		resetAnnonces()
+		loadAnnonces(deps, profession, annonces)
 	}
 
 	// ajouter un submit btn 
-    loadAnnonces(deps, profession, annonces)
+    
     
    })
    return select

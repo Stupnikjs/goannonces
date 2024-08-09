@@ -1,15 +1,20 @@
 
+function resetAnnonces(){
+    let annoncesDiv = document.querySelector("#annoncesDiv")
+     annoncesDiv.innerHtml = ""
+}
+
 
 function loadAnnonces( deps, profession, annonces) {
     let annoncesDiv = document.querySelector("#annoncesDiv")
-    console.log(profession)
+    deps = deps.map(el => {return parseInt(el)})
+    
     let filtered = annonces.filter( el => el["profession"] == profession)
 
     filtered = filtered.filter(el => deps.includes(el["departement"])) 
-    
-    console.log(filtered, deps)
+    console.log(filtered)
     for (let annonce of filtered){
-        console.log(annonce)
+       
         let el = createAnnoncesElement(annonce)
         annoncesDiv.appendChild(el) 
     }
