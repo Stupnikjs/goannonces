@@ -46,3 +46,24 @@ func (app *Application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
 	td.Data["Annonces"] = string(bytes)
 	_ = render(w, r, "/acceuil.gohtml", &td)
 }
+
+
+/*
+
+
+
+api handlers 
+get by city
+
+
+
+*/
+
+
+
+func (app *Application) GetAnnonces(w http.ResponseWriter, r *http.Request){
+
+
+
+
+}
