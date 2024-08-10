@@ -39,10 +39,13 @@ func AnnonceToHtml(a Annonce) string {
 
 func MapContains(m map[string][]string, key string) bool {
 	v, exists := m[key]
-	if v[0] != "" {
+
+	if Contains(v, "") | Contains(v,0) {
 		return true
-	}
-	return exists
+	} else {
+return false 
+}
+	
 }
 
 func GetFilteredAnnonces(form map[string][]string) []Annonce {
