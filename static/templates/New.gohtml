@@ -1,1 +1,51 @@
-hj
+{{template "base" .}}
+
+{{define "content"}}
+  
+
+        
+            <h1> PharmAnnonces <i class="fa-solid fa-plus"></i></h1>
+            <ul id="iconeUl">
+                <li> <i class="fa-solid fa-briefcase"></i> </li>
+                <li> <i class="fa-solid fa-tablets"></i></li>
+                <li> <i class="fa-solid fa-prescription-bottle"></i></li>
+            </ul>
+            <h2> Trouve ton job en Pharmacie d'officine </h2>
+            <div> Près de chez toi <i class="fa-solid fa-location-dot"></i> </div>
+
+            <form class="searchForm" hx-post="/api/annonces" hx-target="#annoncesDiv" hx-trigger="submit">
+                <legend>Recherche </legend>
+
+                <label for="job"> Emploi </label>
+                <select name="job" >
+                    <option></option>
+                    <option>Préparateur</option>
+                    <option>Etudiant</option>
+                    <option>Rayoniste</option>
+                </select>
+
+                <select name="dep" >
+                    <option></option>
+                    {{ range $key, $value := .Data.Dep }}
+                        <option value="{{ $key }}">{{ $key }}  {{ $value }} </option>
+                    
+                    {{ end }}
+                </select>
+
+                <select name="contract" value="">
+                    <option></option>
+                    <option>CDI</option>
+                    <option>CDD</option>
+                    <option>Interim</option>
+                </select>
+                
+                <label for="city"> Ville </label>
+                <input type="text" name="city" value=""/>
+
+                <button type="submit">Search</button>
+            </form>
+
+            <div id="annoncesDiv"></div>
+    
+           
+{{end}}
