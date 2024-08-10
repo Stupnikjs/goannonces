@@ -62,8 +62,9 @@ get by city
 
 
 func (app *Application) GetAnnonces(w http.ResponseWriter, r *http.Request){
+  
 
-
-
+  
+   
 
 }
