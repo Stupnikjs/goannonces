@@ -40,7 +40,15 @@ func AnnonceToHtml(a Annonce) string {
 func MapContains(m map[string][]string, key string) bool {
 	v, exists := m[key]
 
-	// handle case with int == 0
+	intV, err := strconv.Atoi(v[0])
+	if err == nil {
+		if intV != 0 {
+			return true
+		} else {
+			return false
+		}
+	}
+
 	if Contains(v, "") {
 		return false
 	} else if !exists {
