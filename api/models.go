@@ -38,13 +38,15 @@ func AnnonceToHtml(a Annonce) string {
 }
 
 func MapContains(m map[string][]string, key string) bool {
-	v, _ := m[key]
+	v, exists := m[key]
 
 	// handle case with int == 0
 	if Contains(v, "") {
-		return true
-	} else {
 		return false
+	} else if !exists {
+		return false
+	} else {
+		return true
 	}
 
 }
