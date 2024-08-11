@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -32,17 +31,39 @@ func render(w http.ResponseWriter, r *http.Request, t string, td *TemplateData) 
 // template rendering
 
 func (app *Application) RenderAccueil(w http.ResponseWriter, r *http.Request) {
-	annonces, err := LoadAnnonces()
-	if err != nil {
-		fmt.Println(err)
-	}
-	bytes, err := json.Marshal(annonces)
 
-	if err != nil {
-		fmt.Println(err)
-	}
 	td := TemplateData{}
 	td.Data = make(map[string]any)
-	td.Data["Annonces"] = string(bytes)
-	_ = render(w, r, "/acceuil.gohtml", &td)
+	td.Data["Dep"] = Departements
+	_ = render(w, r, "/new.gohtml", &td)
+}
+
+/*
+
+
+
+api handlers
+get by city
+
+
+
+*/
+
+func (app *Application) GetHTMLAnnonces(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Println(r.Form)
+	annonces := GetFilteredAnnonces(r.Form)
+	str := ""
+
+	fmt.Println(annonces)
+	for _, a := range annonces {
+		str += AnnonceToHtml(a)
+	}
+
+	w.Write([]byte(str))
 }

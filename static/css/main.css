@@ -64,71 +64,10 @@ h1 {
   height: max-content;
 }
 
-#choiceDiv{
-  margin: 3rem auto;
-  display: flex;
-  justify-content: space-around;
-  gap: 5%; 
-}
-
-#choiceDiv > button {
-
-  padding: 0.4rem 2rem ;
-  flex: 1;
-   font-family: "voltaire";
-  background-color: aliceblue;
-  border-radius: .2rem;
-}
 
 
 
 
-#choiceDiv > button:hover {
-  background-color: antiquewhite;
-}
-
-#choiceDiv > span{
- font-size: 2rem;
-}
-
-.selectDep {
-  width: 20%;
-}
-
-
-  
-.showlocationDiv {
-  display: flex;
-  align-items: center;
-
-}
-
-#locationDiv {
-  justify-content: space-around;
-}
-#locationDiv > input {
-  width: 5vw;
-  height: 5vh;
-  font-size: 2rem;
-  text-align: center;
-  
-}
-#locationDiv > label {
-  width: 50%;
-  font-size: 1.1rem;
-  white-space: nowrap;
-
-}
-#locationDiv > button {
-  padding: 1rem 0;
-
-}
-
-
-
-.d-none {
-  display: none;
-}
 
 .annoncesDiv{
   display: flex;
@@ -145,7 +84,7 @@ h1 {
  
 }
 
-.annonceDiv {
+.annonceLink {
   background-color: aliceblue;
   color: black; 
   padding: 1rem;
@@ -179,11 +118,17 @@ h1 {
 }
 
 
+.searchForm {
+  display: flex;
+  flex-direction: column;
+}
+
 footer {
   
   background-color: aliceblue;
   height: 20vh;
 }
+
 
 
 @media (min-width: 900px) and (max-width: 1200px) {
