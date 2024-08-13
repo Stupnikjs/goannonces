@@ -12,6 +12,7 @@ func main() {
 
 	app := api.Application{
 		Port: 8080,
+		DB: 
 	}
 
 	/*

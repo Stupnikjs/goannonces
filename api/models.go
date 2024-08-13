@@ -1,14 +1,15 @@
 package api
 
 import (
-	"database/sql"
 	"fmt"
 	"strconv"
+
+	"github.com/Stupnikjs/goannonces/database"
 )
 
 type Application struct {
 	Port int
-	DB   *sql.DB
+	DB   database.DBRepo
 }
 
 type Annonce struct {
