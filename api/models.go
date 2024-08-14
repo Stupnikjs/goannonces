@@ -38,28 +38,6 @@ func AnnonceToHtml(a Annonce) string {
 	return str
 }
 
-func MapContains(m map[string][]string, key string) bool {
-	v, exists := m[key]
-
-	intV, err := strconv.Atoi(v[0])
-	if err == nil {
-		if intV != 0 {
-			return true
-		} else {
-			return false
-		}
-	}
-
-	if Contains(v, "") {
-		return false
-	} else if !exists {
-		return false
-	} else {
-		return true
-	}
-
-}
-
 func GetFilteredAnnonces(form map[string][]string) []Annonce {
 
 	filteredAnnonces := []Annonce{}
@@ -67,9 +45,6 @@ func GetFilteredAnnonces(form map[string][]string) []Annonce {
 	annonces, _ := LoadAnnonces()
 
 	// Check if required keys are present in the form
-	job := MapContains(form, "job")
-	dep := MapContains(form, "dep")
-	contract := MapContains(form, "contract")
 
 	fmt.Println(job, dep, contract)
 	for _, an := range annonces {

@@ -43,12 +43,3 @@ func LoadJsonAnnonces() ([]byte, error) {
 
 	return bytes, nil
 }
-
-func Contains[T comparable](arr []T, c T) bool {
-	for _, item := range arr {
-		if item == c {
-			return true
-		}
-	}
-	return false
-}
