@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/Stupnikjs/goannonces/database"
 )
@@ -36,46 +35,4 @@ func AnnonceToHtml(a Annonce) string {
 	`, a.Url, a.Departement, a.Lieu)
 
 	return str
-}
-
-func GetFilteredAnnonces(form map[string][]string) []Annonce {
-
-	filteredAnnonces := []Annonce{}
-	// build select query from form
-	annonces, _ := LoadAnnonces()
-
-	// Check if required keys are present in the form
-
-	fmt.Println(job, dep, contract)
-	for _, an := range annonces {
-		// Assume that all criteria are required to match if they are provided
-		matches := true
-
-		// Apply filters based on presence in the form
-		if job {
-			if an.Profession != form["job"][0] {
-				matches = false
-			}
-		}
-		if dep {
-			// map over
-			fmt.Println(form["dep"][0])
-			depNum, err := strconv.Atoi(form["dep"][0])
-			if err != nil || an.Departement != depNum {
-				matches = false
-			}
-		}
-		if contract {
-			if an.Contrat != form["contract"][0] {
-				matches = false
-			}
-		}
-
-		// If all criteria are satisfied, append the annonce
-		if matches {
-			filteredAnnonces = append(filteredAnnonces, an)
-		}
-	}
-
-	return filteredAnnonces
 }

@@ -1,6 +1,6 @@
-package util
+package database
 
-import strconv
+import "strconv"
 
 func MapContains(m map[string][]string, key string) bool {
 	v, exists := m[key]

@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"github.com/Stupnikjs/goannonces/api"
 )
@@ -31,21 +32,26 @@ func (m *PostgresRepo) CheckId(id string) bool {
 }
 
 func (m *PostgresRepo) SelectAnnoncesQuery(form map[string][]string) ([]api.Annonce, error) {
+
+	fmt.Println(len(form))
+
+	for k, v := range form {
+		annonces = m.FilterAnnonces(k, v)
+	}
+
+}
+
+func (m *PostgresRepo) FilterAnnonces(sqlfield string, value string) ([]api.Annonce, error) {
 	annonces := []api.Annonce{}
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	job := MapContains(form, "job")
-	dep := MapContains(form, "dep")
-	contract := MapContains(form, "contract")
-
-	selectFiltered := `
+	selectFiltered := fmt.Sprintf(`
 SELECT id, url, pubdate, ville, lieu, departement, description, profession, contrat, created_at
 FROM annonces
-WHERE 
+WHERE %s=%s
 ;
-`
-
+`, sqlfield, value)
 	rows, err := m.DB.QueryContext(ctx, selectFiltered)
 
 	return annonces, nil
