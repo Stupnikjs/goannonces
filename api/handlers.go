@@ -5,6 +5,8 @@ import (
 	"html/template"
 	"net/http"
 	"path"
+
+	"github.com/Stupnikjs/goannonces/database"
 )
 
 var pathToTemplates = "./static/templates/"
@@ -57,12 +59,18 @@ func (app *Application) GetHTMLAnnonces(w http.ResponseWriter, r *http.Request) 
 	}
 
 	fmt.Println(r.Form)
-	annonces := GetFilteredAnnonces(r.Form)
+	annonces, err := app.DB.SelectAnnoncesQuery(r.Form)
+	fmt.Println(err)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	str := ""
 
 	fmt.Println(annonces)
 	for _, a := range annonces {
-		str += AnnonceToHtml(a)
+		str += database.AnnonceToHtml(a)
 	}
 
 	w.Write([]byte(str))

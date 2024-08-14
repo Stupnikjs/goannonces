@@ -22,6 +22,10 @@ font-family: "voltaire";
 
 }
 
+input, select, option {
+  font-family: "voltaire";
+}
+
 body {
   min-height: 100vh;
   display: flex;
@@ -78,19 +82,17 @@ h1 {
 #annoncesDiv{
   padding: 1rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
-  gap:5%;
- 
 }
 
 .annonceLink {
+  width: 45%;
   background-color: aliceblue;
   color: black; 
-  padding: 1rem;
-  display: flex;
-  flex: 1; 
-  min-height: 10vh;
+  padding: .5rem;
+  display: flex; 
+  min-height: 8vh;
   text-decoration: none;
   position: relative;
   justify-content: center;

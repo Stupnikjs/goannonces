@@ -16,30 +16,31 @@
             <form class="searchForm" hx-post="/api/annonces" hx-target="#annoncesDiv" hx-trigger="submit">
                 <legend>Recherche </legend>
 
-                <label for="job"> Emploi </label>
-                <select name="job" >
+                <label for="profession"> Emploi </label>
+                <select name="profession" >
                     <option></option>
+                    <option>Pharmacien</option>
                     <option>Préparateur</option>
                     <option>Etudiant</option>
                     <option>Rayoniste</option>
                 </select>
-
-                <select name="dep" >
+                <label for="departement"> Departement </label>
+                <select name="departement" >
                     <option></option>
                     {{ range $key, $value := .Data.Dep }}
                         <option value="{{ $key }}">{{ $key }}  {{ $value }} </option>
                     
                     {{ end }}
                 </select>
-
-                <select name="contract" value="">
+                <label for="contrat"> Contrat </label>
+                <select name="contrat" value="">
                     <option></option>
                     <option>CDI</option>
                     <option>CDD</option>
                     <option>Interim</option>
                 </select>
                 
-                <label for="city"> Ville </label>
+                <label for="ville"> Ville </label>
                 <input type="text" name="city" value=""/>
 
                 <button type="submit">Search</button>

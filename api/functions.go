@@ -4,10 +4,17 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+
+	"github.com/Stupnikjs/goannonces/database"
 )
 
-func LoadAnnonces() ([]Annonce, error) {
-	annonces := []Annonce{}
+type Application struct {
+	Port int
+	DB   database.DBRepo
+}
+
+func LoadAnnonces() ([]database.Annonce, error) {
+	annonces := []database.Annonce{}
 	file, err := os.Open("./annonces.json")
 	if err != nil {
 		return nil, err

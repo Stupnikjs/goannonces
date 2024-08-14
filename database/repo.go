@@ -1,8 +1,7 @@
 package database
 
-import "github.com/Stupnikjs/goscrapp/data"
-
 type DBRepo interface {
-	InitTable() error
-	InsertAnnonce(data.Annonce) error
+	CheckId(id string) bool
+	SelectAnnoncesQuery(map[string][]string) ([]Annonce, error)
+	FilterAnnonces(string, string) ([]Annonce, error)
 }
