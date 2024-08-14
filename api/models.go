@@ -63,6 +63,7 @@ func MapContains(m map[string][]string, key string) bool {
 func GetFilteredAnnonces(form map[string][]string) []Annonce {
 
 	filteredAnnonces := []Annonce{}
+	// build select query from form
 	annonces, _ := LoadAnnonces()
 
 	// Check if required keys are present in the form

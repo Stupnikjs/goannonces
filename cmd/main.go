@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/Stupnikjs/goannonces/api"
+	"github.com/Stupnikjs/goannonces/database"
 	_ "google.golang.org/api/option"
 )
 
@@ -12,18 +13,17 @@ func main() {
 
 	app := api.Application{
 		Port: 8080,
-		DB: 
 	}
 
-	/*
-		db, err := app.ConnectToDB()
+	conn, err := app.ConnectToDB()
 
-		app.DB = db
+	app.DB = database.PostgresRepo{
+		DB: conn,
+	}
 
-		if err != nil {
-			fmt.Println(err)
-		}
-	*/
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	http.ListenAndServe(fmt.Sprintf(":%d", app.Port), app.Routes())
 
