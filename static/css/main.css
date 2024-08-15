@@ -84,9 +84,11 @@ h1 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  gap: 1%; 
 }
 
 .annonceLink {
+  margin: 1px 0;
   width: 45%;
   background-color: aliceblue;
   color: black; 
@@ -100,12 +102,19 @@ h1 {
   border: .1px solid lightgray;
 }
 
+.annonceLink:hover{
+  background-color: antiquewhite;
+}
+
+
+
 
 .lieuSpan{
   text-decoration: none;
   font-size: 0.5rem;
   position: absolute;
-  bottom: 1vw;
+  bottom: .1vh;
+   
 }
  
 .dateSpan{
@@ -117,8 +126,21 @@ h1 {
 .depSpan{
   position: absolute;
   left: 1vw;
+  top: .5vh;
+  font-size: .7rem; 
 }
 
+
+.contratSpan{
+  position: absolute;
+  top: 5; 
+  font-size: small;
+  right: 1vw; 
+}
+
+.professionSpan{
+  color: gray; 
+}
 
 .searchForm {
   display: flex;

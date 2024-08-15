@@ -23,12 +23,13 @@ func AnnonceToHtml(a Annonce) string {
 		<a class="annonceLink" href="%s">
 	 		<span class="depSpan">%d</span>
 			<span class="lieuSpan">%s</span>
+			<span class="villeSpan">%s</span>
 			<span class="contratSpan">%s</span>
 			<span class="dateSpan">%s</span>
 			<span class="professionSpan">%s</span>
 		</a>
 
-	`, a.Url, a.Departement, a.Lieu, a.Contrat, a.PubDate, a.Profession)
+	`, a.Url, a.Departement, a.Lieu, a.Ville, a.Contrat, a.PubDate, a.Profession)
 
 	return str
 }
